@@ -1,0 +1,56 @@
+ 
+     
+    
+    
+     
+       
+        <style>
+            /* Form container */
+            #otpForm {
+                max-width: 300px;
+                margin: 0 auto;
+                padding: 20px;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            /* OTP input */
+            #otpForm input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+    
+            /* Submit button */
+            #otpForm button[type="submit"] {
+                width: 100%;
+                padding: 10px;
+                border: none;
+                border-radius: 4px;
+                background-color: #f00b03;
+                color: #fff;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+    
+            /* Button hover effect */
+            #otpForm button[type="submit"]:hover {
+                background-color: #000000;
+            }
+        </style>
+    
+    
+        <form id="otpForm" action="/verify-otp" method="post">
+            <label for="otp">Enter OTP:</label>
+            <input type="text" id="otp" name="otp">
+            <button type="submit">Verify OTP</button>
+        </form>
+     
+    
+    
+</body>
+</html>

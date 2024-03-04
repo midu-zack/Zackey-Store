@@ -473,7 +473,7 @@
                                         <div class="login-register-form">
                                             <h1>Login</h1>
                                                 <small></small>
-                                            <form action="/user/login" method="post">
+                                            <form action="/login" method="post">
                                                 <small><span id="err-message" style="color: red;">{{message}}</span></small>
                                                 <input type="text" name="email" placeholder="Email">
                                                 <input type="password" name="password" placeholder="Password">
@@ -484,6 +484,7 @@
                                                         <a href="#">Forgot Password?</a>
                                                     </div>
                                                     <button type="submit">Login</button>
+                                                     <button><a href="/auth/google">Login with Google</a></button>
                                                 </div>
                                             </form>
                                         </div>
@@ -494,26 +495,32 @@
                                         <div class="login-register-form">
                                               <h1>Sign Up</h1>
                                                
-                                            <form action="/user/register" method="post" >
+                                            <form action="/auth/register" method="post" >
 
                                                  <small id="name-error" style="color:red; display: none;">Invalid Name</small>
-                                                 <input type="text" name="Name" placeholder="Name">
+                                                 <input type="text" name="name" placeholder="Name">
                                                 
                                                  <small id="phone-error" style="color:red; display: none;">Invalid phone</small>
-                                                 <input name="PhoneNumber" placeholder="PhoneNumber" type="phoneNumber">
-                                                
-                                                 <small id="email-error" style="color:red; display: none;">Invalid email</small>
-                                                 <input name="Email" placeholder="Email" type="email">
-                                               
-                                                 <small id="password-error" style="color:red; display: none;">Invalid password</small>
-                                                 <input type="password" name="Password" placeholder="Password">
+                                                 <input name="phoneNumber" placeholder="PhoneNumber" type="phoneNumber">
+
+                                              
+                                                 
+                                                <small id="email-error" style="color:red; display: none;">Invalid email</small>
+                                                <input name="email" placeholder="Email" type="email">
                                                 
                                               
-                                              <div class="button-box">
-                                                    <button type="submit" onclick="validateAndSubmit(event)" >Register</button>
-                                                </div>
-                                            </form>
+                               
 
+                                                 <small id="password-error" style="color:red; display: none;">Invalid password</small>
+                                                 <input type="password" name="password" placeholder="Password">
+                                                
+                                              
+                                                 <div class="button-box">
+                                                    <button type="submit" onclick="validateAndSubmit(event)" >Register</button>
+                                                 </div>
+                                           
+                                                 </form>
+                                                 
                 
                                           <script>
                                                 function validateAndSubmit(event) {
@@ -521,10 +528,10 @@
                                                     
                                                     // Get form elements
                                                     var form = event.target.form;
-                                                    var nameInput = form.elements['Name'];
-                                                    var phoneInput = form.elements['PhoneNumber'];
-                                                    var emailInput = form.elements['Email'];
-                                                    var passwordInput = form.elements['Password'];
+                                                    var nameInput = form.elements['name'];
+                                                    var phoneInput = form.elements['phoneNumber'];
+                                                    var emailInput = form.elements['email'];
+                                                    var passwordInput = form.elements['password'];
 
                                                     // Validation
                                                     var isValid = true;
@@ -567,11 +574,9 @@
                                                     }else{
                                                         event.preventDefault()
                                                     }
+
                                                 }
                                                 </script>
-
-                                           
-
                                         </div>
                                     </div>
                                 </div>

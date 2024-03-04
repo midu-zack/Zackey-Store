@@ -1,9 +1,13 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const path = require('path')
-
-const userRouter = require("./routers/userRouter");
+const dotenv = require("dotenv")
+dotenv.config()
+ 
+const userRouter = require("./routers/user");
+const authRoutes = require("./routers/auth")
 const adminRouter = require("./routers/adminRouter");
+const bodyParser = require("body-parser");
+const connectDatabase = require("./config/database");
 
 const app = express();
 
@@ -17,22 +21,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-mongoose
-  .connect("mongodb://localhost:27017/E-commerce-database", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.error("Error connecting to MongoDB", err);
-  });
 
-
+app.use("/", authRoutes);
 app.use("/", userRouter);
 
 
-app.listen(port, () => {
+
+app.listen(port,async() => {
   console.log(`server running on  ${port}`);
+  await connectDatabase() 
 });
