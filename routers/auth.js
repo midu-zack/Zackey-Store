@@ -12,10 +12,7 @@ router.use(passport.session())
 
 const userController = require('../controllers/auth');
 
-// router.get('/',userController.homepage); 
-
-
-
+ 
 router.get('/login-register',loginPage );
 router.get('/auth/register',otpReg);
 

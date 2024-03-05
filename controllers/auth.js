@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const User = require("../model/user");
 const generateOTP = require("../utils/otpGenerator");
+const jwt = require("jsonwebtoken")
 const dotenv = require("dotenv")
 dotenv.config()
  
@@ -50,11 +51,31 @@ const submitLogin = async (req, res) => {
       return res
         .status(404)
         .render("user/login-register", {
-          message: "Incorrect password. Please try again.",
+          message: "Incorrect password. Please try again." ,
         });
     }
 
+     // generate jwt token 
+     const token = jwt.sign({
+      id: user._id,
+      name : user.name,
+      email : user.email 
+    },
+    process.env.JWT_KEY,{
+
+      expiresIn: "24h",
+
+    });
+
+    //set JWT Token in a cookie
+    res.cookie("jwt",token,{
+      httpOnly:true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+      secure: process.env.NODE_ENV === "production",
+    })
+   
     res.redirect("/");
+
   } catch (error) {
     res.status(500).json({ message: "Login failed", error });
   }
@@ -80,12 +101,25 @@ const  successGoogleLogin = async(req,res)=>{
       })
       await  user.save();
     }
-
-    console.log(user);
+    
     // generate jwt token 
-    // const token = jwt.sign({
-    //   id
-    // })
+    const token = jwt.sign({
+      id: user._id,
+      name : user.name,
+      email : user.email 
+    },
+    process.env.JWT_KEY,{
+
+      expiresIn: "24h",
+
+    });
+
+    //set JWT Token in a cookie
+    res.cookie("jwt",token,{
+      httpOnly:true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+      secure: process.env.NODE_ENV === "production",
+    })
    
     res.status(200).redirect('/')
 
@@ -100,9 +134,10 @@ const  successGoogleLogin = async(req,res)=>{
   }
 }
 
+// 
 const failureGooglelogin = (req, res) => {
 
-  res.status(500).render("login-register", { message : "Error logging in with Google"});
+  res.status(500).render("login-register",{ message : "Error logging in with Google"});
 
 };
 
