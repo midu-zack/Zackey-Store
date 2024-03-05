@@ -66,11 +66,11 @@ const submitLogin = async (req, res) => {
 const  successGoogleLogin = async(req,res)=>{
   try{
     if(!req.user){
-      return res.status(404).send('no user data , Login field')
+      return res.status(404).send('no user data , Login failed')
     }
-    console.log(rq.user);
+    console.log(req.user);
 
-    const user = await User.findOne({email:req.user.email});
+    let user = await User.findOne({email:req.user.email});
     
     if(!user){
 
@@ -80,18 +80,30 @@ const  successGoogleLogin = async(req,res)=>{
       })
       await  user.save();
     }
+
+    console.log(user);
+    // generate jwt token 
+    // const token = jwt.sign({
+    //   id
+    // })
    
     res.status(200).redirect('/')
 
+    console.log("User logged in with Google : jwt created");
+
   }catch(error){
+
     console.error("Error logging in with Google:", error);
-    res.status(500).redirect("/login");
+
+    res.status(500).redirect("user/login");
     
   }
 }
 
 const failureGooglelogin = (req, res) => {
-  res.status(500).send("Error logging in with Google");
+
+  res.status(500).render("login-register", { message : "Error logging in with Google"});
+
 };
 
 
@@ -99,8 +111,8 @@ const failureGooglelogin = (req, res) => {
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.APP_EMAIL , // Your Gmail email address
-    pass: process.env.APP_PASSWORD // Your Gmail password or application-specific password
+    user: process.env.APP_EMAIL ,  
+    pass: process.env.APP_PASSWORD  
   },
   
 });
@@ -130,7 +142,7 @@ const sendOTP = async (email, otp) => {
 let submitRegister = async (req, res) => {
   try {
     const { email } = req.body;
-    const userExist = await User.exists({ email: email.toLowerCase() });
+    const userExist = await User.exists({ email: email.toLowerCase()});
 
     if (userExist) {
       return res
@@ -180,7 +192,7 @@ const verifyOTP = async (req, res) => {
   console.log('This proper mail',email);
 
   const otp = req.body.otp;
-  //  console.log("frnt otp ",otp);
+   
   try {
     const user = await User.findOne({email});
 

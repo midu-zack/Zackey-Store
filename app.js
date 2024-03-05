@@ -5,9 +5,11 @@ dotenv.config()
  
 const userRouter = require("./routers/user");
 const authRoutes = require("./routers/auth")
-const adminRouter = require("./routers/adminRouter");
+// const adminRouter = require("./routers/admin");
 const bodyParser = require("body-parser");
 const connectDatabase = require("./config/database");
+// const { session } = require("passport");
+const session = require("express-session")
 
 const app = express();
 
@@ -21,9 +23,21 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
+app.use(session({
+  secret:"your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // Set to true in production if using HTTPS
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+    } 
+}))
+
 
 app.use("/", authRoutes);
 app.use("/", userRouter);
+
 
 
 
