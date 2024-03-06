@@ -6,6 +6,9 @@ dotenv.config()
 const userRouter = require("./routers/user");
 const authRoutes = require("./routers/auth")
 const adminRouter = require("./routers/admin");
+const categorie = require("./routers/categerie")
+
+
 const bodyParser = require("body-parser");
 const connectDatabase = require("./config/database");
 // const { session } = require("passport");
@@ -38,6 +41,7 @@ app.use(session({
 app.use("/", authRoutes);
 app.use("/", userRouter);
 app.use("/", adminRouter);
+app.use('/', categorie)
 
 
 
