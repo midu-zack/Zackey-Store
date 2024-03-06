@@ -1,4 +1,3 @@
-
 // get homepage
 let homePage = (req, res) => {
   try {
@@ -13,4 +12,4 @@ let homePage = (req, res) => {
  
 module.exports ={
     homePage 
-}
+} 
