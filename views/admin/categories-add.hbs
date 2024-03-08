@@ -49,7 +49,7 @@
                             <!-- Menu: Sub menu ul -->
                             <ul class="sub-menu collapse show" id="categories">
                                 <li><a class="ms-link" href="categorie-list.html">Categories List</a></li>
-                                <li><a class="ms-link" href="categories-edit.html">Categories Edit</a></li>
+                               
                                 <li><a class="ms-link active" href="categories-add.html">Categories Add</a></li>
                             </ul>
                     </li>
@@ -330,8 +330,8 @@
                             <div class="card mb-3">
                                 <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                                     {{#if error}}
-                                    <div style="color: red;">{{error}}</div>
-                                {{/if}}
+                                        <div style="color: red;">{{error}}</div>
+                                     {{/if}}
                                 </div>
                                 <div class="card-body">
                                     <form action="/addCategorie" method="post">
