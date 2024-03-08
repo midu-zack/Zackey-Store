@@ -18,7 +18,25 @@ let categorieListShow = (req, res) => {
     }
   }
 
+  const submitAddCategory = async (req,res)=>{
+    try{
+      const {name}=req.body
+      const newCategorie = new Categorie ({
+        categorie : name 
+      })
+      await newCategorie.save();
+
+      res.status(201).render('admin/categorie-list');
+      
+    }catch(error){
+      console.error('Error saving Categorie:', error);
+      res.status(500).json({ message: 'An error occurred while saving the Categorie' });
+
+    }
+  }
+
   module.exports = {
     categorieListShow,
-    categorieAddShow
+    categorieAddShow,
+    submitAddCategory
   }
