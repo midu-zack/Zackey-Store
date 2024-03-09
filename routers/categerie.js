@@ -12,6 +12,7 @@ router.post("/addCategorie",submitAddCategory)
 router.get("/categorieEdit/:id",categoryEdit)
 // router.post("/categorieEdit/:id",categoryEdit)
 
+
 router.post("/categorieEdit/:id",categoryUpdate)
 
 router.post("/categorieDelete/:id",categoryDelete)

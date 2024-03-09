@@ -334,11 +334,11 @@
                                     <h6 class="mb-0 fw-bold ">Edit category</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form action="/categorieEdit/{{this._id}}" method="post"> 
+                                    <form action="/categorieEdit/{{category._id }}" method="post"> 
                                         <div class="row g-3 align-items-center">
                                             <div class="col-md-6">
-                                                <label  class="form-label">Name</label>
-                                                <input type="text" class="form-control" value="{{this.categorie}}">
+                                                <label   class="form-label">Name</label>
+                                                <input name="categorie" type="text" class="form-control" value="{{category.categorie}}">
 
                                                 
                                             </div>
@@ -378,7 +378,7 @@
 
     <!-- Jquery Page Js -->   
     <script src="../js/template.js"></script>
-    <script>
+    {{!-- <script>
         
         $(document).ready(function() {
         //Ch-editer
@@ -416,7 +416,7 @@
             });
         });
             
-    </script>
+    </script> --}}
 </body>
 
 <!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/categories-edit.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Feb 2024 06:56:28 GMT -->

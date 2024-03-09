@@ -4,6 +4,7 @@ let categorieListShow = async (req, res) => {
   try {
     const category = await Categorie.find();
     res.render("admin/categorie-list", { category });
+    
   } catch (error) {
     console.error(error, "rendering login page ");
     res.status(500).send("Internal Server Error in home page");
@@ -40,17 +41,16 @@ let categoryEdit = async (req, res) => {
   try {
     let categoryId = req.params.id;
 
-    console.log("categoryId", categoryId);
+    console.log("categoryId",categoryId);
 
     let category = await Categorie.findById(categoryId);
 
     if (!category) {
       return res.status(404).send("Category not found");
     }
-
-    // let categorieName = category.categorie;
-
-    res.render("admin/categories-edit", { category });
+ 
+    res.render("admin/categories-edit",{category});
+    console.log(category.categorie);
   } catch (error) {
     res.status(500).send("Internal Server Error in category Edit");
   }
@@ -59,8 +59,7 @@ let categoryEdit = async (req, res) => {
 let categoryUpdate = async (req, res) => {
   try {
     let categoryId = req.params.id;
-
-    console.log(categoryId);
+    let newCategoryName = req.body.categorie;
 
     let category = await Categorie.findById(categoryId);
 
@@ -68,7 +67,11 @@ let categoryUpdate = async (req, res) => {
       return res.status(404).send("Category not found");
     }
 
-    category.categorie = req.body.categorie;
+    // Update the category name
+    category.categorie = newCategoryName;
+
+    // Save the updated category
+    await category.save();
 
     return res.status(200).redirect("/categorie");
   } catch (error) {
@@ -76,6 +79,10 @@ let categoryUpdate = async (req, res) => {
     return res.status(500).send("Internal Server Error in category Update");
   }
 };
+
+
+
+
 
 let categoryDelete = async (req, res) => {
   try {
