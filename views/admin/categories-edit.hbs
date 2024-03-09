@@ -334,17 +334,21 @@
                                     <h6 class="mb-0 fw-bold ">Edit category</h6>
                                 </div>
                                 <div class="card-body">
-                                    <form action="/categorieEdit" method="post"> 
+                                    <form action="/categorieEdit/{{this._id}}" method="post"> 
                                         <div class="row g-3 align-items-center">
                                             <div class="col-md-6">
                                                 <label  class="form-label">Name</label>
-                                                <input type="text" class="form-control" value="{{categorieName}}">
+                                                <input type="text" class="form-control" value="{{this.categorie}}">
 
                                                 
                                             </div>
+                                            
                                             <div class="col-12">
+                                               
                                                   <button type="submit" class="btn btn-primary py-2 px-5 text-uppercase btn-set-task w-sm-100">Save</button>
+                                                   
                                             </div>
+                                            
                                         
                                         </div>
                                     </form>
