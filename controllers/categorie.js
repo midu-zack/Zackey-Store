@@ -28,6 +28,8 @@ const submitAddCategory = async (req, res) => {
     });
     await newCategorie.save();
     const category = await Categorie.find();
+
+    
     res.status(201).render("admin/categorie-list", { category });
   } catch (error) {
     console.error("Error saving Categorie:", error);
@@ -58,6 +60,7 @@ let categoryEdit = async (req, res) => {
 
 let categoryUpdate = async (req, res) => {
   try {
+    
     let categoryId = req.params.id;
     let newCategoryName = req.body.categorie;
 

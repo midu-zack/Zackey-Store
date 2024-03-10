@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const adminSchema = new mongoose.Schema({
+const categorySchema = new mongoose.Schema({
   
   
    categorie :{
@@ -13,6 +13,6 @@ const adminSchema = new mongoose.Schema({
 });
 
  
-const Categorie = mongoose.model('Categorie', adminSchema);
+const Categorie = mongoose.model('Categorie', categorySchema);
 
 module.exports = Categorie; // export the module
