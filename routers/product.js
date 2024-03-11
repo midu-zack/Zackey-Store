@@ -9,5 +9,4 @@ router.post("/addProduct",productAdding)
 
 
 
-
 module.exports = router;
