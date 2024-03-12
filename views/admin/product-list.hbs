@@ -35,13 +35,10 @@
                             <i class="icofont-truck-loaded fs-5"></i> <span>Products</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
                             <!-- Menu: Sub menu ul -->
                             <ul class="sub-menu collapse show" id="menu-product">
-                                <li><a class="ms-link" href="product-grid.html">Product Grid</a></li>
+                               
                                 <li><a class="ms-link active" href="product-list.html">Product List</a></li>
-                                <li><a class="ms-link" href="product-edit.html">Product Edit</a></li>
-                                <li><a class="ms-link" href="product-detail.html">Product Details</a></li>
                                 <li><a class="ms-link" href="product-add.html">Product Add</a></li>
-                                <li><a class="ms-link" href="product-cart.html">Shopping Cart</a></li>
-                                <li><a class="ms-link" href="checkout.html">Checkout</a></li>
+                            
                             </ul>
                     </li>
                     <li class="collapsed">
@@ -50,7 +47,7 @@
                             <!-- Menu: Sub menu ul -->
                             <ul class="sub-menu collapse" id="categories">
                                 <li><a class="ms-link" href="categorie-list.html">Categories List</a></li>
-                                <li><a class="ms-link" href="categories-edit.html">Categories Edit</a></li>
+                                
                                 <li><a class="ms-link" href="categories-add.html">Categories Add</a></li>
                             </ul>
                     </li>
@@ -261,7 +258,7 @@
                             </div>
                             <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
                                 <div class="u-info me-2">
-                                    <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">John Quinn</span></p>
+                                    <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">Midu-Zack</span></p>
                                     <small>Admin Profile</small>
                                 </div>
                                 <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
@@ -273,8 +270,8 @@
                                             <div class="d-flex py-1">
                                                 <img class="avatar rounded-circle" src="assets/images/profile_av.svg" alt="profile">
                                                 <div class="flex-fill ms-3">
-                                                    <p class="mb-0"><span class="font-weight-bold">John	Quinn</span></p>
-                                                    <small class="">Johnquinn@gmail.com</small>
+                                                    <p class="mb-0"><span class="font-weight-bold">Midu-Zack</span></p>
+                                                    <small class="">midlajmidu0002@gmail.com</small>
                                                 </div>
                                             </div>
                                             
@@ -304,7 +301,7 @@
                             <div class="input-group flex-nowrap input-group-lg">
                                 <input type="search" class="form-control" placeholder="Search" aria-label="search" aria-describedby="addon-wrapping">
                                 <button type="button" class="input-group-text" id="addon-wrapping"><i class="fa fa-search"></i></button>
-                                
+                
                             </div>
                         </div>
         
@@ -320,14 +317,14 @@
                             <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                                 <h3 class="fw-bold mb-0">Products</h3>
                                 <div class="btn-group group-link btn-set-task w-sm-100">
-                                    <a href="product-grid.html" class="btn d-inline-flex align-items-center" aria-current="page"><i class="icofont-wall px-2 fs-5"></i>Grid View</a>
+                                    {{!-- <a href="product-grid.html" class="btn d-inline-flex align-items-center" aria-current="page"><i class="icofont-wall px-2 fs-5"></i>Grid View</a> --}}
                                     <a href="product-list.html" class="btn active d-inline-flex align-items-center"><i class="icofont-listing-box px-2 fs-5"></i> List View</a>
                                 </div>
                             </div>
                         </div>
                     </div> <!-- Row end  -->
                     <div class="row g-3 mb-3">
-                        <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-3">
+                        {{!-- <div class="col-12 col-md-12 col-lg-4 col-xl-4 col-xxl-3">
                             <div class="sticky-lg-top">
                                 <div class="card mb-3">
                                     <div class="reset-block">
@@ -394,24 +391,7 @@
                                     </div>
                                 </div>
 
-                                <div class="card mb-3">
-                                    <div class="size-block">
-                                        <div class="filter-title">
-                                            <a class="title" data-bs-toggle="collapse" href="#size" role="button" aria-expanded="true">Select Size</a>
-                                        </div>
-                                        <div class="collapse show" id="size" >
-                                            <div class="filter-size" id="filter-size-1">
-                                                <ul>
-                                                    <li>XS</li>
-                                                    <li>S</li>
-                                                    <li class="">M</li>
-                                                    <li>L</li>
-                                                    <li>XL</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                 
                                 <div class="card mb-3">
                                     <div class="color-block">
                                         <div class="filter-title">
@@ -550,31 +530,34 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-12 col-lg-8 col-xl-8 col-xxl-9">
-                            <div class="card mb-3 bg-transparent p-2">
- 
-                               
-                                  {{#each product}}
+                        </div> --}}
+
+                        <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                            <div class="card mb-3 bg-transparent p-2">                              
+                                  {{#each products}}
                                 <div class="card border-0 mb-1">
                                     {{!-- <div class="form-check form-switch position-absolute top-0 end-0 py-3 px-3 d-none d-md-block">
                                         <input class="form-check-input" type="checkbox" id="Eaten-switch6">
                                         <label class="form-check-label" for="Eaten-switch6">Add to Cart</label>
                                     </div> --}}
                                     <div class="card-body d-flex align-items-center flex-column flex-md-row">
-                                        {{!-- <a href="product-detail.html">
-                                            <img class="w120 rounded img-fluid" src="assets/images/product/product-6.jpg" alt="">
-                                        </a> --}}
+                                        <a href="product-detail.html">
+                                            <img class="w120 rounded img-fluid" src="{{this.images.[0]}}" alt="noImage">
+                                        </a>
                                         <div class="ms-md-4 m-0 mt-4 mt-md-0 text-md-start text-center w-100">
-                                            <a href="product-detail.html"><h6 class="mb-3 fw-bold">{{this.name}}<span class="text-muted small fw-light d-block">{{this.material}}</span></h6></a>
+                                            <a href="product-detail.html">
+                                                <h6>{{this.name}}</h6>
+                                                <h6 class="mb-3 fw-bold"><span class="text-muted small fw-light d-block">{{this.material}}</span></h6></a>
                                                 <div class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-start">
                                                     <div class="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
-                                                        <div class="text-muted small">Special priceends</div>
+                                                        <div class="text-muted small">Created</div>
+                                                        {{!-- <strong>{{this.createdAt.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'})}}</strong> --}}
                                                         <strong>{{this.createdAt}}</strong>
+
                                                     </div>
                                                      <div class="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
                                                         <div class="text-muted small">MRP</div>
-                                                        <strong>{{this.mrp}}</strong>
+                                                        <strong >{{this.mrp}}</strong>
                                                     </div>
                                                     <div class="pe-xl-5 pe-md-4 ps-md-0 px-3 mb-2">
                                                            <div class="text-muted small">Price</div>
@@ -589,10 +572,26 @@
                                                     <button type="button" class="btn btn-primary">Add Cart</button>
                                                 </div> --}}
                                         </div>
+                                         <div class="m-2 d-flex"  role="group"  > 
+                                            
+                                                    <form class="col-6 m-2" action="/editProduct/{{this.id}}"  method="post">
+                                                            <button type="submit" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></button>
+                                                    </form>
+                                                         
+                                                    <form class="col-6 m-2" action="/deleteProduct/{{this._id}}" method="get">
+                                                        <button type="submit" class="btn btn-outline-secondary"><i class="icofont-ui-delete text-danger"></i></button>
+                                                    </form>
+                                                           
+                                                         
+                                                </div>
                                     </div>
+                                               
                                 </div>
 
                                    {{!-- <small style="font-weight:600;" class=""><span class="text-primary font-weight-bold"> Category : </span>{{product.category}} </small><br> --}}
+
+
+                                                   
                                  {{/each}}
 
 
@@ -604,7 +603,7 @@
                                  
                         {{!-- </div>     --}}
                             </div>
-                            <div class="row g-3 mb-3">
+                            {{!-- <div class="row g-3 mb-3">
                                 <div class="col-md-12">
                                     <nav class="justify-content-end d-flex">
                                         <ul class="pagination">
@@ -622,7 +621,7 @@
                                         </ul>
                                     </nav>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div> <!-- Row end  -->
                 </div>
