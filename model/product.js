@@ -26,7 +26,10 @@ const productSchema = new mongoose.Schema({
         type:Array
     },
 
-    material :{
+    meterial :{
+        type:String
+    },
+    coupon :{
         type:String
     },
 

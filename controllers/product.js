@@ -7,7 +7,7 @@ const cloudinary = require("../config/cloudinary");
 let listProduct = async (req, res) => {
   try {
     const products = await Product.find();
-    res.render("admin/product-list", { products });
+    res.render("admin/product-list",{products});
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "An error occurred while fetching products" });
@@ -17,7 +17,7 @@ let listProduct = async (req, res) => {
 let addProduct = async (req, res) => {
   try {
     const categories = await Category.find();
-    res.render("admin/product-add", { categories });
+    res.render("admin/product-add",{categories});
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "An error occurred while fetching categories" });
@@ -34,10 +34,10 @@ let productAdding = async (req, res) => {
       coupon,
       createdAt,
       category,
-      material,
+      meterial,
       description,
     } = req.body;
-
+ 
     console.log(req.body);
 
     const imageURLs = [];
@@ -53,7 +53,7 @@ let productAdding = async (req, res) => {
 
     const newProduct = new Product({
       name: productName,
-      material: material,
+      meterial: meterial,
       mrp: mrp,
       price: price,
       color: color,
@@ -69,9 +69,8 @@ let productAdding = async (req, res) => {
 
     await newProduct.save();
 
-    console.log(products);
-    // res.render("admin/product-list",{products});
-
+    console.log('This is update product ',products);
+   
     res.redirect("/listProduct")
 
 
@@ -82,21 +81,14 @@ let productAdding = async (req, res) => {
   }
 };
 
-const updateProduct = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    console.log("update productId", productId);
 
-    const {
-      productName,
-      mrp,
-      price,
-      color,
-      coupon,
-      category,
-      material,
-      description,
-    } = req.body;
+
+let editProduct = async (req, res) => {
+  try {
+
+    let productId = req.params.id;
+
+    console.log("editproductId",productId);
 
     let product = await Product.findById(productId);
 
@@ -104,35 +96,68 @@ const updateProduct = async (req, res) => {
       return res.status(404).send("Product not found");
     }
 
-    // Update product properties
-    product.name = productName;
-    product.mrp = mrp;
-    product.price = price;
-    product.color = color;
-    product.coupon = coupon;
-    product.category = category;
-    product.material = material;
-    product.description = description;
+    const categories = await Category.find();
+
+    if (!categories) {
+      return res.status(404).send("categories not found");
+    }
+    res.render("admin/product-edit",{product,categories}); // Pass the product object to the template
+
+  } catch (error) {
+    res.status(500).send("Internal Server Error in product Edit");
+  }
+};
+
+const updateProduct = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    console.log("update productId:", productId);
+   
+    const {
+      productName,
+      mrp,
+      price,
+      coupon,
+      category,
+      material,
+      description,
+    } = req.body;
+
+    console.log("this is req body:", req.body);
+
+    let updateFields = {
+      name: productName,
+      mrp: mrp,
+      price: price,
+      coupon: coupon,
+      category: category,
+      material: material, 
+      description: description,
+    };
 
     // Check if there's a file to upload
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path);
-      product.images.push(result.secure_url);
+      updateFields.images = [result.secure_url];
     }
 
-    // Save the updated product
-    await product.save();
+    // Update the product using findByIdAndUpdate
+    const updatedProduct = await Product.findByIdAndUpdate(productId, updateFields, { new: true });
 
-    // res.redirect("/listProduct");
-    res.render("admin/product-edit")
+    if (!updatedProduct) {
+      return res.status(404).send("Product not found");
+    }
+
+    console.log("Updated product:", updatedProduct);
+
+    res.redirect("/listProduct");
   } catch (error) {
     console.error("Error updating Product:", error);
     res.status(500).send("Internal Server Error in product Update");
   }
 };
 
-
-
+ 
 
 let deleteProduct = async (req, res) => {
   try {
@@ -151,16 +176,13 @@ let deleteProduct = async (req, res) => {
     res.status(500).json({ message: "An error occurred while deleting the Product" });
   }
 };
-
-
-     
-
-
+ 
 
 module.exports = {
   listProduct,
   addProduct,
   productAdding,
+  editProduct,
   updateProduct,
   deleteProduct,
 };
