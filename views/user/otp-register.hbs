@@ -500,13 +500,16 @@
     
      
     
-       <form id="otpForm" action="/verify-otp" method="post">
+            <form id="otpForm" action="/verify-otp" method="post">
             {{#if error}}
-        <p style="color: red;">{{error}}</p>
-             {{/if}}
+                <p style="color: red;">{{error}}</p>
+            {{/if}}
             <input type="hidden" value="{{email}}" name="email"> <!-- Ensure to add the name attribute for form submission -->
+              <input type="hidden" value="{{phoneNumber}}" name="phoneNumber">
+                <input type="hidden" value="{{password}}" name="password">
+                  <input type="hidden" value="{{name}}" name="name">
             <label for="otp">Enter OTP:</label>
-            <input type="text" id="otp" name="otp">
+            <input type="text" id="otp"  name="otp" required>
             <button type="submit">Verify OTP</button>
         </form>
 

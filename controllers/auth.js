@@ -148,7 +148,7 @@ const  successGoogleLogin = async(req,res)=>{
 // 
 const failureGooglelogin = (req, res) => {
 
-  res.status(500).render("login-register",{ message : "Error logging in with Google"});
+  res.status(500).render("user/login-register",{ message : "Error logging in with Google"});
 
 };
 
@@ -163,8 +163,7 @@ const transporter = nodemailer.createTransport({
   
 });
 
-
-// Function to generate OTP (One Time Password)
+ 
 
 // Function to send OTP via email
 const sendOTP = async (email, otp) => {
@@ -177,86 +176,84 @@ const sendOTP = async (email, otp) => {
     });
 
     console.log("OTP sent successfully to:", email);
-
     console.log(otp);
   } catch (error) {
     console.error("Error sending OTP:", error);
+    throw error; // Rethrow the error to handle it in the caller function
   }
 };
 
 // handle signup form submission
 let submitRegister = async (req, res) => {
   try {
-    const { email } = req.body;
-    const userExist = await User.exists({ email: email.toLowerCase()});
+    const { name, email, phoneNumber, password } = req.body;
+
+    console.log("this is submtREgister all datas:", name,email,phoneNumber,password );
+
+    const userExist = await User.exists({ email: email.toLowerCase() });
 
     if (userExist) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "email already exist, Please try again",
-        });
+      return res.status(400).render('user/login-register', {
+        success: false,
+        message: "Email already exists. Please try again.",
+      });
     }
 
-    const password = req.body.password;
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
     const otp = generateOTP();
 
-    const newUser = new User({
-      name: req.body.name,
-      phoneNumber: req.body.phoneNumber,
-      email: req.body.email,
-      password: hashedPassword,
-      otp,
-       
-    });
+    req.session.otp = otp;
 
-    console.log(newUser);
+    console.log("Generated OTP:", otp);
 
-    await newUser.save();
-    sendOTP(req.body.email, otp);
-   
-    
-    console.log(email);
+    console.log("this is send email and otp : ", email,otp);
 
-    // res.redirect('/otp-register');
-    res.render("user/otp-register",{email:email});
+    await sendOTP(email, otp);
+
+
+    res.render("user/otp-register", { email, phoneNumber, password,otp, name });
 
   } catch (error) {
     console.error(error);
-
     res.status(500).json({ message: "Internal server Error", error });
   }
 };
 
 const verifyOTP = async (req, res) => {
-
-  const email = req.body.email;
-
-  console.log('This proper mail',email);
-
-  const otp = req.body.otp;
-   
+  const { email, otp, name, phoneNumber, password } = req.body;
   try {
-    const user = await User.findOne({email});
-
-    console.log("backend otp ",user);
-
-    console.log("check the user",user);
-
-    if (!user || user.otp !== otp || user.otpExpiration < Date.now()) {
-      res.status(400).render("user/otp-register", { error: "Invalid OTP" });
-    } else {
-      // res.send('OTP verified successfully');
-      res.render("user/index");
+    // const user = await User.findOne({ email });
+    
+    // console.log(req.session.otp);
+ 
+    if (otp !== req.session.otp) {
+      return res.status(400).render("user/otp-register", { error: "Invalid OTP" });
     }
+
+    console.log('how are you',email,otp,name,phoneNumber,password);
+
+    // const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password,10);
+
+    // Save user data in the database
+    const newUser = new User({
+         name,
+         phoneNumber,
+         email,
+         password: hashedPassword,
+  
+    });
+
+    await newUser.save();
+
+    // Redirect to success page
+    return res.render("user/index");
+
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal Server Error in verifyOpt");
+    return res.status(500).send("Internal Server Error in verifyOTP");
   }
 };
+
 
 module.exports = {
   loginPage,

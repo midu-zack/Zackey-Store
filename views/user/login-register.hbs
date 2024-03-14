@@ -497,98 +497,91 @@
                                         <div class="login-register-form">
                                               <h1>Sign Up</h1>
                                                
-                                            <form action="/auth/register" method="post" >
+                                         <form action="/auth/register" method="post">
+      <small class="error-message" id="name-error" style="color:red; display: none;">Invalid Name</small>
+    <input type="text" name="name" placeholder="Name">
+  
+    <small class="error-message" id="phone-error" style="color:red; display: none;">Invalid phone</small>
+    <input name="phoneNumber" placeholder="PhoneNumber" type="phoneNumber">
+    
+    <small class="error-message" id="email-error" style="color:red; display: none;">Invalid email</small>
+    <input name="email" placeholder="Email" type="email">
+    
+     <small class="error-message" id="password-error" style="color:red; display: none;">Invalid password</small>
+    <input type="password" name="password" placeholder="Password">
+   
+    <small class="error-message" id="confirm-password-error" style="color:red; display: none;">Passwords do not match</small>
+    <input type="password" name="confirmPassword" placeholder="Confirm Password">
+    
 
-                                                 <small id="name-error" style="color:red; display: none;">Invalid Name</small>
-                                                 <input type="text" name="name" placeholder="Name">
-                                                
-                                                 <small id="phone-error" style="color:red; display: none;">Invalid phone</small>
-                                                 <input name="phoneNumber" placeholder="PhoneNumber" type="phoneNumber">
+    <div class="button-box">
+        <button type="submit" onclick="validateAndSubmit(event)">Register</button>
+    </div>
+</form>
 
-                                              
-                                                 
-                                                <small id="email-error" style="color:red; display: none;">Invalid email</small>
-                                                <input name="email" placeholder="Email" type="email">
-                                                
- 
+<script>
+    function validateAndSubmit(event) {
+        var form = event.target.form;
+        var nameInput = form.elements['name'];
+        var phoneInput = form.elements['phoneNumber'];
+        var emailInput = form.elements['email'];
+        var passwordInput = form.elements['password'];
+        var confirmPasswordInput = form.elements['confirmPassword'];
 
-                                                 <small id="password-error" style="color:red; display: none;">Invalid password</small>
-                                                 <input type="password" name="password" placeholder="Password">
+        var isValid = true;
 
+        if (nameInput.value.trim() === '') {
+            displayError('name-error', 'Invalid Name');
+            isValid = false;
+        } else {
+            hideError('name-error');
+        }
 
-                                                  <small id="confirm-password-error" style="color:red; display: none;">Invalid password</small>
-                                                 <input type="password" name="conformPassword" placeholder="conformPassword">
-                                                
-                                              
-                                                 <div class="button-box">
-                                                    <button type="submit" onclick="validateAndSubmit(event)" >Register</button>
-                                                 </div>
-                                           
-                                                 </form>
-                                                 
-                
-                                          <script>
-                                                function validateAndSubmit(event) {
-                                                     
-                                                    
-                                                    // Get form elements
-                                                    var form = event.target.form;
-                                                    var nameInput = form.elements['name'];
-                                                    var phoneInput = form.elements['phoneNumber'];
-                                                    var emailInput = form.elements['email'];
-                                                    var passwordInput = form.elements['password'];
+        if (!(/^\d{10}$/.test(phoneInput.value))) {
+            displayError('phone-error', 'Invalid phone');
+            isValid = false;
+        } else {
+            hideError('phone-error');
+        }
 
-                                                    // Validation
-                                                    var isValid = true;
+        if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value))) {
+            displayError('email-error', 'Invalid email');
+            isValid = false;
+        } else {
+            hideError('email-error');
+        }
 
-                                                    // Validate Name
-                                                    if (nameInput.value.trim() === '') {
-                                                        document.getElementById('name-error').style.display = 'block';
-                                                        isValid = false;
-                                                    } else {
-                                                        document.getElementById('name-error').style.display = 'none';
-                                                    }
+        if (passwordInput.value.length < 6) {
+            displayError('password-error', 'Invalid password');
+            isValid = false;
+        } else {
+            hideError('password-error');
+        }
 
-                                                    // Validate Phone Number
-                                                    if (!(/^\d{10}$/.test(phoneInput.value))) {
-                                                        document.getElementById('phone-error').style.display = 'block';
-                                                        isValid = false;
-                                                    } else {
-                                                        document.getElementById('phone-error').style.display = 'none';
-                                                    }
+        if (confirmPasswordInput.value !== passwordInput.value) {
+            displayError('confirm-password-error', 'Passwords do not match');
+            isValid = false;
+        } else {
+            hideError('confirm-password-error');
+        }
 
-                                                    // Validate Email
-                                                    if (!(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value))) {
-                                                        document.getElementById('email-error').style.display = 'block';
-                                                        isValid = false;
-                                                    } else {
-                                                        document.getElementById('email-error').style.display = 'none';
-                                                    }
+        if (!isValid) {
+            event.preventDefault();
+        }
+    }
 
-                                                    // Validate Password
-                                                    if (passwordInput.value.length < 6) {
-                                                        document.getElementById('password-error').style.display = 'block';
-                                                        isValid = false;
-                                                    } else {
-                                                        document.getElementById('password-error').style.display = 'none';
-                                                    }   
+    function displayError(id, message) {
+        var errorElement = document.getElementById(id);
+        errorElement.innerText = message;
+        errorElement.style.display = 'block';
+    }
 
-                                                    if (confirmPasswordInput.value !== passwordInput.value) {
-                                                        document.getElementById('confirm-password-error').style.display = 'block';
-                                                        isValid = false;
-                                                    } else {
-                                                        document.getElementById('confirm-password-error').style.display = 'none';
-                                                    }
+    function hideError(id) {
+        var errorElement = document.getElementById(id);
+        errorElement.style.display = 'none';
+    }
+</script>
 
-                                                    // If the form is valid, submit the form
-                                                    if (isValid) {
-                                                        form.submit();
-                                                    }else{
-                                                        event.preventDefault()
-                                                    }
-
-                                                }
-                                                </script>
                                         </div>
                                     </div>
                                 </div>
