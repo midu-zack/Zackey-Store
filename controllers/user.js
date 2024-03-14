@@ -9,7 +9,7 @@ let homePage = async (req, res) => {
     const products = await Product.find();
     res.render('user/index',{products} );
   } catch (error) {
-    console.error(error ,"rendering homage  ");
+     
     res.status(500).send('Internal Server Error in home page');
   }
 }
@@ -19,9 +19,9 @@ let homePage = async (req, res) => {
 let account = async (req,res)=>{
   try {
   let userId = req.body.id;
-  console.log("this is id user account id" , userId);
+  // console.log("this is id user account id" , userId);
   let user = await User.findOne({_id:userId})
-  console.log("getting the user details :" , user);
+  // console.log("getting the user details :" , user);
   if(!user){
     return res.status(400).send("user not found")
   }
