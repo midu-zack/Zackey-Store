@@ -1,6 +1,5 @@
 const Product = require("../model/product");
 const Category = require("../model/categorie");
-const upload = require("../config/multer");
 const cloudinary = require("../config/cloudinary");
 
 // show the product list page

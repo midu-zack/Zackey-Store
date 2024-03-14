@@ -14,11 +14,10 @@ const verifyToken = (req,res,next)=>{
         const decoded = jwt.verify(token,process.env.JWT_KEY);
         req.user = decoded;
         next();
-
-    }catch(error){
+    }
+    catch(error){
         return res.render('user/login')
     }
 }
-
-
+ 
 module.exports = verifyToken;

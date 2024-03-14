@@ -16,6 +16,8 @@ const userController = require('../controllers/auth');
 router.get('/login-register',loginPage );
 router.get('/auth/register',otpReg);
 
+router.get('/logout',userController.logout)
+
 router.post('/send-otp', sendOTP);
 router.post('/verify-otp',verifyOTP);
 router.post('/auth/register',submitRegister)

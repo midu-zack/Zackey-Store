@@ -9,7 +9,18 @@ let homePage = (req, res) => {
 }
 
 
+// get userAccount
+let account = async (req,res)=>{
+  try {
+    
+  } catch (error) {
+    
+  }
+}
+
  
 module.exports ={
-    homePage 
+    homePage ,
+    account
+
 } 

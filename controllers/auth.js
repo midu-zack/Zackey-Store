@@ -10,12 +10,22 @@ dotenv.config()
 // get  loginPage
 const loginPage = (req, res) => {
   try {
-    res.render("user/login-register");
+   
+      res.render("user/login-register");
+    
   } catch (err) {
     console.error("Error rendering login page:", err);
     res.status(500).send("Internal Server Error");
   }
 };
+
+
+const logout = (req, res) => {
+  res.clearCookie('jwt'); // Clear the JWT cookie
+  res.redirect('/'); // Redirect to login page or any other appropriate page
+};
+
+
 
 const otpReg = (req, res) => {
   try {
@@ -61,6 +71,7 @@ const submitLogin = async (req, res) => {
       name : user.name,
       email : user.email 
     },
+
     process.env.JWT_KEY,{
 
       expiresIn: "24h",
@@ -249,6 +260,7 @@ const verifyOTP = async (req, res) => {
 
 module.exports = {
   loginPage,
+  logout,
   submitRegister,
   submitLogin,
   sendOTP,
