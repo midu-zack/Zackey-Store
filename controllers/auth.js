@@ -6,6 +6,7 @@ const generateOTP = require("../utils/otpGenerator");
 const jwt = require("jsonwebtoken")
 const dotenv = require("dotenv")
 dotenv.config()
+const Product = require("../model/product")
  
 // get  loginPage
 const loginPage = (req, res) => {
@@ -24,7 +25,6 @@ const logout = (req, res) => {
   res.clearCookie('jwt'); // Clear the JWT cookie
   res.redirect('/'); // Redirect to login page or any other appropriate page
 };
-
 
 
 const otpReg = (req, res) => {
@@ -84,8 +84,8 @@ const submitLogin = async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
       secure: process.env.NODE_ENV === "production",
     })
-   
-    res.redirect("/");
+    const products = await Product.find();
+    res.redirect("/",{products});
 
   } catch (error) {
     res.status(500).json({ message: "Login failed", error });
@@ -188,7 +188,7 @@ let submitRegister = async (req, res) => {
   try {
     const { name, email, phoneNumber, password } = req.body;
 
-    console.log("this is submtREgister all datas:", name,email,phoneNumber,password );
+    // console.log("this is submtREgister all datas:", name,email,phoneNumber,password );
 
     const userExist = await User.exists({ email: email.toLowerCase() });
 
@@ -221,16 +221,11 @@ let submitRegister = async (req, res) => {
 const verifyOTP = async (req, res) => {
   const { email, otp, name, phoneNumber, password } = req.body;
   try {
-    // const user = await User.findOne({ email });
-    
-    // console.log(req.session.otp);
- 
+   
     if (otp !== req.session.otp) {
       return res.status(400).render("user/otp-register", { error: "Invalid OTP" });
     }
-
-    console.log('how are you',email,otp,name,phoneNumber,password);
-
+ 
     // const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password,10);
 
@@ -244,9 +239,10 @@ const verifyOTP = async (req, res) => {
     });
 
     await newUser.save();
+    const products = await Product.find();
 
     // Redirect to success page
-    return res.render("user/index");
+    return res.render("user/index",{products});
 
   } catch (error) {
     console.error(error);

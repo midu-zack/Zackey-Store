@@ -51,27 +51,25 @@
                                         <li class="angle-shape"><a href="index-4.html">Home</a>
                                              
                                         </li>
-                                        <li class="angle-shape"><a href="shop.html">Shop </a>
+                                        <li class="angle-shape"><a href="/shop">Shop </a>
                                             <ul class="mega-menu mega-menu-hm4">
                                                 <li><a class="menu-title" href="#">Shop Layout</a>
                                                     <ul>
-                                                        <li><a href="shop.html">standard style</a></li>
-                                                        <li><a href="shop-2.html">standard style 2</a></li>
-                                                        <li><a href="shop-2-col.html">shop 2 column</a></li>
-                                                        <li><a href="shop-no-sidebar.html">shop no sidebar</a></li>
-                                                        <li><a href="shop-fullwide.html">shop fullwide</a></li>
+                                                      
+                                                        {{!-- <li><a href="shop-no-sidebar.html">shop no sidebar</a></li> --}}
+                                                        <li><a href="/shop">shop fullwide</a></li>
 
                                                     </ul>
                                                 </li>
-                                                <li><a class="menu-title" href="#">Shop Layout</a>
+                                                {{!-- <li><a class="menu-title" href="#">Shop Layout</a>
                                                     <ul>
                                                         <li><a href="shop-fullwide-no-sidebar.html">fullwide no sidebar </a></li>
                                                         <li><a href="shop-list.html">list style</a></li>
                                                         <li><a href="shop-list-2col.html">list 2 column</a></li>
                                                         <li><a href="shop-list-no-sidebar.html">list no sidebar</a></li>
                                                     </ul>
-                                                </li>
-                                                <li><a class="menu-title" href="#">Product Details</a>
+                                                </li> --}}
+                                                {{!-- <li><a class="menu-title" href="#">Product Details</a>
                                                     <ul>
                                                         <li><a href="product-details.html">standard style</a></li>
                                                         <li><a href="product-details-2.html">standard style 2</a></li>
@@ -79,15 +77,15 @@
                                                         <li><a href="product-details-tab2.html">tab style 2</a></li>
                                                         <li><a href="product-details-tab3.html">tab style 3 </a></li>
                                                     </ul>
-                                                </li>
-                                                <li><a class="menu-title" href="#">Product Details</a>
+                                                </li> --}}
+                                                {{!-- <li><a class="menu-title" href="#">Product Details</a>
                                                     <ul>
                                                         <li><a href="product-details-gallery.html">gallery style </a></li>
                                                         <li><a href="product-details-sticky.html">sticky style</a></li>
                                                         <li><a href="product-details-slider.html">slider style</a></li>
                                                         <li><a href="product-details-affiliate.html">Affiliate style</a></li>
                                                     </ul>
-                                                </li>
+                                                </li> --}}
                                             </ul>
                                         </li>
                                        
@@ -132,21 +130,21 @@
                                                 <ul>
                                                     <li><a href="login-register">Login</a></li>
                                                     <li><a href="login-register">Creat Account</a></li>
-                                                    <li><a href="my-account.html">My Account</a></li>
+                                                    <li><a href="/account">My Account</a></li>
+                                                    {{!-- <li><a href="/logout">Logout</a></li> --}}
+
                                                 </ul>
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
-                                      <div>
-                                     <!-- logout.hbs -->
-                                              
-                                                    <a href="/logout" class="logout-link">
-                                                        <i class="fas fa-sign-out-alt"></i>
-                                                    </a>
-
-                                         
-                                </div>
+                                   
+                                    {{!-- {{#if user}}
+                                    <li><a href="/loginregister"><i class="fa fa-user"></i> Account</a></li>
+                                    {{else}}
+                                      <li><a href="/logout"><i class="fa fa-user"></i> Logout</a></li>
+                                    {{/if}} --}}
+                                   
                                 <div class="cart-wrap cart-wrap-2">
                                     <button class="cart-active">
                                         <span class="mini-cart-price-2">$400.00</span>
@@ -463,7 +461,7 @@
                         <h1 class="wow fadeInLeft">Best Furniture <br>Collection.</h1>
                         <p class="wow fadeInLeft">There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. </p>
                         <div class="slider-btn-4">
-                            <a class="wow fadeInLeft" href="product-details.html"><span>Shop Now</span> <i class="la la-shopping-cart"></i></a>
+                            <a class="wow fadeInLeft" href="/shop"><span>Shop Now</span> <i class="la la-shopping-cart"></i></a>
                         </div>
                     </div>
                 </div>
@@ -515,10 +513,12 @@
                 <div class="section-title-4 text-center">
                     <h2>Featured Product</h2>
                 </div>
-                <div class="product-slider-active-2 owl-carousel">
+                    {{#each products}}
+                <div class="product-slider-active-3 owl-carousel">
                     <div class="product-wrap product-border-2 pro-hover-shadow mb-40">
                         <div class="product-img mb-15">
-                            <a href="product-details.html"><img src="assets/images/product/pro-hm4-1.jpg" alt="product"></a>
+                            <a href="product-details.html">
+                               <img class="w120 rounded img-fluid" src="{{this.images.[0]}}" alt="noImage">
                             <div class="product-action-3">
                                 <a data-bs-toggle="modal" data-bs-target="#exampleModal" title="Quick View" href="#"><i class="la la-arrows"></i></a>
                                 <a title="Wishlist" href="#"><i class="la la-heart-o"></i></a>
@@ -526,101 +526,15 @@
                             </div>
                         </div>
                         <div class="product-content-2">
-                            <h4><a href="product-details.html">Simple Chair</a></h4>
-                            <span>Moving</span>
+                            <h4><a href="product-details.html">{{this.name}}</a></h4>
+                            <span>{{this.meterial}}</span>
                             <div class="pro-price-2">
-                                <span>$20.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-wrap product-border-2 pro-hover-shadow mb-40">
-                        <div class="product-img mb-15">
-                            <a href="product-details.html"><img src="assets/images/product/pro-hm4-2.jpg" alt="product"></a>
-                            <div class="product-action-3">
-                                <a data-bs-toggle="modal" data-bs-target="#exampleModal" title="Quick View" href="#"><i class="la la-arrows"></i></a>
-                                <a title="Wishlist" href="#"><i class="la la-heart-o"></i></a>
-                                <a title="Add To Cart" href="#"><i class="la la-cart-plus"></i></a>
-                            </div>
-                        </div>
-                        <div class="product-content-2">
-                            <h4><a href="product-details.html">Simple Chair</a></h4>
-                            <span>Moving</span>
-                            <div class="pro-price-2">
-                                <span>$30.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-wrap product-border-2 pro-hover-shadow mb-40">
-                        <div class="product-img mb-15">
-                            <a href="product-details.html"><img src="assets/images/product/pro-hm4-3.jpg" alt="product"></a>
-                            <div class="product-action-3">
-                                <a data-bs-toggle="modal" data-bs-target="#exampleModal" title="Quick View" href="#"><i class="la la-arrows"></i></a>
-                                <a title="Wishlist" href="#"><i class="la la-heart-o"></i></a>
-                                <a title="Add To Cart" href="#"><i class="la la-cart-plus"></i></a>
-                            </div>
-                        </div>
-                        <div class="product-content-2">
-                            <h4><a href="product-details.html">Simple Chair</a></h4>
-                            <span>Moving</span>
-                            <div class="pro-price-2">
-                                <span>$40.00</span>
-                                <span class="old-price">$50.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-wrap product-border-2 pro-hover-shadow mb-40">
-                        <div class="product-img mb-15">
-                            <a href="product-details.html"><img src="assets/images/product/pro-hm4-4.jpg" alt="product"></a>
-                            <div class="product-action-3">
-                                <a data-bs-toggle="modal" data-bs-target="#exampleModal" title="Quick View" href="#"><i class="la la-arrows"></i></a>
-                                <a title="Wishlist" href="#"><i class="la la-heart-o"></i></a>
-                                <a title="Add To Cart" href="#"><i class="la la-cart-plus"></i></a>
-                            </div>
-                        </div>
-                        <div class="product-content-2">
-                            <h4><a href="product-details.html">Simple Chair</a></h4>
-                            <span>Moving</span>
-                            <div class="pro-price-2">
-                                <span>$60.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-wrap product-border-2 pro-hover-shadow mb-40">
-                        <div class="product-img mb-15">
-                            <a href="product-details.html"><img src="assets/images/product/pro-hm4-5.jpg" alt="product"></a>
-                            <div class="product-action-3">
-                                <a data-bs-toggle="modal" data-bs-target="#exampleModal" title="Quick View" href="#"><i class="la la-arrows"></i></a>
-                                <a title="Wishlist" href="#"><i class="la la-heart-o"></i></a>
-                                <a title="Add To Cart" href="#"><i class="la la-cart-plus"></i></a>
-                            </div>
-                        </div>
-                        <div class="product-content-2">
-                            <h4><a href="product-details.html">Simple Chair</a></h4>
-                            <span>Moving</span>
-                            <div class="pro-price-2">
-                                <span>$80.00</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-wrap product-border-2 pro-hover-shadow mb-40">
-                        <div class="product-img mb-15">
-                            <a href="product-details.html"><img src="assets/images/product/pro-hm4-2.jpg" alt="product"></a>
-                            <div class="product-action-3">
-                                <a data-bs-toggle="modal" data-bs-target="#exampleModal" title="Quick View" href="#"><i class="la la-arrows"></i></a>
-                                <a title="Wishlist" href="#"><i class="la la-heart-o"></i></a>
-                                <a title="Add To Cart" href="#"><i class="la la-cart-plus"></i></a>
-                            </div>
-                        </div>
-                        <div class="product-content-2">
-                            <h4><a href="product-details.html">Simple Chair</a></h4>
-                            <span>Moving</span>
-                            <div class="pro-price-2">
-                                <span>$70.00</span>
-                                <span class="old-price">$90.00</span>
+                                <span>{{this.price}}</span>
                             </div>
                         </div>
                     </div>
                 </div>
+                    {{/each}}
             </div>
         </div>
         <div class="banner-area pb-75">
@@ -694,7 +608,7 @@
                 </div>
             </div>
         </div>
-        <div class="product-area pb-70 section-padding-3">
+        {{!-- <div class="product-area pb-70 section-padding-3">
             <div class="container-fluid">
                 <div class="section-title-4 text-center">
                     <h2>Furnitures Categories</h2>
@@ -1164,7 +1078,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="brand-logo-area pb-110 section-padding-3">
             <div class="container-fluid">
                 <div class="brand-logo-border">
