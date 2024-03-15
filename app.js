@@ -8,6 +8,7 @@ const authRoutes = require("./routers/auth")
 const adminRouter = require("./routers/admin");
 const categorie = require("./routers/categerie")
 const product = require("./routers/product")
+const customers = require("./routers/customers")
 
 
 const bodyParser = require("body-parser");
@@ -44,6 +45,7 @@ app.use("/", userRouter);
 app.use("/", adminRouter);
 app.use("/", categorie)
 app.use("/", product)
+app.use("/",customers)
 
 
 

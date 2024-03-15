@@ -7,6 +7,16 @@ const userSchema = new mongoose.Schema({
     
     },
 
+   //  createdAt: {
+   //    type: Date,
+   //    default: () => {
+   //        const now = new Date();
+   //        // Extract the date part
+   //        const dateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+   //        return dateOnly;
+   //    }
+   //    },
+
    phoneNumber :{
       type:String,
       

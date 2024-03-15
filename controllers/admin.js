@@ -14,6 +14,23 @@ let adminLoginPage = (req, res) => {
     }
   }
 
+  let adminLogout = (req, res) => {
+    try {
+        // Assuming you're using session-based authentication
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("Error destroying session:", err);
+                res.status(500).json({ message: "Failed to logout" });
+            } else {
+                res.status(200).render('admin/dashboard',{ message: "Logout successful" });
+            }
+        });
+    } catch (error) {
+        console.error("Error during logout:", error);
+        res.status(500).json({ message: "Failed to logout" });
+    }
+}
+
 
 
 // handle login submission
@@ -44,11 +61,11 @@ let adminSubmitlogin = async (req, res) => {
 
                 res.render("admin/dashboard")
             } else {
-                // Password incorrect
+               
                 res.render('admin/admin-login', { error: 'Incorrect email or password' });
             }
         } else {
-            // Admin not found
+             
             res.render('admin/admin-login', { error: 'Admin not found' });
         }
     } catch (error) {
@@ -60,5 +77,6 @@ let adminSubmitlogin = async (req, res) => {
   
   module.exports ={
       adminLoginPage ,
-      adminSubmitlogin
+      adminSubmitlogin,
+      adminLogout
   }

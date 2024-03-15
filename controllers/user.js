@@ -58,10 +58,21 @@ let showShop = async(req,res)=>{
 //   res.render('user/profile', {user});
 // }
 
+
+// add to cart page 
+let addCart = async (req,res)=>{
+  try {
+    res.render("user/cart")
+
+  } catch (error) {
+    console.log(error);
+  }
+}
  
 module.exports ={
     homePage ,
     account,
-    showShop
+    showShop,
+    addCart
 
 } 
