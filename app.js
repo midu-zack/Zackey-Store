@@ -2,7 +2,7 @@ const express = require("express");
 const path = require('path')
 const dotenv = require("dotenv")
 dotenv.config()
- 
+
 const userRouter = require("./routers/user");
 const authRoutes = require("./routers/auth")
 const adminRouter = require("./routers/admin");
@@ -15,9 +15,10 @@ const bodyParser = require("body-parser");
 const connectDatabase = require("./config/database");
 // const { session } = require("passport");
 const session = require("express-session")
+const cookieParser = require('cookie-parser');
 
 const app = express();
-
+app.use(cookieParser());
 const port = 2005;
 
 app.set("view engine", "hbs");

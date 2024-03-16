@@ -20,13 +20,7 @@ const loginPage = (req, res) => {
   }
 };
 
-
-const logout = (req, res) => {
-  res.clearCookie('jwt'); // Clear the JWT cookie
-  res.redirect('/'); // Redirect to login page or any other appropriate page
-};
-
-
+ 
 const otpReg = (req, res) => {
   try {
     res.render("user/otp-register");
@@ -36,6 +30,7 @@ const otpReg = (req, res) => {
   }
 };
 
+
 // handle login submission
 const submitLogin = async (req, res) => {
   try {
@@ -43,54 +38,55 @@ const submitLogin = async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    // if (user.block){
-    //   return res.render('login',{message:'user contact blocked'})
-    // }
-
     if (!user) {
-      return res
-        .status(404)
-        .render("user/login-register", {
-          message: "User not exist. Please Register.",
-        });
+      return res.status(404).render("user/login-register", {
+        message: "User does not exist. Please Register.",
+      });
     }
-    //password hashing
+
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res
-        .status(404)
-        .render("user/login-register", {
-          message: "Incorrect password. Please try again." ,
-        });
+      return res.status(404).render("user/login-register", {
+        message: "Incorrect password. Please try again.",
+      });
     }
 
-     // generate jwt token 
-     const token = jwt.sign({
-      id: user._id,
-      name : user.name,
-      email : user.email 
-    },
+    // Generate JWT token
+    const token = jwt.sign(
+      {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+      process.env.JWT_KEY,
+      {
+        expiresIn: "24h",
+      }
+    );
 
-    process.env.JWT_KEY,{
-
-      expiresIn: "24h",
-
+    // Set JWT Token in a cookie
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+      // secure: process.env.NODE_ENV === "production",
     });
 
-    //set JWT Token in a cookie
-    res.cookie("jwt",token,{
-      httpOnly:true,
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
-      secure: process.env.NODE_ENV === "production",
-    })
+    // Optionally, store user ID in a separate cookie
+    // res.cookie("userId", user._id, {
+    //   maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
+    //   // secure: process.env.NODE_ENV === "production",
+    // });
+
     const products = await Product.find();
-    res.redirect("/",{products});
+
+    res.render("user/index", { products });
 
   } catch (error) {
     res.status(500).json({ message: "Login failed", error });
   }
 };
+
 
 
 
@@ -241,8 +237,7 @@ const verifyOTP = async (req, res) => {
     await newUser.save();
     const products = await Product.find();
 
-    // Redirect to success page
-    return res.render("user/index",{products});
+    return res.render("user/login-register",{products});
 
   } catch (error) {
     console.error(error);
@@ -253,7 +248,6 @@ const verifyOTP = async (req, res) => {
 
 module.exports = {
   loginPage,
-  logout,
   submitRegister,
   submitLogin,
   sendOTP,

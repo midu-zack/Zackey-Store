@@ -32,6 +32,15 @@ const userSchema = new mongoose.Schema({
    otpExpiration:{
       type: Date
    } ,
+   token : {
+      type:String,
+      default:null
+   },
+   
+   blocked : {
+      type:Boolean,
+      default:false
+   },
 
 
   email: { 

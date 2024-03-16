@@ -14,26 +14,7 @@ let homePage = async (req, res) => {
   }
 }
 
-
-// get userAccount
-let account = async (req,res)=>{
-  try {
-  let userId = req.body.id;
-  // console.log("this is id user account id" , userId);
-  let user = await User.findOne({_id:userId})
-  // console.log("getting the user details :" , user);
-  if(!user){
-    return res.status(400).send("user not found")
-  }
-  
-    res.render("user/my-account")
-
-  } catch (error) {
-
-    console.log(error);
-    
-  }
-}
+ 
 
 // get shop page
 let showShop = async(req,res)=>{
@@ -47,16 +28,40 @@ let showShop = async(req,res)=>{
     
   }
 }
-// get myaccount
-// let profile = async (req, res) => {
-//   let userId = req.user.id;
-//   let user = await User.findOne({ _id: userId });
-//   console.log(user,'getting the user details');
-//   if (!user) {
-//       return res.status(400).send('User not found');
-//   }
-//   res.render('user/profile', {user});
-// }
+
+
+// get myAccount
+const account = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    console.log("this is account user  ",req.user);
+
+    if (!userId) {
+      return res.status(401).render("user/login-register");
+    }
+
+    const user = await User.findById(userId);
+
+    // Check if user exists
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    res.render("user/my-account", { user });
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+ 
+// logout user
+const logout = (req, res) => {
+  res.clearCookie('jwt'); // Clear the JWT cookie
+  res.clearCookie('userId')
+  res.redirect('/'); // Redirect to login page or any other appropriate page
+};
 
 
 // add to cart page 
@@ -71,8 +76,9 @@ let addCart = async (req,res)=>{
  
 module.exports ={
     homePage ,
-    account,
     showShop,
-    addCart
+    addCart,
+    logout,
+    account
 
 } 

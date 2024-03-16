@@ -6,17 +6,24 @@ const verifyToken = (req,res,next)=>{
 
     const token = req.cookies.jwt
 
-    if(!token){
-        return res.render('user/login')
-    }
 
     try{
+        
+        if(!token){
+           
+            return res.render("user/login-register")
+        } 
         const decoded = jwt.verify(token,process.env.JWT_KEY);
+
         req.user = decoded;
+        
         next();
     }
+
     catch(error){
-        return res.render('user/login')
+
+        return res.render('user/login-register')
+
     }
 }
  

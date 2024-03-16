@@ -335,7 +335,7 @@
                                             <tr>
                                                 <th>Id</th>
                                                 <th>Customers</th> 
-                                                {{!-- <th>Register  Date</th> --}}
+                                                {{!-- <th>Register  Date</th>    --}}
                                                 <th>Mail</th>
                                                 <th>Phone</th> 
                                                 {{!-- <th>Country</th>  --}}
@@ -361,13 +361,35 @@
                                                 {{!-- <td>South Africa</td> --}}
                                                 {{!-- <td>18</td> --}}
                                                 <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <button type="button" class="btn btn-outline-secondary"  data-bs-toggle="modal" data-bs-target="#expedit"><i class="icofont-edit text-success"></i></button>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                    </div>
+                                                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                    <button type="button" class="btn btn-outline-secondary toggle-btn" data-bs-toggle="modal" data-bs-target="#expedit">Block</button>
+                                                </div>
+
+
                                                 </td>
                                             </tr>
                                              {{/each}}
+                                             
+                                             <script>
+                                                document.addEventListener('DOMContentLoaded', function() {
+                                                    const toggleBtn = document.querySelector('.toggle-btn');
+
+                                                    toggleBtn.addEventListener('click', function() {
+                                                        const currentText = toggleBtn.textContent.trim();
+                                                        
+                                                        if (currentText === 'Block') {
+                                                            toggleBtn.textContent = 'Unblock';
+                                                            toggleBtn.classList.remove('btn-outline-secondary');
+                                                            toggleBtn.classList.add('btn-outline-danger');
+                                                        } else {
+                                                            toggleBtn.textContent = 'Block';
+                                                            toggleBtn.classList.remove('btn-outline-danger');
+                                                            toggleBtn.classList.add('btn-outline-secondary');
+                                                        }
+                                                    });
+                                                });
+
+                                             </script>
                                             
                                              
                                             

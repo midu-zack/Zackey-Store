@@ -16,20 +16,19 @@ let adminLoginPage = (req, res) => {
 
   let adminLogout = (req, res) => {
     try {
-        // Assuming you're using session-based authentication
         req.session.destroy((err) => {
             if (err) {
-                console.error("Error destroying session:", err);
-                res.status(500).json({ message: "Failed to logout" });
-            } else {
-                res.status(200).render('admin/dashboard',{ message: "Logout successful" });
+                console.error('Error destroying session:', err);
+                return res.status(500).send('Internal Server Error');
             }
+            res.redirect('/admin');
         });
     } catch (error) {
-        console.error("Error during logout:", error);
-        res.status(500).json({ message: "Failed to logout" });
+        console.error('Error during logout:', error);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
+
 
 
 
