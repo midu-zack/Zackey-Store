@@ -3,22 +3,23 @@ const path = require('path')
 const dotenv = require("dotenv")
 dotenv.config()
 
-const userRouter = require("./routers/user");
-const authRoutes = require("./routers/auth")
-const adminRouter = require("./routers/admin");
-const categorie = require("./routers/categerie")
-const product = require("./routers/product")
-const customers = require("./routers/customers")
+const userRouter =require("./routers/user");
+const authRoutes =require("./routers/auth")
+const adminRouter =require("./routers/admin");
+const categorieRouter =require("./routers/categerie")
+const productRouter =require("./routers/product")
+const customersRouter =require("./routers/customers")
+const cartRouter =require("./routers/cart")
 
 
 const bodyParser = require("body-parser");
 const connectDatabase = require("./config/database");
 // const { session } = require("passport");
 const session = require("express-session")
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 
 const app = express();
-app.use(cookieParser());
+// app.use(cookieParser());
 const port = 2005;
 
 app.set("view engine", "hbs");
@@ -44,9 +45,10 @@ app.use(session({
 app.use("/", authRoutes);
 app.use("/", userRouter);
 app.use("/", adminRouter);
-app.use("/", categorie)
-app.use("/", product)
-app.use("/",customers)
+app.use("/", categorieRouter)
+app.use("/", productRouter)
+app.use("/",customersRouter)
+app.use("/",cartRouter)
 
 
 

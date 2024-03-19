@@ -489,8 +489,10 @@
                             <div class="tab-content jump">
                                 <div id="shop-1" class="tab-pane active">
                                     <div class="row">
-                                         
+
+                                         {{!-- {{#if products}} --}}
                                           {{#each products}}
+
                                         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
                                             <div class="product-wrap mb-35">
                                                 <div class="product-img mb-15">
@@ -511,13 +513,14 @@
                                                             <span>{{this.price}}</span>
                                                         </div>
                                                         <div class="product-addtocart">
-                                                            <a title="Add To Cart" href="/addCart">+ Add To Cart</a>
+                                                            <a title="Add To Cart" href="/addCart/{{this._id}}">+ Add To Cart</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                          {{/each}}
+                                         {{!-- {{/if}} --}}
                                     </div>
                                 </div>
                                 {{!-- <div id="shop-2" class="tab-pane">

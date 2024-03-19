@@ -1,30 +1,22 @@
-const jwt = require('jsonwebtoken')
-const dotenv = require('dotenv')
-dotenv.config()
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
-const verifyToken = (req,res,next)=>{
+const verifyToken = (req, res, next) => {
+  const token = req.cookies.jwt;
 
-    const token = req.cookies.jwt
-
-
-    try{
-        
-        if(!token){
-           
-            return res.render("user/login-register")
-        } 
-        const decoded = jwt.verify(token,process.env.JWT_KEY);
-
-        req.user = decoded;
-        
-        next();
+  try {
+    if (!token) {
+      return res.render("user/login-register");
     }
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
 
-    catch(error){
+    req.user = decoded;
 
-        return res.render('user/login-register')
+    next();
+  } catch (error) {
+    return res.render("user/login-register");
+  }
+};
 
-    }
-}
- 
 module.exports = verifyToken;

@@ -140,8 +140,9 @@ const  successGoogleLogin = async(req,res)=>{
     
   }
 }
+ 
 
-// 
+
 const failureGooglelogin = (req, res) => {
 
   res.status(500).render("user/login-register",{ message : "Error logging in with Google"});
@@ -235,6 +236,7 @@ const verifyOTP = async (req, res) => {
     });
 
     await newUser.save();
+    console.log(newUser);
     const products = await Product.find();
 
     return res.render("user/login-register",{products});

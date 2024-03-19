@@ -59,25 +59,16 @@ const account = async (req, res) => {
 // logout user
 const logout = (req, res) => {
   res.clearCookie('jwt'); // Clear the JWT cookie
-  res.clearCookie('userId')
+  // res.clearCookie('userId')
   res.redirect('/'); // Redirect to login page or any other appropriate page
 };
 
 
-// add to cart page 
-let addCart = async (req,res)=>{
-  try {
-    res.render("user/cart")
 
-  } catch (error) {
-    console.log(error);
-  }
-}
  
 module.exports ={
     homePage ,
     showShop,
-    addCart,
     logout,
     account
 
