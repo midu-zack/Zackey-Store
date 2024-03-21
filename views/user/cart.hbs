@@ -474,27 +474,39 @@
                                     </thead>
                                     <tbody>
                                          
-                                        
+                                        {{#each bookings}}
                                         <tr>
                                             <td class="product-thumbnail">
                                                 <a href="#"> 
-                                                    <img class="w120 rounded img-fluid" src="{{products.images.[0]}}" alt="noImage">
+                                                    <img class="w120 rounded img-fluid" src="{{this.product.images.[0]}}" alt="noImage">
                                                 </a>
                                                 
                                             </td>
-                                            <td class="product-name"><a href="#">{{products.name}}</a></td>
-                                            <td class="product-price-cart"><span class="amount">{{products.price}}</span></td>
-                                            <td class="product-quantity">
-                                                <div class="cart-plus-minus">
-                                                    <input class="cart-plus-minus-box" type="text" name="qtybutton" value="2">
-                                                </div>
+                                            <td class="product-name"><a href="#">{{this.product.name}}</a></td>
+                                            <td class="product-price-cart"><span class="amount">{{this.product.price}}</span></td>
+                                           <td class="product-quantity ">
+                                                 
+                                                    <button type="button" onclick="decrementQuantity('{{this.product._id}}')">-</button>
+                                                    <input id="quantityInput{{this.product._id}}" class="cart-plus-minus-box" value='{{this.quantity}}' type="text">
+                                                    <button type="button" onclick="incrementQuantity('{{this.product._id}}')">+</button>
+                                                
                                             </td>
-                                            <td class="product-subtotal">$110.00</td>
+
+                                           <td class="product-subtotal">
+                                                    {{#if this.total}}
+                                                        {{this.total}}
+                                                    {{else}}
+                                                        {{this.product.price}}
+                                                    {{/if}}
+                                             </td>
                                             <td class="product-remove">
                                                 {{!-- <a href="#"><i class="la la-pencil"></i></a> --}}
-                                                <a href="/deleteProductCart/{{products.id}}"><i class="la la-close"></i></a>
+                                                <a href="/deleteProductCart/{{this.product._id}}"><i class="la la-close"></i></a>
+                                                
                                             </td>
                                         </tr>
+                                        {{/each}}
+
                                     </tbody>
                                 </table>
                             </div>
@@ -502,7 +514,7 @@
                                 <div class="col-lg-12">
                                     <div class="cart-shiping-update-wrapper">
                                         <div class="cart-shiping-update">
-                                            <a href="#">Continue Shopping</a>
+                                            <a href="/shop">Continue Shopping</a>
                                         </div>
                                         <div class="cart-clear">
                                             <button>Update Shopping Cart</button>
@@ -709,8 +721,67 @@
             </div>
         </footer>
     </div>
+
     <!-- JS
 ============================================ -->
+
+
+    <script>
+  // Function to increment the quantity
+const incrementQuantity = (productId) => {
+    const quantityInput = document.getElementById(`quantityInput${productId}`);
+    const currentValue = parseInt(quantityInput.value);
+    const newValue = currentValue + 1;
+    quantityInput.value = newValue;
+
+    // Call a function to send the updated quantity to the backend
+    updateQuantity(productId, newValue);
+}
+
+// Function to decrement the quantity
+const decrementQuantity = (productId) => {
+    const quantityInput = document.getElementById(`quantityInput${productId}`);
+    const currentValue = parseInt(quantityInput.value);
+    // Ensure quantity does not go below 1
+    const newValue = currentValue > 1 ? currentValue - 1 : 1;
+    quantityInput.value = newValue;
+
+    // Call a function to send the updated quantity to the backend
+    updateQuantity(productId, newValue);
+}
+
+// Function to send the updated quantity to the backend
+const updateQuantity = async (productId, newQuantity) => {
+    try {
+        // Your fetch or axios request to send the updated quantity to the backend
+        const response = await fetch('/updateQuantity', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId, newQuantity })
+        });
+
+        // Handle the response
+        if (response.ok) {
+            const data = await response.json();
+             window.location.reload();
+        
+        } else {
+            console.error('Error updating quantity:', response.statusText);
+        }
+    } catch (error) {
+        // Handle errors
+        console.error('Error updating quantity:', error);
+    }
+};
+
+
+   
+
+
+</script>
+
 
     <!-- Modernizer JS -->
     <script src="/assets/js/vendor/modernizr-3.11.7.min.js"></script>
