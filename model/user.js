@@ -56,7 +56,13 @@ const userSchema = new mongoose.Schema({
     shippingcost: {
         type: Number,
         // default: 70
-    }
+    },
+    wishlist: [{
+        items: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+        }
+    }],
 });
 
 userSchema.pre('save', async function(next) {

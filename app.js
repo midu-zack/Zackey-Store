@@ -10,6 +10,7 @@ const categorieRouter =require("./routers/categerie")
 const productRouter =require("./routers/product")
 const customersRouter =require("./routers/customers")
 const cartRouter =require("./routers/cart")
+const wishlistRouter = require("./routers/wishlist")
 
 
 const bodyParser = require("body-parser");
@@ -49,7 +50,7 @@ app.use("/", categorieRouter)
 app.use("/", productRouter)
 app.use("/",customersRouter)
 app.use("/",cartRouter)
-
+app.use("/",wishlistRouter)
 
 
 

@@ -5,8 +5,7 @@ const showCart = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    
-
+  
     if (!userId) {
       return res.render("user/login-register");
     }

@@ -484,13 +484,19 @@
                                             </td>
                                             <td class="product-name"><a href="#">{{this.product.name}}</a></td>
                                             <td class="product-price-cart"><span class="amount">{{this.product.price}}</span></td>
-                                           <td class="product-quantity ">
-                                                 
-                                                    <button type="button" onclick="decrementQuantity('{{this.product._id}}')">-</button>
-                                                    <input id="quantityInput{{this.product._id}}" class="cart-plus-minus-box" value='{{this.quantity}}' type="text">
-                                                    <button type="button" onclick="incrementQuantity('{{this.product._id}}')">+</button>
-                                                
-                                            </td>
+<td class="product-quantity">
+    <div class="input-group input-group-sm">
+        <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('{{this.product._id}}')" style="background-color: white; color: black;" onmouseover="this.style.backgroundColor='red'" onmouseout="this.style.backgroundColor='white'">-</button>
+        </div>
+        <input id="quantityInput{{this.product._id}}" class="form-control" value="{{this.quantity}}" type="text" style="width:10px; height: 35px; border-radius: 28px; text-align: center;">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('{{this.product._id}}')" style="background-color: white; color: black;" onmouseover="this.style.backgroundColor='red'" onmouseout="this.style.backgroundColor='white'">+</button>
+        </div>
+    </div>
+</td>
+
+
 
                                            <td class="product-subtotal">
                                                     {{#if this.total}}
@@ -739,7 +745,7 @@ const incrementQuantity = (productId) => {
 }
 
 // Function to decrement the quantity
-const decrementQuantity = (productId) => {
+ const decrementQuantity = (productId) => {
     const quantityInput = document.getElementById(`quantityInput${productId}`);
     const currentValue = parseInt(quantityInput.value);
     // Ensure quantity does not go below 1
@@ -749,6 +755,8 @@ const decrementQuantity = (productId) => {
     // Call a function to send the updated quantity to the backend
     updateQuantity(productId, newValue);
 }
+
+
 
 // Function to send the updated quantity to the backend
 const updateQuantity = async (productId, newQuantity) => {
