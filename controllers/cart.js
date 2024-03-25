@@ -42,9 +42,8 @@ const addCart = async (req, res) => {
 
      if (updatedUser) {
       res.redirect("/shop?success=addedToCart");
-    } else  {
-      res.render('user/login-register')
-      // res.redirect("user/shop-fullwide", { alertMessage: "Product is already in the cart." });
+    } else {
+      res.redirect("/Shop?failed=ItemIsAlreadyInCart");
     }
   } catch (error) {
     // Handle errors

@@ -40,7 +40,8 @@ const addToWishlist = async (req,res)=>{
 
         if (updatedUser) {
             return res.redirect('/Shop?success=addedToWishlist');
-        } else {
+        }
+         else {
             return res.redirect(`/Shop?failed=ItemIsAlreadyInWishList&productId=${productId}`);
         }
         
@@ -50,7 +51,31 @@ const addToWishlist = async (req,res)=>{
     }
 }
 
+
+const DeleteWishList = async (req, res) => {
+    const productId = req.params.id;
+
+    try {
+        const updatedUserWishlist = await User.findOneAndUpdate(
+            { 'wishlist.items': productId },
+            { $pull: { wishlist: { items: productId } } },
+            { new: true }
+        );
+     
+        if (!updatedUserWishlist) {
+            return res.status(404).send('Product not found in wishlist');
+        }
+
+        // Redirect to the wishlist page after deletion
+        res.redirect('/Wishlist?success');
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
 module.exports = {
     wishlist,
-    addToWishlist
+    addToWishlist,
+    DeleteWishList,
 }
