@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Daxone - eCommerce Bootstrap 5 Template</title>
+    <title>checkout</title>
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,6 +15,7 @@
 
     <!-- CSS
 	============================================ -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="assets/css/vendor/bootstrap.min.css">
@@ -457,8 +458,8 @@
         <div class="checkout-main-area pt-90 pb-90">
             <div class="container">
                 <div class="customer-zone mb-20">
-                    <p class="cart-page-title">Returning customer? <a class="checkout-click1" href="#">Click here to login</a></p>
-                    <div class="checkout-login-info">
+                    <p class="cart-page-title">Returning customer? <a  href="/login-register">Click here to login</a></p>
+                    {{!-- <div class="checkout-login-info">
                         <p>If you have shopped with us before, please enter your details in the boxes below. If you are a new customer, please proceed to the Billing & Shipping section.</p>
                         <form action="#">
                             <div class="row">
@@ -494,9 +495,10 @@
                                 <li><a href="#">Google</a></li>
                             </ul>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
-                <div class="customer-zone mb-20">
+
+                {{!-- <div class="customer-zone mb-20">
                     <p class="cart-page-title">Have a coupon? <a class="checkout-click3" href="#">Click here to enter your code</a></p>
                     <div class="checkout-login-info3">
                         <form action="#">
@@ -504,239 +506,282 @@
                             <input type="submit" value="Apply Coupon">
                         </form>
                     </div>
-                </div>
+                </div> --}}
+               
                 <div class="checkout-wrap pt-30">
                     <div class="row">
                         <div class="col-lg-7">
                             <div class="billing-info-wrap mr-50">
                                 <h3>Billing Details</h3>
+                                
+                                 {{#if address}}
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6">
                                         <div class="billing-info mb-20">
-                                            <label>First Name <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text">
+                                            <label>First Name <abbr class="required"  title="required">*</abbr></label>
+                                            <input type="text" value="{{address.[0].firstName}}">
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                         <div class="billing-info mb-20">
                                             <label>Last Name <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text">
+                                            <input type="text" value="{{address.[0].lastName}}">
                                         </div>
                                     </div>
-                                    <div class="col-lg-12">
+                                    {{!-- <div class="col-lg-12">
                                         <div class="billing-info mb-20">
                                             <label>Company Name <abbr class="required" title="required">*</abbr></label>
                                             <input type="text">
                                         </div>
                                     </div>
+                                    
                                     <div class="col-lg-12">
                                         <div class="billing-select mb-20">
                                             <label>Country <abbr class="required" title="required">*</abbr></label>
                                             <select>
-                                                <option>Select a country</option>
-                                                <option>Azerbaijan</option>
-                                                <option>Bahamas</option>
-                                                <option>Bahrain</option>
-                                                <option>Bangladesh</option>
-                                                <option>Barbados</option>
+                                                <option data-display="{{address.[0].country}}">{{address.[0].country}}</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> --}}
+
                                     <div class="col-lg-12">
                                         <div class="billing-info mb-20">
                                             <label>Street Address <abbr class="required" title="required">*</abbr></label>
-                                            <input class="billing-address" placeholder="House number and street name" type="text">
-                                            <input placeholder="Apartment, suite, unit etc." type="text">
+                                            <input class="billing-address" value="{{address.[0].address}}" type="text">
+                                            {{!-- <input placeholder="Apartment, suite, unit etc." type="text"> --}}
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <div class="billing-info mb-20">
                                             <label>Town / City <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text">
+                                            <input type="text" value="{{address.[0].city}}">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12">
                                         <div class="billing-info mb-20">
-                                            <label>State / County <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text">
+                                            <label>State <abbr class="required" title="required">*</abbr></label>
+                                            <input type="text" value="{{address.[0].state}}">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12">
                                         <div class="billing-info mb-20">
-                                            <label>Postcode / ZIP <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text">
+                                            <label>Postcode <abbr class="required" title="required">*</abbr></label>
+                                            <input type="text" value="{{address.[0].postcode}}">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12">
                                         <div class="billing-info mb-20">
                                             <label>Phone <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text">
+                                            <input type="text" value="{{address.[0].phone}}">
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12">
                                         <div class="billing-info mb-20">
                                             <label>Email Address <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text">
+                                            <input type="text" value="{{address.[0].email}}">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="checkout-account mb-25">
+                                {{else}}
+                                {{!-- <div class="checkout-account mb-25">
                                     <input class="checkout-toggle2" type="checkbox">
                                     <span>Create an account?</span>
                                 </div>
                                 <div class="checkout-account-toggle open-toggle2 mb-30">
                                     <label>Email Address</label>
                                     <input placeholder="Password" type="password">
-                                </div>
+                                </div> --}}
+
+
+
+                            
                                 <div class="checkout-account mt-25">
                                     <input class="checkout-toggle" type="checkbox">
                                     <span>Ship to a different address?</span>
                                 </div>
+                        
+                            <form action="/addAddress" method="post">
                                 <div class="different-address open-toggle mt-30">
                                     <div class="row">
                                         <div class="col-lg-6 col-md-6">
                                             <div class="billing-info mb-20">
                                                 <label>First Name</label>
-                                                <input type="text">
+                                                <input type="text" name="firstName">
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="billing-info mb-20">
                                                 <label>Last Name</label>
-                                                <input type="text">
+                                                <input type="text" name="lastName" >
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
+                                        {{!-- <div class="col-lg-12">
                                             <div class="billing-info mb-20">
                                                 <label>Company Name</label>
                                                 <input type="text">
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
-                                            <div class="billing-select mb-20">
-                                                <label>Country</label>
-                                                <select>
-                                                    <option>Select a country</option>
-                                                    <option>Azerbaijan</option>
-                                                    <option>Bahamas</option>
-                                                    <option>Bahrain</option>
-                                                    <option>Bangladesh</option>
-                                                    <option>Barbados</option>
-                                                </select>
-                                            </div>
+                                        <div class="billing-select mb-20">
+                                            <label for="country">State</label>
+                                            <select name="state" id="country">
+                                                <option>Select a country</option>
+                                                <option>Delhi</option>
+                                                <option>Punjab</option>
+                                                <option>Maharashtra</option>
+                                                <option>Goa</option>
+                                                <option>Kerala</option>
+                                            </select>
                                         </div>
+                                    </div> --}}
+
                                         <div class="col-lg-12">
                                             <div class="billing-info mb-20">
                                                 <label>Street Address</label>
-                                                <input class="billing-address" placeholder="House number and street name" type="text">
-                                                <input placeholder="Apartment, suite, unit etc." type="text">
+                                                <input class="billing-address" name="address" type="text">
+                                                {{!-- <input placeholder="Apartment, suite, unit etc." type="text"> --}}
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="billing-info mb-20">
                                                 <label>Town / City</label>
-                                                <input type="text">
+                                                <input type="text" name="city">
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="billing-info mb-20">
-                                                <label>State / County</label>
-                                                <input type="text">
+                                                <label>State </label>
+                                                <input type="text" name="state">
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="billing-info mb-20">
-                                                <label>Postcode / ZIP</label>
-                                                <input type="text">
+                                                <label>Postcode </label>
+                                                <input type="text" name="postcode" >
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="billing-info mb-20">
                                                 <label>Phone</label>
-                                                <input type="text">
+                                                <input type="text" name="phone">
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6">
                                             <div class="billing-info mb-20">
                                                 <label>Email Address</label>
-                                                <input type="text">
+                                                <input type="text" name="email">
                                             </div>
                                         </div>
                                     </div>
+                                    <button type="submit" >SUBMIT</button>
                                 </div>
-                                <div class="additional-info-wrap">
+                            </form>
+ 
+                                {{!-- <div class="additional-info-wrap">
                                     <label>Order notes</label>
                                     <textarea placeholder="Notes about your order, e.g. special notes for delivery. " name="message"></textarea>
-                                </div>
+                                </div> --}}
+ {{/if}}
+
+                 
                             </div>
                         </div>
                         <div class="col-lg-5">
                             <div class="your-order-area">
                                 <h3>Your order</h3>
                                 <div class="your-order-wrap gray-bg-4">
+
+                                        {{#if user}}
+                                       
                                     <div class="your-order-info-wrap">
                                         <div class="your-order-info">
                                             <ul>
                                                 <li>Product <span>Total</span></li>
                                             </ul>
                                         </div>
+                                         {{#each user.bookings}}
                                         <div class="your-order-middle">
                                             <ul>
-                                                <li>Product Name X 1 <span>$329 </span></li>
-                                                <li>Product Name X 1 <span>$329 </span></li>
+                                                {{!-- <li>{{this.productName}}  <span>${{this.total}}</span></li> --}}
+                                                <li>{{this.productName}}  <span>${{this.total}} </span></li>
                                             </ul>
                                         </div>
+                                         {{/each}}
                                         <div class="your-order-info order-subtotal">
                                             <ul>
-                                                <li>Subtotal <span>$329 </span></li>
+                                                <li>Subtotal <span>${{user.subtotal}} </span></li>
                                             </ul>
                                         </div>
                                         <div class="your-order-info order-shipping">
                                             <ul>
-                                                <li>Shipping <p>Enter your full address </p>
+                                                <li>Shipping <p>$40</p>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div class="your-order-info order-total">
                                             <ul>
-                                                <li>Total <span>$273.00 </span></li>
+                                                <li>Total <span>$ {{user.grandtotal}}  </span></li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="payment-method">
+                                     
+                                   
+                                     {{/if}}
+
+                                        <div id="order-details">
+                                            <!-- Date and Time will be displayed here -->
+                                        </div>
+
+                                    <form action="/placeOrder" method="post">
+                                    
+                                    <div class="payment-method" >
                                         <div class="pay-top sin-payment">
-                                            <input id="payment_method_1" class="input-radio" type="radio" value="cheque" checked="checked" name="payment_method">
+                                            <input id="payment_method_1" class="input-radio" type="radio" value="bank" checked="checked" name="paymentMethod">
                                             <label for="payment_method_1"> Direct Bank Transfer </label>
                                             <div class="payment-box payment_method_bacs">
                                                 <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference.</p>
                                             </div>
                                         </div>
                                         <div class="pay-top sin-payment">
-                                            <input id="payment-method-2" class="input-radio" type="radio" value="cheque" name="payment_method">
+                                            <input id="payment-method-2" class="input-radio" type="radio" value="cheque" name="paymentMethod">
                                             <label for="payment-method-2">Check payments</label>
                                             <div class="payment-box payment_method_bacs">
                                                 <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference.</p>
                                             </div>
                                         </div>
                                         <div class="pay-top sin-payment">
-                                            <input id="payment-method-3" class="input-radio" type="radio" value="cheque" name="payment_method">
+                                            <input id="payment-method-3" class="input-radio" type="radio" value="cod" name="paymentMethod">
                                             <label for="payment-method-3">Cash on delivery </label>
                                             <div class="payment-box payment_method_bacs">
                                                 <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference.</p>
                                             </div>
                                         </div>
                                         <div class="pay-top sin-payment sin-payment-3">
-                                            <input id="payment-method-4" class="input-radio" type="radio" value="cheque" name="payment_method">
-                                            <label for="payment-method-4">PayPal <img alt="" src="assets/images/icon-img/payment.png"><a href="#">What is PayPal?</a></label>
+                                            <input id="payment-method-4" class="input-radio" type="radio" value="paypal" name="paymentMethod">
+                                            <label for="payment-method-4">PayPal <img alt="" src="assets/images/icon-img/payment.png"><a href="https://www.paypal.com/us/digital-wallet/how-paypal-works">What is PayPal?</a></label>
                                             <div class="payment-box payment_method_bacs">
                                                 <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference.</p>
                                             </div>
                                         </div>
+                                      
+                                        {{!-- <div class="Place-order mt-40"> --}}
+                                              <a class="Place-order " >
+                                                  <button  type="submit">Place Order</button>
+                                              </a>
+                                                 
+                                              
+                                           
+                                           {{!-- <a href="" type="submit" >Place Order</a> --}}
+                                       {{!-- </div> --}}
+                                       
                                     </div>
+                                    
+                                  </form>
+
                                 </div>
-                                <div class="Place-order mt-40">
-                                    <a href="#">Place Order</a>
-                                </div>
+                                
+ 
+
                             </div>
                         </div>
                     </div>
@@ -890,8 +935,45 @@
     <script src="assets/js/plugins/smoothscroll.js"></script>
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 </body>
 
 
 <!-- Mirrored from template.hasthemes.com/daxone/daxone/checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Feb 2024 10:44:50 GMT -->
 </html>
+
+ <script>
+        // Function to parse query parameters from URL
+        function getQueryParams(url) {
+            const queryParams = {};
+            const params = new URLSearchParams(url.search);
+            for (const param of params) {
+                queryParams[param[0]] = param[1];
+            }
+            return queryParams;
+        }
+
+        // Function to display SweetAlert success message
+        function displaySuccessAlert() {
+            swal("Success", "Order placed successfully!", "success");
+        }
+
+        // Function to display order details
+        function displayOrderDetails(date, time) {
+            document.getElementById('order-details').innerHTML = `<p>Date: ${date}</p><p>Time: ${time}</p>`;
+        }
+
+        // Function to display success alert and order details
+        function displayOrderConfirmation() {
+            const queryParams = getQueryParams(window.location);
+            if (queryParams.success === 'orderedplacedsuccessfully') {
+                displaySuccessAlert();
+                const date = decodeURIComponent(queryParams.date);
+                const time = decodeURIComponent(queryParams.time);
+                displayOrderDetails(date, time);
+            }
+        }
+
+        // Call function when the page loads
+        window.onload = displayOrderConfirmation;
+    </script>

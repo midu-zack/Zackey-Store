@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        // required: true,
     },
     phoneNumber: {
         type: String,
-        required: true,
+        // required: true,
     },
     otp: {
         type: String,
@@ -39,12 +39,16 @@ const userSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Product'
         },
+        
         quantity: {
             type: Number,
             default: 1
         },
         total: {
             type: Number
+        },
+        productName: {
+            type : String
         }
     }],
     subtotal: {
@@ -55,7 +59,7 @@ const userSchema = new mongoose.Schema({
     },
     shippingcost: {
         type: Number,
-        // default: 70
+        default: 40
     },
     wishlist: [{
         items: {
@@ -63,6 +67,47 @@ const userSchema = new mongoose.Schema({
             ref: 'Product'
         }
     }],
+    address: [{
+        // country: {
+        //     type: String,
+        
+        // },
+        firstName: {
+            type: String,
+            
+        },
+        lastName: {
+            type: String,
+             
+        },
+        address: {
+            type: String,
+            
+        },
+        city: {
+            type: String,
+            
+        },
+        state: {
+            type: String,
+          
+        },
+        postcode: {
+            type: String,
+            
+        },
+        email: {
+            type: String,
+             
+        },
+        phone: {
+            type: String,
+           
+        }
+    }],
+    orders :[{
+        
+    }]
 });
 
 userSchema.pre('save', async function(next) {

@@ -447,13 +447,14 @@
                     <h2>cart page</h2>
                     <ul>
                         <li>
-                            <a href="index.html">Home</a>
+                            <a href="/shop">Shop</a>
                         </li>
                         <li class="active">cart </li>
                     </ul>
                 </div>
             </div>
         </div>
+        {{#if bookings}}
         <div class="cart-main-area pt-85 pb-90">
             <div class="container">
                 <h3 class="cart-page-title">Your cart items</h3>
@@ -484,17 +485,17 @@
                                             </td>
                                             <td class="product-name"><a href="#">{{this.product.name}}</a></td>
                                             <td class="product-price-cart"><span class="amount">{{this.product.price}}</span></td>
-<td class="product-quantity">
-    <div class="input-group input-group-sm">
-        <div class="input-group-prepend">
-            <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('{{this.product._id}}')" style="background-color: white; color: black;" onmouseover="this.style.backgroundColor='red'" onmouseout="this.style.backgroundColor='white'">-</button>
-        </div>
-        <input id="quantityInput{{this.product._id}}" class="form-control" value="{{this.quantity}}" type="text" style="width:10px; height: 35px; border-radius: 28px; text-align: center;">
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('{{this.product._id}}')" style="background-color: white; color: black;" onmouseover="this.style.backgroundColor='red'" onmouseout="this.style.backgroundColor='white'">+</button>
-        </div>
-    </div>
-</td>
+                                                <td class="product-quantity">
+                                                    <div class="input-group input-group-sm">
+                                                        <div class="input-group-prepend">
+                                                            <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('{{this.product._id}}')" style="background-color: white; color: black;" onmouseover="this.style.backgroundColor='red'" onmouseout="this.style.backgroundColor='white'">-</button>
+                                                        </div>
+                                                        <input id="quantityInput{{this.product._id}}" class="form-control" value="{{this.quantity}}" type="text" style="width:10px; height: 35px; border-radius: 28px; text-align: center;">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('{{this.product._id}}')" style="background-color: white; color: black;" onmouseover="this.style.backgroundColor='red'" onmouseout="this.style.backgroundColor='white'">+</button>
+                                                        </div>
+                                                    </div>
+                                                </td>
 
 
 
@@ -523,8 +524,8 @@
                                             <a href="/shop">Continue Shopping</a>
                                         </div>
                                         <div class="cart-clear">
-                                            <button>Update Shopping Cart</button>
-                                            <a href="#">Clear Shopping Cart</a>
+                                            {{!-- <button>Update Shopping Cart</button> --}}
+                                            <a href="/clearToCart">Clear Shopping Cart</a>
                                         </div>
                                     </div>
                                 </div>
@@ -574,7 +575,7 @@
                                     </div> --}}
                                 {{!-- </div> --}}
                             </div>
-                            <div class="col-lg-4 col-md-6">
+                            {{!-- <div class="col-lg-4 col-md-6">
                                 <div class="discount-code-wrapper">
                                     <div class="title-wrap">
                                         <h4 class="cart-bottom-title section-bg-gray">Use Coupon Code</h4>
@@ -587,29 +588,39 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
+ 
                             <div class="col-lg-4 col-md-12">
                                 <div class="grand-totall">
                                     <div class="title-wrap">
                                         <h4 class="cart-bottom-title section-bg-gary-cart">Cart Total</h4>
                                     </div>
-                                    <h5>Total products <span>$260.00</span></h5>
+                                    {{!-- <h5>Total products <span>$260.00</span></h5> --}}
                                     <div class="total-shipping">
                                         <h5>Total shipping</h5>
-                                        <ul>
-                                            <li><input type="checkbox"> Standard <span>$20.00</span></li>
-                                            <li><input type="checkbox"> Express <span>$30.00</span></li>
+                                         <ul>
+                                            <li>Price <span>${{subtotal}}</span> </li>
+                                            <li>Delivery Charges <span>$40</span></li>
                                         </ul>
+                                        
                                     </div>
-                                    <h4 class="grand-totall-title">Grand Total <span>$260.00</span></h4>
-                                    <a href="#">Proceed to Checkout</a>
+                                    <h4 class="grand-totall-title">Grand Total <span>${{grandtotal}}</span></h4>
+                                    <a href="/checkOut">Proceed to Checkout</a>
                                 </div>
                             </div>
+                             
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+          {{else}}
+        <div class="total m-5">
+        <p class="text-center">Cart is empty!</p>
+        </div>
+        {{/if}}
+
+
         <footer class="footer-area section-padding-2 bg-bluegray pt-80">
             <div class="container-fluid">
                 <div class="footer-top pb-40">

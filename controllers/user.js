@@ -34,13 +34,13 @@ let showShop = async(req,res)=>{
 const account = async (req, res) => {
   try {
     // Ensure req.user exists and contains the user ID
-    if (!req.user || !req.user.id) {
+    if (!req.user.id) {
       return res.status(401).render("user/login-register");
     }
 
     const userId = req.user.id;
 
-    console.log("this is account user  ", req.user);
+    // console.log("this is account user  ", req.user);
 
     const user = await User.findById(userId);
 

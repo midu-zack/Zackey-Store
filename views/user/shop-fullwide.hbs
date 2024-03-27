@@ -884,7 +884,6 @@
 
 
 <script>
-
 const urlParams = new URLSearchParams(window.location.search);
 const success = urlParams.get('success');
 const failed = urlParams.get('failed');
@@ -911,11 +910,9 @@ if (failed === 'ItemIsAlreadyInCart') {
         showCancelButton: false, // Do not show the cancel button
         confirmButtonText: 'OK' // Set the confirm button text to 'OK'
     }).then(() => {
-        // Handle the OK button click action here
+        // You may add further actions here if needed
     });
 }
-
-
 
 if (success === 'addedToWishlist') {
     showNotification('success', 'Item successfully added to Wishlist!');
@@ -930,10 +927,17 @@ if (failed === 'ItemIsAlreadyInWishList') {
         confirmButtonText: 'Yes, remove it' // Show the confirm button with appropriate text
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = `/DeleteWishList/${productId}`;
+            // Check if productId exists before redirection
+            if (productId) {
+                window.location.href = `/DeleteWishList/${productId}`;
+            } else {
+                console.error('productId is missing or invalid.');
+                // Handle error scenario
+            }
         }
     });
 }
+
 
 </script>
 
