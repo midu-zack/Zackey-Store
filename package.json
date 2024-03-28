@@ -25,6 +25,7 @@
     "nodemon": "^3.1.0",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
+    "tinycolor2": "^1.6.0",
     "uuid": "^9.0.1"
   },
   "description": ""

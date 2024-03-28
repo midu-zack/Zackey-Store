@@ -22,15 +22,15 @@ const productSchema = new mongoose.Schema({
         type: Number
     },
 
-    colors: {
-        type:Array
+    color:{
+        type:String
     },
 
     meterial :{
         type:String
     },
     coupon :{
-        type:String
+        type:Array
     },
 
     mrp :{
@@ -48,7 +48,9 @@ const productSchema = new mongoose.Schema({
         type:String
 
     },
-
+    modelNumber: {
+        type: String
+    },
     images: {
         type:Array
     },

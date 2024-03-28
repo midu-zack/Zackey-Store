@@ -1,6 +1,7 @@
 const Product = require("../model/product");
 const Category = require("../model/categorie");
 const cloudinary = require("../config/cloudinary");
+// const tinycolor = require("tinycolor2");
 
 // show the product list page
 let listProduct = async (req, res) => {
@@ -8,77 +9,98 @@ let listProduct = async (req, res) => {
     const products = await Product.find();
     res.render("admin/product-list",{products});
   } catch (error) {
-    console.log(error);
+     console.error(error);
     res.status(500).json({ message: "An error occurred while fetching products" });
   }
 };
-
-let addProduct = async (req, res) => {
+// show the product add page
+let ShowAddProduct = async (req, res) => {
   try {
+    
     const categories = await Category.find();
     res.render("admin/product-add",{categories});
   } catch (error) {
-    console.log(error);
+    console.error(error);
+
     res.status(500).json({ message: "An error occurred while fetching categories" });
   }
 };
+ 
+
+// Function to convert hexadecimal color code to color name
+// function convertHexToColorName(hexColor) {
+//   try {
+//       hexColor = hexColor.replace('#', '');
+//       console.log("Processed hexColor:", hexColor);
+//       const color = tinycolor(`#${hexColor}`);
+//       console.log("Tinycolor object:", color);
+//       const colorName = color.toName();
+//       console.log("Color name:", colorName);
+//       return colorName ? colorName : `#${hexColor.toUpperCase()}`; // Return original color code if color name is not found
+//   } catch (error) {
+//       console.error("Error converting color:", error);
+//       return `#${hexColor.toUpperCase()}`; // Return original color code on error
+//   }
+// }
+
 
 let productAdding = async (req, res) => {
-  try {
-    const {
-      productName,
-      mrp,
-      price,
-      color,
-      coupon,
-      createdAt,
-      category,
-      meterial,
-      description,
-    } = req.body;
- 
-    console.log(req.body);
+    try {
+        const {
+            productName,
+            mrp,
+            price,
+            color,
+            coupon,
+            createdAt,
+            category,
+            meterial,
+            description,
+            modelNumber,
+        } = req.body;
 
-    const imageURLs = [];
+        console.log("Received color:",color);
 
-    console.log("this is file",req.file );
-    
-    if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path);
-      imageURLs.push(result.secure_url);
-  } else {
-      console.log("No product images found");
-  }
+        const imageURLs = [];
 
-    const newProduct = new Product({
-      name: productName,
-      meterial: meterial,
-      mrp: mrp,
-      price: price,
-      color: color,
-      createdAt: createdAt,
-      category: category,
-      coupon: coupon,
-      description: description,
-      images: imageURLs,
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path);
+            imageURLs.push(result.secure_url);
+        } else {
+            return res.send("No product images found");
+        }
 
-    });
- 
-    const products = await Product.find();
+        // const convertedColor = convertHexToColorName(color);
 
-    await newProduct.save();
+        // console.log("Converted color:", convertedColor);
 
-    console.log('This is update product ',products);
-   
-    res.redirect("/listProduct")
+        const newProduct = new Product({
+            name: productName,
+            meterial: meterial,
+            mrp: mrp,
+            price: price,
+            color: color,
+            createdAt: createdAt,
+            category: category,
+            coupon: coupon,
+            description: description,
+            modelNumber: modelNumber,
+            images: imageURLs,
 
+        });
 
-    
-  } catch (error) {
-    console.error("Error saving Product:", error);
-    res.status(500).json({ message: "An error occurred while saving the Product" });
-  }
+        await newProduct.save();
+
+        console.log('Product saved successfully');
+
+        res.redirect("/listProduct");
+    } catch (error) {
+        console.error("Error saving Product:", error);
+        res.status(500).json({ message: "An error occurred while saving the Product" });
+    }
 };
+
+
 
 
 
@@ -87,7 +109,6 @@ let editProduct = async (req, res) => {
 
     let productId = req.params.id;
 
-    console.log("editproductId",productId);
 
     let product = await Product.findById(productId);
 
@@ -106,6 +127,10 @@ let editProduct = async (req, res) => {
     res.status(500).send("Internal Server Error in product Edit");
   }
 };
+
+
+
+
 
 const updateProduct = async (req, res) => {
   try {
@@ -140,6 +165,8 @@ const updateProduct = async (req, res) => {
       updateFields.images = [result.secure_url];
     }
 
+    console.log('this is file',req.file);
+
     // Update the product using findByIdAndUpdate
     const updatedProduct = await Product.findByIdAndUpdate(productId, updateFields, { new: true });
 
@@ -155,13 +182,12 @@ const updateProduct = async (req, res) => {
     res.status(500).send("Internal Server Error in product Update");
   }
 };
-
  
 
 let deleteProduct = async (req, res) => {
   try {
     const productId = req.params.id; // Assuming product ID is passed in the URL parameters
-    console.log(productId);
+    
     // Find the product by ID and delete it
     const deletedProduct = await Product.findByIdAndDelete(productId);
 
@@ -177,11 +203,25 @@ let deleteProduct = async (req, res) => {
 };
  
 
+const singleProductDetails =async (req,res)=>{
+  try {
+    const productId = req.params.id
+    const product = await Product.findById(productId)
+     
+    
+
+    res.render("user/product-details",{product})
+  } catch (error) {
+     console.error(error);
+  }
+}
+
 module.exports = {
   listProduct,
-  addProduct,
+  ShowAddProduct,
   productAdding,
   editProduct,
   updateProduct,
   deleteProduct,
+  singleProductDetails
 };

@@ -506,13 +506,15 @@
                                         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
                                             <div class="product-wrap mb-35">
                                                 <div class="product-img mb-15">
-                                                    {{!-- <a href="product-details.html"> --}}
-                                                       <img class="w120 rounded img-fluid" src="{{this.images.[0]}}" alt="noImage">
+                                                    <a href="/singleProduct/{{this._id}}">
+                                                        <img class="w120 rounded img-fluid" src="{{this.images.[0]}}" alt="noImage">
+
+                                                    </a>
                                                     {{!-- <span class="price-dec font-dec">NEW</span> --}}
                                                     <div class="product-action">
                                                         <a data-bs-toggle="modal" data-bs-target="#exampleModal" title="Quick View" href="#"><i class="la la-plus"></i></a>
                                                         <a title="Wishlist" href="/wishlist/{{this._id}}"><i class="la la-heart-o"></i></a>
-                                                        <a title="Compare" href="#"><i class="la la-retweet"></i></a>
+                                                        {{!-- <a title="Compare" href="#"><i class="la la-retweet"></i></a> --}}
                                                     </div>
                                                 </div>
                                                 <div class="product-content">
@@ -593,7 +595,7 @@
                                 </div>
                             </div>
                             
-                            <div class="sidebar-widget pt-40 mt-40 shop-sidebar-border">
+                            {{!-- <div class="sidebar-widget pt-40 mt-40 shop-sidebar-border">
                                 <h4 class="sidebar-title">Colour </h4>
                                 <div class="sidebar-widget-list mt-20">
                                     <ul>
@@ -623,7 +625,7 @@
                                         </li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div> --}}
                             
                             
                         </div>

@@ -127,6 +127,7 @@ const showCheckout = async (req, res) => {
             console.log(error);
         }
     }
+    
 
 module.exports = {
     showCheckout,
