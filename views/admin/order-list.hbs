@@ -10,11 +10,11 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
 
     <!-- plugin css file  -->
-    <link rel="stylesheet" href="/public/assets/plugin/datatables/responsive.dataTables.min.css">
-    <link rel="stylesheet" href="/public/assets/plugin/datatables/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="assets/plugin/datatables/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="assets/plugin/datatables/dataTables.bootstrap5.min.css">
 
     <!-- project css file  -->
-    <link rel="stylesheet" href="/public/assets/css/ebazar.style.min.css">
+    <link rel="stylesheet" href="assets/css/ebazar.style.min.css">
 </head>
 <body>
     <div id="ebazar-layout" class="theme-blue">                          
@@ -30,7 +30,7 @@
                 </a>
                 <!-- Menu: main ul -->
                 <ul class="menu-list flex-grow-1 mt-3">
-                    <li><a class="m-link" href="index.html"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
+                    <li><a class="m-link" href="/dashboard"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
                     <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-product" href="#">
                             <i class="icofont-truck-loaded fs-5"></i> <span>Products</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
@@ -74,7 +74,7 @@
                             <li><a class="ms-link" href="customer-detail.html">Customers Details</a></li>
                         </ul>
                     </li>
-                    <li class="collapsed">
+                    {{!-- <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-sale" href="#">
                         <i class="icofont-sale-discount fs-5"></i> <span>Sales Promotion</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
                         <!-- Menu: Sub menu ul -->
@@ -132,7 +132,7 @@
                             <li><a class="ms-link" href="contact.html">Contact Us</a></li>
                             <li><a class="ms-link" href="todo-list.html">Todo List</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                 </ul>
                 <!-- Menu: menu collepce btn -->
                 <button type="button" class="btn btn-link sidebar-mini-btn text-light">
@@ -158,25 +158,25 @@
                             </div>
                             <div class="dropdown zindex-popover">
                                 <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
-                                    <img src="/public/assets/images/flag/GB.png" alt="">
+                                    <img src="assets/images/flag/GB.png" alt="">
                                 </a>
                                 <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-md-end p-0 m-0 mt-3">
                                     <div class="card border-0">
                                         <ul class="list-unstyled py-2 px-3">
                                             <li>
-                                                <a href="#" class=""><img src="/public/assets/images/flag/GB.png" alt=""> English</a>
+                                                <a href="#" class=""><img src="assets/images/flag/GB.png" alt=""> English</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="/public/assets/images/flag/DE.png" alt=""> German</a>
+                                                <a href="#" class=""><img src="assets/images/flag/DE.png" alt=""> German</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="/public/assets/images/flag/FR.png" alt=""> French</a>
+                                                <a href="#" class=""><img src="assets/images/flag/FR.png" alt=""> French</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="/public/assets/images/flag/IT.png" alt=""> Italian</a>
+                                                <a href="#" class=""><img src="assets/images/flag/IT.png" alt=""> Italian</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="/public/assets/images/flag/RU.png" alt=""> Russian</a>
+                                                <a href="#" class=""><img src="assets/images/flag/RU.png" alt=""> Russian</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -201,7 +201,7 @@
                                                 <ul class="list-unstyled list mb-0">
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="/public/assets/images/xs/avatar1.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar1.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Chloe Walkerr</span> <small>2MIN</small></p>
                                                                 <span class="">Added New Product 2021-07-15 <span class="badge bg-success">Add</span></span>
@@ -219,7 +219,7 @@
                                                     </li>
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="/public/assets/images/xs/avatar3.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar3.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Melanie	Oliver</span> <small>1HR</small></p>
                                                                 <span class="">Orader  Return RT-00004</span>
@@ -228,7 +228,7 @@
                                                     </li>
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="/public/assets/images/xs/avatar5.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar5.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Boris Hart</span> <small>13MIN</small></p>
                                                                 <span class="">Product Order to Toyseller</span>
@@ -237,7 +237,7 @@
                                                     </li>
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="/public/assets/images/xs/avatar6.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar6.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Alan	Lambert</span> <small>1HR</small></p>
                                                                 <span class="">Leave Apply</span>
@@ -246,7 +246,7 @@
                                                     </li>
                                                     <li class="py-2">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="/public/assets/images/xs/avatar7.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar7.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Zoe Wright</span> <small class="">1DAY</small></p>
                                                                 <span class="">Product Stoke Entry Updated</span>
@@ -266,13 +266,13 @@
                                     <small>Admin Profile</small>
                                 </div>
                                 <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                    <img class="avatar lg rounded-circle img-thumbnail" src="/public/assets/images/profile_av.svg" alt="profile">
+                                    <img class="avatar lg rounded-circle img-thumbnail" src="assets/images/profile_av.svg" alt="profile">
                                 </a>
                                 <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
                                     <div class="card border-0 w280">
                                         <div class="card-body pb-0">
                                             <div class="d-flex py-1">
-                                                <img class="avatar rounded-circle" src="/public/assets/images/profile_av.svg" alt="profile">
+                                                <img class="avatar rounded-circle" src="assets/images/profile_av.svg" alt="profile">
                                                 <div class="flex-fill ms-3">
                                                     <p class="mb-0"><span class="font-weight-bold">John	Quinn</span></p>
                                                     <small class="">Johnquinn@gmail.com</small>
@@ -327,21 +327,23 @@
                         <div class="col-md-12">
                             <div class="card"> 
                                 <div class="card-body"> 
+                                    {{#if usersAndOrders}}
                                     <table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%;">  
                                         <thead>
                                             <tr>
                                                 <th>Id</th>
                                                 <th>Item</th>
                                                 <th>Customer Name</th>
-                                                <th>Payment Info</th>
+                                                {{!-- <th>Payment Info</th> --}}
                                                 <th>Price</th>
                                                 <th>Status</th>
+                                                <th>View</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            {{!-- <tr>
                                                 <td><a href="order-details.html"><strong>#Order-78414</strong></a></td>
-                                                <td><img src="/public/assets/images/product/product-1.jpg" class="avatar lg rounded me-2" alt="profile-image"><span> Oculus VR </span></td>
+                                                <td><img src="assets/images/product/product-1.jpg" class="avatar lg rounded me-2" alt="profile-image"><span> Oculus VR </span></td>
                                                 <td>Molly</td>
                                                 <td>Credit Card</td>
                                                 <td>
@@ -351,7 +353,7 @@
                                             </tr>
                                             <tr>
                                                 <td><a href="order-details.html"><strong>#Order-58414</strong></a></td>
-                                                <td><img src="/public/assets/images/product/product-2.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Wall Clock</span></td>
+                                                <td><img src="assets/images/product/product-2.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Wall Clock</span></td>
                                                 <td>Brian</td>
                                                 <td>Debit Card</td>
                                                 <td>
@@ -361,7 +363,7 @@
                                             </tr>
                                             <tr>
                                                 <td><a href="order-details.html"><strong>#Order-48414</strong></a></td>
-                                                <td><img src="/public/assets/images/product/product-3.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Note Diaries</span></td>
+                                                <td><img src="assets/images/product/product-3.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Note Diaries</span></td>
                                                 <td>Julia</td>
                                                 <td>Debit Card</td>
                                                 <td>
@@ -371,46 +373,47 @@
                                             </tr>
                                             <tr>
                                                 <td><a href="order-details.html"><strong>#Order-38414</strong></a></td>
-                                                <td><img src="/public/assets/images/product/product-4.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Flower Port</span></td>
+                                                <td><img src="assets/images/product/product-4.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Flower Port</span></td>
                                                 <td>Sonia</td>
                                                 <td>Credit Card</td>
                                                 <td>
                                                     $320
                                                 </td>
                                                 <td><span class="badge bg-warning">Progress</span></td>
-                                            </tr>
+                                            </tr> --}}
+                                           
+                                             
+                                            {{#each usersAndOrders}}
+                                            {{#each this.orders}}
                                             <tr>
-                                                <td><a href="order-details.html"><strong>#Order-28414</strong></a></td>
-                                                <td><img src="/public/assets/images/product/product-1.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Oculus VR</span></td>
-                                                <td>Adam H</td>
-                                                <td>Debit Card</td>
+                                                <td><a href="order-details.html"><strong>{{this.orderId}}</strong></a></td>
+
                                                 <td>
-                                                    $20
+
+                                                      
+                                                      <span>{{this.items.[0].productName}} ({{this.items.[0].quantity}})</span>
                                                 </td>
-                                                <td><span class="badge bg-warning">Progress</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="order-details.html"><strong>#Order-18414</strong></a></td>
-                                                <td><img src="/public/assets/images/product/product-2.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Wall Clock</span></td>
-                                                <td>Alexander</td>
-                                                <td>Debit Card</td>
+
+                                                 
+                                                  {{!-- <img src="{{this.images.[0]}}" class="avatar lg rounded me-2" alt="product-image"> --}}
+                                                
+                                                <td>{{../name}}</td>
+                                                {{!-- <td></td> --}}
                                                 <td>
-                                                    $820
+                                                    {{this.totalAmountUserPaid}}
                                                 </td>
-                                                <td><span class="badge bg-success">Complited</span></td>
+                                                <td><span class="badge bg-success">{{this.status}}</span></td>
+                                                <td><a href="/orderDetails/{{this.orderId}}">View</a></td>
+
+
                                             </tr>
-                                            <tr>
-                                                <td><a href="order-details.html"><strong>#Order-11414</strong></a></td>
-                                                <td><img src="/public/assets/images/product/product-3.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Note Diaries</span></td>
-                                                <td>Gabrielle</td>
-                                                <td>Bank Emi</td>
-                                                <td>
-                                                    $620
-                                                </td>
-                                                <td><span class="badge bg-success">Complited</span></td>
-                                            </tr>
+                                            {{/each}}
+                                            {{/each}}
                                         </tbody>
                                     </table>
+                                    {{else}}
+                                        <p>No orders found.</p>
+                                    {{/if}}
                                 </div>
                             </div>
                         </div>
@@ -563,10 +566,10 @@
     </div> 
 
     <!-- Jquery Core Js -->
-    <script src="/public/assets/bundles/libscripts.bundle.js"></script>
+    <script src="assets/bundles/libscripts.bundle.js"></script>
 
     <!-- Plugin Js -->
-    <script src="/public/assets/bundles/dataTables.bundle.js"></script>  
+    <script src="assets/bundles/dataTables.bundle.js"></script>  
 
     <!-- Jquery Page Js -->
     <script src="../js/template.js"></script>

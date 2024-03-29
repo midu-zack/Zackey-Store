@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const uuid = require('uuid');
+
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -106,8 +108,18 @@ const userSchema = new mongoose.Schema({
         }
     }],
     orders :[{
-        
+        items: [{
+            productName: { type: String, required: true },
+            quantity: { type: Number, required: true }
+        }],
+        totalAmountUserPaid: { type: Number, required: true },
+        date: { type: String},
+        time: { type: String },
+        orderId: { type: String, default: uuid.v4 },
+        status: { type: String, enum: ['Pending', 'Shipped', 'Delivered','Cancelled'], default: 'Pending' },
+        paymentMethod: {type:String}
     }]
+
 });
 
 userSchema.pre('save', async function(next) {

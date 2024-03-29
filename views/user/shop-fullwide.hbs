@@ -943,5 +943,28 @@ if (failed === 'ItemIsAlreadyInWishList') {
 
 </script>
 
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get('productId');
+const success = urlParams.get('success');
+
+if (success === 'orderSuccessfully') {
+    // Display a success message using native alert
+    alert('Order placed successfully! Thank you for your purchase.');
+
+    // Clear URL parameters after 4 seconds
+    setTimeout(() => {
+        const newUrl = window.location.href.split('?')[0]; // Get the URL without parameters
+        window.history.replaceState({}, document.title, newUrl); // Replace the current URL without parameters
+    }, 4000);
+
+    // Redirect to /home after 4 seconds
+    setTimeout(() => {
+        window.location.href = '/shop'; // Redirect to /home
+    }, 4000);
+} 
+
+</script>
+
 <!-- Mirrored from template.hasthemes.com/daxone/daxone/shop-fullwide.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Feb 2024 10:44:34 GMT -->
 </html>

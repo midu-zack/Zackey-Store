@@ -148,6 +148,7 @@ const updateProduct = async (req, res) => {
     } = req.body;
 
     console.log("this is req body:", req.body);
+    
 
     let updateFields = {
       name: productName,
@@ -158,6 +159,7 @@ const updateProduct = async (req, res) => {
       material: material, 
       description: description,
     };
+
 
     // Check if there's a file to upload
     if (req.file) {
@@ -216,6 +218,13 @@ const singleProductDetails =async (req,res)=>{
   }
 }
 
+
+
+
+ 
+
+
+
 module.exports = {
   listProduct,
   ShowAddProduct,
@@ -223,5 +232,8 @@ module.exports = {
   editProduct,
   updateProduct,
   deleteProduct,
-  singleProductDetails
+  singleProductDetails,
+
+
+   
 };
