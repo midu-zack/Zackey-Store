@@ -1,5 +1,5 @@
 const express = require("express");
-const { homePage, showShop, logout, account } = require("../controllers/user");
+const { homePage, showShop, logout, account, blockUnblock } = require("../controllers/user");
 const router = express.Router();
 const verifyToken = require("../middleware/jwtmiddleware");
  
@@ -13,5 +13,7 @@ router.get("/profile",verifyToken,account);
 router.get("/logout", logout);
 
 router.get("/shop", showShop);
+
+router.post("/userBlock",blockUnblock)
 
 module.exports = router;

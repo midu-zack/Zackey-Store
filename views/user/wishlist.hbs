@@ -13,6 +13,11 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
 
+
+<!-- Font Awesome CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+
     <!-- CSS
     
 	============================================ -->
@@ -149,7 +154,7 @@
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li><a href="shop.html">Mens</a></li>
+                                        {{!-- <li><a href="shop.html">Mens</a></li>
                                         <li class="angle-shape"><a href="#">Pages</a>
                                             <ul class="submenu">
                                                 <li><a href="about-us.html">about us </a></li>
@@ -161,7 +166,7 @@
                                                 <li><a href="contact.html">contact us </a></li>
                                                 <li><a href="login-register.html">login/register </a></li>
                                             </ul>
-                                        </li>
+                                        </li> --}}
                                         <li class="angle-shape"><a href="blog.html">Blog</a>
                                             <ul class="submenu">
                                                 <li><a href="blog.html">standard style </a></li>
@@ -524,9 +529,21 @@
         <div class="product-material">{{this.items.meterial}}</div>
         <div class="product-price">${{this.items.price}}</div>
     </div>
-    <div class="product-actions">
-        <a href="/DeleteWishlist/{{this.items._id}}">Delete</a>
-    </div>
+   <div class="product-actions">
+    <a href="/DeleteWishlist/{{this.items._id}}">
+        <i class="fas fa-trash"></i> <!-- Font Awesome trash icon -->
+    </a>
+</div>
+
+
+ {{!-- <div class="product-actions">
+    <a href="/DeleteWishlist/{{this.items._id}}" class="btn btn-link p-0 m-0" aria-label="Delete">
+        <span class="visually-hidden">Delete</span>
+        <i class="bi bi-trash"></i> <!-- Assuming you're using Bootstrap icons -->
+    </a>
+</div> --}}
+
+
 </div>
 
 {{/each}}

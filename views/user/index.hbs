@@ -13,6 +13,7 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
 
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
       <!-- SweetAlert CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     {{!-- fontasywn --}}
@@ -1305,7 +1306,7 @@
 <!-- Mirrored from template.hasthemes.com/daxone/daxone/index-4.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Feb 2024 10:44:04 GMT -->
 </html>
 
-<script>
+{{!-- <script>
 const urlParams = new URLSearchParams(window.location.search);
 const productId = urlParams.get('productId');
 const success = urlParams.get('success');
@@ -1330,5 +1331,32 @@ if (success === 'orderSuccessfully') {
         window.location.href = '/'; // Redirect to /home
     }, 1500);
 }
-</script>
+</script> --}}
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('productId');
+        const success = urlParams.get('success');
+
+        if (success === 'orderSuccessfully') {
+            // Display a larger green success message using Toastify
+            Toastify({
+                text: 'Order placed successfully! Thank you for your purchase!',
+                duration: 5000, // Auto close the notification after 5 seconds
+                gravity: 'center', // Display notification at the top
+                position: 'center', // Position notification at the center
+                
+                style: {
+                    background: 'green', // Background color for the success message
+                    color: 'white', // Text color
+                    'font-size': '24px', // Larger font size
+                    'text-align': 'center' // Center align the text
+                },
+                stopOnFocus: true // Stop the timer when notification is clicked for user interaction
+            }).showToast();
+        }
+    </script>
  

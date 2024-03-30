@@ -511,33 +511,86 @@
                                                                 <th>Action</th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>1</td>
-                                                                <td>Aug 22, 2018</td>
-                                                                <td>Pending</td>
-                                                                <td>$3000</td>
-                                                                <td><a href="cart.html" class="check-btn sqr-btn ">View</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>2</td>
-                                                                <td>July 22, 2018</td>
-                                                                <td>Approved</td>
-                                                                <td>$200</td>
-                                                                <td><a href="cart.html" class="check-btn sqr-btn ">View</a></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>3</td>
-                                                                <td>June 12, 2017</td>
-                                                                <td>On Hold</td>
-                                                                <td>$990</td>
-                                                                <td><a href="cart.html" class="check-btn sqr-btn ">View</a></td>
-                                                            </tr>
-                                                        </tbody>
+
+                                                            <tbody id="ordersTableBody">
+                                                                {{#each user.orders}}
+                                                                <tr>
+                                                                    <td></td> <!-- Leave this blank, we'll fill it dynamically -->
+                                                                    <td>{{this.date}}</td>
+                                                                    <td>{{this.status}}</td>
+                                                                    <td>{{this.totalAmountUserPaid}}</td>
+                                                                   <td>
+                                                                      <button type="button" class="btn btn-danger view-order" data-bs-toggle="modal" data-bs-target="#productModal" 
+              data-order-id="{{this.orderId}}" data-order-details="{{this}}">
+        View
+      </button>
+                                                                    </td>
+
+                                                                </tr>
+                                                                {{/each}}
+                                                            </tbody>
+
+
+
                                                     </table>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>  
+<!-- Modal -->
+<div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="productModalLabel">Order Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="orderDetailsBody">
+        <!-- Order details will be displayed here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+ 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Handle click on "View" button
+  document.querySelectorAll('.view-order').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var orderDetails = JSON.parse(this.user.orders);
+      populateModal(orderDetails);
+    });
+  });
+
+  // Function to populate modal with order details
+  function populateModal(orderDetails) {
+    var modalBody = document.getElementById('orderDetailsBody');
+    modalBody.innerHTML = ''; // Clear previous content
+    
+    // Populate modal with order details
+    var orderInfo = document.createElement('p');
+    orderInfo.textContent = 'Order ID: ' + orderDetails.orderId;
+    modalBody.appendChild(orderInfo);
+
+    var statusInfo = document.createElement('p');
+    statusInfo.textContent = 'Status: ' + orderDetails.status;
+    modalBody.appendChild(statusInfo);
+
+    var totalInfo = document.createElement('p');
+    totalInfo.textContent = 'Total Amount: ' + orderDetails.totalAmountUserPaid;
+    modalBody.appendChild(totalInfo);
+
+    // Add more details as needed
+  }
+});
+
+
+</script>
+ 
+
+
+
+
                                         <!-- Single Tab Content End -->
                                         <!-- Single Tab Content Start -->
                                         <div class="tab-pane fade" id="download" role="tabpanel">
@@ -786,6 +839,28 @@
     <!-- Bootstrap JS -->
     <script src="/assets/js/vendor/bootstrap.min.js"></script>
 
+ {{!-- This my countIncrement  --}}
+ 
+<!-- Add this script block after the Handlebars template -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select the table body
+        const ordersTableBody = document.getElementById('ordersTableBody');
+
+        // Get all table rows within the table body
+        const rows = ordersTableBody.querySelectorAll('tr');
+
+        // Loop through each row and set the index
+        rows.forEach((row, index) => {
+            // Get the first cell in the row
+            const firstCell = row.querySelector('td:first-child');
+
+            // Set the text content of the first cell to the incremented index
+            firstCell.textContent = index + 1;
+        });
+    });
+</script>
+    
     <!-- Slick Slider JS -->
     <script src="/assets/js/plugins/countdown.js"></script>
     <script src="/assets/js/plugins/counterup.js"></script>
