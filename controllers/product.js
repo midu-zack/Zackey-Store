@@ -205,19 +205,42 @@ let deleteProduct = async (req, res) => {
 };
  
 
-const singleProductDetails =async (req,res)=>{
-  try {
-    const productId = req.params.id
-    const product = await Product.findById(productId)
+// const singleProductDetails =async (req,res)=>{
+//   try {
+//     const productId = req.params.id
+//     const product = await Product.findById(productId)
      
     
 
-    res.render("user/product-details",{product})
-  } catch (error) {
-     console.error(error);
-  }
-}
+//     res.render("user/product-details",{product})
+//   } catch (error) {
+//      console.error(error);
+//   }
+// }
 
+
+
+ 
+const singleProductDetails = async (req, res) => {
+  try {
+      const productId = req.params.id;
+      const product = await Product.findOne({ _id: productId, productCategory: req.query.category }); // Include category filter
+      if (!product) {
+          return res.status(404).json({ error: 'Product not found' });
+      }
+      console.log(product);
+      res.render("user/product-details", { product });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+ 
+
+
+ 
 
 
 

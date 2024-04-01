@@ -570,7 +570,8 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="sidebar-widget shop-sidebar-border pt-40">
+
+ {{!-- <div class="sidebar-widget shop-sidebar-border pt-40">
                                 <h4 class="sidebar-title">Shop By Categories</h4>
 
 
@@ -584,7 +585,92 @@
                                 </div>
 
                                 
+                            </div> --}}
+
+
+<div class="sidebar-widget shop-sidebar-border pt-40">
+    <h4 class="sidebar-title">Shop By Categories</h4>
+    <div class="shop-catigory mt-20">
+        <select name="category" id="categorySelect" class="form-select" size="5" aria-label="size 3 select example">
+            {{#each categories}}
+                <option value="{{this.category}}">{{this.categorie}}</option>
+            {{/each}}
+        </select>
+    </div>
+</div>
+
+<div id="productDisplay">
+    <!-- Product display will be rendered here -->
+</div>
+
+<script>
+    function displayProducts(products) {
+        const productDisplay = document.getElementById('productDisplay');
+        productDisplay.innerHTML = ''; // Clear existing products
+
+        products.forEach(product => {
+            const productHTML = `
+                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="product-box mb-40">
+                        <div class="product-box-wrapper">
+                            <div class="product-img">
+                                <img src="${product.productImages[0]}" class="w-100" alt="${product.productName}">
                             </div>
+                            <div class="product-desc pb-20">
+                                <div class="product-desc-top">
+                                    <div class="categories">
+                                        <a href="/products?productId=${product._id}" class="product-category"><span>${product.productCategory}</span></a>
+                                    </div>
+                                    <a href="" class="wishlist float-right"><span><i class="fal fa-heart"></i></span></a>
+                                </div>
+                                <a href="/products?productId=${product._id}" class="product-title">${product.productName}</a>
+                                <div class="price-switcher">
+                                    <span class="price switcher-item">₹ ${product.productPrice}</span>
+                                    <a href="cart.html" class="add-cart text-capitalize switcher-item">+add to cart</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            productDisplay.innerHTML += productHTML;
+        });
+    }
+
+    function fetchProductsByCategory(category) {
+        fetch(`/products?category=${category}`)
+            .then(response => response.json())
+            .then(data => {
+                displayProducts(data);
+            })
+            .catch(error => {
+                console.error('Error fetching products by category:', error);
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const categorySelect = document.getElementById('categorySelect');
+        categorySelect.addEventListener('change', function() {
+            const selectedCategory = categorySelect.value;
+          console.log('This is select category',selectedCategory);
+
+            fetchProductsByCategory(selectedCategory);
+        });
+
+        // Fetch products for the default selected category on page load
+        const defaultCategory = categorySelect.value;
+        fetchProductsByCategory(defaultCategory);
+    });
+</script>
+
+
+
+ 
+ 
+
+
+ 
+
                             <div class="shop-price-filter mt-35 shop-sidebar-border pt-40 sidebar-widget">
                                 <h4 class="sidebar-title">Price Filter</h4>
                                 <div class="price-filter mt-20">
@@ -852,7 +938,7 @@
 ============================================ -->
 
     <!-- Modernizer JS -->
-    <script src="/assets/js/vendor/modernizr-3.11.7.min.js"></script>
+    <script src="/assets/js/vendor/modernizr-3.11.7.min.js"></>
     <!-- Modernizer JS -->
     <script src="/assets/js/vendor/jquery-3.6.0.min.js"></script>
     <!-- Bootstrap JS -->

@@ -521,9 +521,9 @@
                                                                     <td>{{this.totalAmountUserPaid}}</td>
                                                                    <td>
                                                                       <button type="button" class="btn btn-danger view-order" data-bs-toggle="modal" data-bs-target="#productModal" 
-              data-order-id="{{this.orderId}}" data-order-details="{{this}}">
-        View
-      </button>
+                    data-order-id="{{this.orderId}}" data-order-details="{{this}}">
+                View
+            </button>
                                                                     </td>
 
                                                                 </tr>
@@ -536,60 +536,139 @@
                                                 </div>
                                             </div>
                                         </div>  
+
+
 <!-- Modal -->
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="productModalLabel">Order Details</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body" id="orderDetailsBody">
-        <!-- Order details will be displayed here -->
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <h5 class="modal-title text-center" id="productModalLabel">Order Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="orderDetailsBody">
+                <!-- Order details will be displayed here -->
+            </div>
+            <!-- Add the cancellation button -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelOrderButton">Cancel Order</button>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
- 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  // Handle click on "View" button
-  document.querySelectorAll('.view-order').forEach(function(button) {
-    button.addEventListener('click', function() {
-      var orderDetails = JSON.parse(this.user.orders);
-      populateModal(orderDetails);
+    // Handle click on "View" button
+    document.querySelectorAll('.view-order').forEach(function(button) {
+        button.addEventListener('click', function() {
+            const orderId = this.getAttribute('data-order-id');
+            fetchOrderDetails(orderId);
+        });
     });
-  });
 
-  // Function to populate modal with order details
-  function populateModal(orderDetails) {
-    var modalBody = document.getElementById('orderDetailsBody');
-    modalBody.innerHTML = ''; // Clear previous content
-    
-    // Populate modal with order details
-    var orderInfo = document.createElement('p');
-    orderInfo.textContent = 'Order ID: ' + orderDetails.orderId;
-    modalBody.appendChild(orderInfo);
+    // Function to fetch order details
+    function fetchOrderDetails(orderId) {
+        fetch(`/getOrderDetails?orderId=${orderId}`)
+            .then(response => response.json())
+            .then(data => {
+                populateModal(data);
+                toggleCancellationButton(data.status); // Show or hide cancellation button based on status
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle error or display error message in modal body
+                const modalBody = document.getElementById('orderDetailsBody');
+                modalBody.innerHTML = '<p>Error fetching order details.</p>';
+            });
+    }
 
-    var statusInfo = document.createElement('p');
-    statusInfo.textContent = 'Status: ' + orderDetails.status;
-    modalBody.appendChild(statusInfo);
+    // Function to populate modal with order details
+    function populateModal(orderDetails) {
+        var modalBody = document.getElementById('orderDetailsBody');
+        modalBody.innerHTML = ''; // Clear previous content
+        
+        // Populate modal with order details
+        var orderInfo = document.createElement('p');
+        orderInfo.textContent = 'Order ID: ' + orderDetails.orderId;
+        modalBody.appendChild(orderInfo);
 
-    var totalInfo = document.createElement('p');
-    totalInfo.textContent = 'Total Amount: ' + orderDetails.totalAmountUserPaid;
-    modalBody.appendChild(totalInfo);
+        var statusInfo = document.createElement('p');
+        statusInfo.textContent = 'Status: ' + orderDetails.status;
+        modalBody.appendChild(statusInfo);
 
-    // Add more details as needed
-  }
+        var totalInfo = document.createElement('p');
+        totalInfo.textContent = 'Total Amount: ' + orderDetails.totalAmountUserPaid;
+        modalBody.appendChild(totalInfo);
+
+        // Add more details as needed
+        if (orderDetails.items && orderDetails.items.length > 0) {
+            var itemsInfo = document.createElement('p');
+            itemsInfo.textContent = 'Items:';
+            modalBody.appendChild(itemsInfo);
+
+            orderDetails.items.forEach(item => {
+                var itemInfo = document.createElement('p');
+                itemInfo.textContent = `- ${item.productName}`;
+                modalBody.appendChild(itemInfo);
+            });
+        }
+    }
+
+    // Function to toggle cancellation button visibility based on status
+    function toggleCancellationButton(status) {
+        const cancelButton = document.getElementById('cancelOrderButton');
+        if (status === 'Pending') { // Change 'Pending' to the status that allows cancellation
+            cancelButton.style.display = 'block'; // Show the cancellation button
+            // Add event listener to cancel order
+            cancelButton.addEventListener('click', function() {
+                console.log('Cancel button clicked'); // Log to verify the button click event
+
+                // Call a function to update order status to "Cancellation"
+                updateOrderStatus('Cancellation');
+            });
+        } else {
+            cancelButton.style.display = 'none'; // Hide the cancellation button
+        }
+    }
+
+    // Function to update order status
+    function updateOrderStatus(newStatus) {
+        console.log('Updating order status...'); // Log to verify function invocation
+
+        // You would implement logic to update the order status here, either by making an API call or updating it directly in your data source
+        const orderId = document.getElementById('orderDetailsBody').querySelector('p:first-child').textContent.split(': ')[1];
+        console.log('Order ID:', orderId); // Log order ID to verify extraction
+
+        fetch(`/cancelOrder?orderId=${orderId}`, {
+            method: 'POST'
+        })
+        .then(response => {
+            console.log('Response:', response); // Log response to check if it's successful
+
+            if (response.ok) {
+                console.log('Order status updated to:', newStatus);
+                // If the request was successful, update the status displayed in the modal
+                const statusInfo = document.querySelector('#orderDetailsBody p:nth-child(2)');
+                statusInfo.textContent = 'Status: Cancelled';
+            } else {
+                // If there was an error, log it
+                console.error('Error updating order status:', response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('Error updating order status:', error);
+        });
+    }
 });
-
-
 </script>
- 
 
 
 
+
+
+
+  
 
                                         <!-- Single Tab Content End -->
                                         <!-- Single Tab Content Start -->

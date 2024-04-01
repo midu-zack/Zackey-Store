@@ -78,10 +78,61 @@ const blockUnblock = async (req, res) => {
   }
 };
 
+
+
+
+const getOrderDetails = async (req, res) => {
+  try {
+      const orderId = req.query.orderId; 
+      const user = await User.findOne({ 'orders.orderId': orderId });
+
+      const order = user.orders.find(order => order.orderId === orderId);
+      if (!order) {
+          return res.status(404).json({ error: 'Order not found in user\'s orders array' });
+      }
+
+  // If order found, return the order details
+  res.json(order);
+
+      }  catch(error){
+    console.error(error);
+    res.status(500).json({ error: 'Error fetching order details' });
+  }};
+
+
+
+  const cancelOrder = async (req, res) => {
+    try {
+        const orderId = req.query.orderId; 
+        const user = await User.findOne({ 'orders.orderId': orderId });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const order = user.orders.find(order => order.orderId === orderId);
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        // Update order status to "Cancelled"
+        order.status = 'Cancelled';
+        await user.save();
+
+        res.json({ message: 'Order cancelled successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error cancelling order' });
+    }
+};
+
+
 module.exports = {
   homePage,
   showShop,
   logout,
   account,
   blockUnblock,
+  getOrderDetails,
+  cancelOrder,
 };

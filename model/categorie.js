@@ -6,6 +6,8 @@ const categorySchema = new mongoose.Schema({
    categorie :{
     type:String
    },
+
+   
    createdAt :{
       type:Date,
       default:Date.now}
