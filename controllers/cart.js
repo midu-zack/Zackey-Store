@@ -11,7 +11,7 @@ const showCart = async (req, res) => {
       return res.render("user/login-register");
     }
 
-    console.log('this is useri',userId);
+    // console.log('this is useri',userId);
 
     // Find the user by ID and populate the bookings array with product details
     const user = await User.findById(userId).populate("bookings.product");
@@ -50,8 +50,6 @@ const addCart = async (req, res) => {
   const productId = req.params.id;
   const userId = req.user.id; // Corrected to use req.user.id
 
-
- 
   try {
 
     const product = await Product.findById(productId);

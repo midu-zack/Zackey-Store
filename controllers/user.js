@@ -1,19 +1,38 @@
 const User = require("../model/user");
 const Product = require("../model/product");
 const Category = require("../model/categorie");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
 
 // get homepage
 let homePage = async (req, res) => {
-  try {
-    const products = await Product.find();
-    res.render("user/index", { products });
-  } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .render("error", { message: "Internal Server Error in home page" });
+
+    const token = req.cookies.jwt;
+
+  if (!token) {
+    return res.render("user/index");
   }
-};
+    try {
+   
+      const decoded = jwt.verify(token, process.env.JWT_KEY);
+      req.user = decoded;
+      
+
+      // console.log("req.user", req.user);
+
+      const user = await User.findOne({_id:req.user.id})
+      const products = await Product.find();
+       
+     return  res.render("user/index", { products, user});
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .render("error", { message: "Internal Server Error in home page" });
+    }
+  }
+
 
 // get shop page
 let showShop = async (req, res) => {

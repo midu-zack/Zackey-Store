@@ -84,7 +84,8 @@ const submitLogin = async (req, res) => {
 
     const products = await Product.find();
 
-    res.render("user/index", { products });
+    // res.render("user/index", { products });
+    res.redirect("/")
   } catch (error) {
     res.status(500).json({ message: "Login failed", error });
   }
@@ -129,7 +130,7 @@ const successGoogleLogin = async (req, res) => {
 
     res.status(200).redirect("/");
 
-    console.log("User logged in with Google : jwt created");
+    // console.log("User logged in with Google : jwt created");
   } catch (error) {
     console.error("Error logging in with Google:", error);
 
@@ -162,8 +163,8 @@ const sendOTP = async (email, otp) => {
       text: `Your OTP is: ${otp}`,
     });
 
-    console.log("OTP sent successfully to:", email);
-    console.log(otp);
+    // console.log("OTP sent successfully to:", email);
+    // console.log(otp);
   } catch (error) {
     console.error("Error sending OTP:", error);
     throw error; // Rethrow the error to handle it in the caller function

@@ -45,7 +45,7 @@
                     <div class="row">
                         <div class="col-xl-3 col-lg-2">
                             <div class="logo mt-45">
-                                <a href="index.html"><img src="assets/images/brand-logo/brand-logo-3.png" alt="logo"></a>
+                                <a href="/"><img src="assets/images/brand-logo/brand-logo-3.png" alt="logo"></a>
                                
                             </div>
                         </div>
@@ -53,19 +53,19 @@
                             <div class="main-menu menu-common-style menu-lh-3 menu-margin-4 menu-ngtv-mrg-1 menu-font-2">
                                 <nav>
                                     <ul>
-                                        <li class="angle-shape"><a href="index-4.html">Home</a>
+                                        <li class="angle-shape"><a href="/">Home</a>
                                              
                                         </li>
                                         <li class="angle-shape"><a href="/shop">Shop </a>
-                                            <ul class="mega-menu mega-menu-hm4">
-                                                <li><a class="menu-title" href="#">Shop Layout</a>
+                                            {{!-- <ul class="mega-menu mega-menu-hm4"> --}}
+                                                {{!-- <li><a class="menu-title" href="#">Shop Layout</a>
                                                     <ul>
                                                       
-                                                        {{!-- <li><a href="shop-no-sidebar.html">shop no sidebar</a></li> --}}
-                                                        {{!-- <li><a href="/shop">shop fullwide</a></li> --}}
+                                                        <li><a href="shop-no-sidebar.html">shop no sidebar</a></li>
+                                                        <li><a href="/shop">shop fullwide</a></li>
 
                                                     </ul>
-                                                </li>
+                                                </li> --}}
                                                 {{!-- <li><a class="menu-title" href="#">Shop Layout</a>
                                                     <ul>
                                                         <li><a href="shop-fullwide-no-sidebar.html">fullwide no sidebar </a></li>
@@ -91,11 +91,11 @@
                                                         <li><a href="product-details-affiliate.html">Affiliate style</a></li>
                                                     </ul>
                                                 </li> --}}
-                                            </ul>
+                                            {{!-- </ul> --}}
                                         </li>
                                        
-                                        <li class="angle-shape"><a href="#">Pages</a>
-                                            <ul class="submenu">
+                                        <li class="angle-shape"><a href="/about">About</a>
+                                            {{!-- <ul class="submenu">
                                                 <li><a href="about-us.html">about us </a></li>
                                                 <li><a href="/addCart">cart page </a></li>
                                                 <li><a href="checkout.html">checkout </a></li>
@@ -105,7 +105,7 @@
                                                 <li><a href="login-register.html">login/register </a></li>
                                             
 
-                                            </ul>
+                                            </ul> --}}
                                         </li>
  
                                         <li><a href="contact.html">Contact</a></li>
@@ -121,11 +121,9 @@
                                     </button>
 
                                 </div> --}}
-                                     <div class="search-wrap-2 search-wrap-2-mrg  border-style ">
-                                            <a href="login-register"><i class="fa-solid fa-user"></i></a>
-                                     </div>
-
-                                <div class="setting-wrap setting-wrap-mrg border-style">
+                                 
+                                {{#if user}}
+                                     <div class="setting-wrap setting-wrap-mrg border-style">
                                     <a class="setting-active" href="#">
                                         <i class="la la-cog"></i> Account
                                     </a>
@@ -139,7 +137,7 @@
                                                 <h4>Account</h4>
                                                 <ul>
                                                     {{!-- <li><a href="login-register">Login</a></li> --}}
-                                                    <li><a href="login-register">Creat Account</a></li>
+                                                    {{!-- <li><a href="login-register">Creat Account</a></li> --}}
                                                     <li><a href="/profile">My Account</a></li>
                                                     <li><a href="/logout">Logout</a></li>
 
@@ -148,55 +146,27 @@
                                         </ul>
                                     </div>
                                 </div>
+                                {{else}}
+                               <div class="search-wrap-2 search-wrap-2-mrg  border-style ">
+                                            <a href="login-register"><i class="fa-solid fa-user"></i></a>
+                                     </div>
+                                   {{/if}}
+                                     
                                    
-                                    {{!-- {{#if user}}
-                                    <li><a href="/loginregister"><i class="fa fa-user"></i> Account</a></li>
-                                    {{else}}
-                                      <li><a href="/logout"><i class="fa fa-user"></i> Logout</a></li>
-                                    {{/if}} --}}
-                                   
-                                <div class="cart-wrap cart-wrap-2">
-                                    <button class="cart-active">
-                                        <span class="mini-cart-price-2">$400.00</span>
+                             <div class="cart-wrap cart-wrap-2">
+                                    <button class="cart-active" onclick="window.location.href='/cart';">
                                         <i class="la la-shopping-cart"></i>
-                                        <span class="count-style-2">01</span>
                                     </button>
-                                    <div class="shopping-cart-content">
-                                        <div class="shopping-cart-top">
+                            </div>
+
+                                   
+                                    {{!-- <div class="shopping-cart-content"> --}}
+                                        {{!-- <div class="shopping-cart-top">
                                             <h4>Your Cart</h4>
                                             <a class="cart-close" href="#"><i class="la la-close"></i></a>
-                                        </div>
-                                        <ul>
-                                            <li class="single-shopping-cart">
-                                                <div class="shopping-cart-img">
-                                                    <a href="#"><img alt="" src="assets/images/cart/cart-1.jpg"></a>
-                                                    <div class="item-close">
-                                                        <a href="#"><i class="sli sli-close"></i></a>
-                                                    </div>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="#">Golden Easy Spot Chair.</a></h4>
-                                                    <span>$99.00</span>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="la la-trash"></i></a>
-                                                </div>
-                                            </li>
-                                            <li class="single-shopping-cart">
-                                                <div class="shopping-cart-img">
-                                                    <a href="#"><img alt="" src="assets/images/cart/cart-2.jpg"></a>
-                                                    <div class="item-close">
-                                                        <a href="#"><i class="sli sli-close"></i></a>
-                                                    </div>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="#">Golden Easy Spot Chair.</a></h4>
-                                                     <span>$99.00</span>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="la la-trash"></i></a>
-                                                </div>
-                                            </li>
+                                        </div> --}}
+                                        {{!-- <ul>
+                                            {{#each bookings}}
                                             <li class="single-shopping-cart">
                                                 <div class="shopping-cart-img">
                                                     <a href="#"><img alt="" src="assets/images/cart/cart-3.jpg"></a>
@@ -205,23 +175,24 @@
                                                     </div>
                                                 </div>
                                                 <div class="shopping-cart-title">
-                                                    <h4><a href="#">Golden Easy Spot Chair.</a></h4>
-                                                    <span>$99.00</span>
+                                                    <h4><a href="#">{{this.product.name}}.</a></h4>
+                                                    <span>${{this.price}}</span>
                                                 </div>
                                                 <div class="shopping-cart-delete">
                                                     <a href="#"><i class="la la-trash"></i></a>
                                                 </div>
                                             </li>
-                                        </ul>
-                                        <div class="shopping-cart-bottom">
+                                            {{/each}}
+                                        </ul> --}}
+                                        {{!-- <div class="shopping-cart-bottom">
                                             <div class="shopping-cart-total">
                                                 <h4>Subtotal <span class="shop-total">$290.00</span></h4>
                                             </div>
                                             <div class="shopping-cart-btn btn-hover default-btn text-center">
                                                 <a class="black-color" href="checkout.html">Continue to Chackout</a>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </div> --}}
+                                    {{!-- </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -1334,29 +1305,43 @@ if (success === 'orderSuccessfully') {
 </script> --}}
 
 
+{{!--  
 
-  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get('productId');
-        const success = urlParams.get('success');
+<div>
+    <button onclick="redirectToHome()">Home</button>
+    <button onclick="redirectToOrders()">Orders</button>
+</div>
 
-        if (success === 'orderSuccessfully') {
-            // Display a larger green success message using Toastify
-            Toastify({
-                text: 'Order placed successfully! Thank you for your purchase!',
-                duration: 5000, // Auto close the notification after 5 seconds
-                gravity: 'center', // Display notification at the top
-                position: 'center', // Position notification at the center
+<script>
+    function redirectToHome() {
+        window.location.href = '/';
+    }
+
+    function redirectToOrders() {
+        window.location.href = '/orders';
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('productId');
+    const success = urlParams.get('success');
+
+    if (success === 'orderSuccessfully') {
+        // Display a larger green success message using Toastify
+        Toastify({
+            text: 'Order placed successfully! Thank you for your purchase!',
+            duration: 5000, // Auto close the notification after 5 seconds
+            gravity: 'center', // Display notification at the top
+            position: 'center', // Position notification at the center
                 
-                style: {
-                    background: 'green', // Background color for the success message
-                    color: 'white', // Text color
-                    'font-size': '24px', // Larger font size
-                    'text-align': 'center' // Center align the text
-                },
-                stopOnFocus: true // Stop the timer when notification is clicked for user interaction
-            }).showToast();
-        }
-    </script>
- 
+            style: {
+                background: 'green', // Background color for the success message
+                color: 'white', // Text color
+                'font-size': '24px', // Larger font size
+                'text-align': 'center' // Center align the text
+            },
+            stopOnFocus: true // Stop the timer when notification is clicked for user interaction
+        }).showToast();
+    }
+</script>
+
+  --}}

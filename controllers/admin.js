@@ -46,7 +46,7 @@ let adminSubmitlogin = async (req, res) => {
         const { email, password } = req.body;
         const admin = await Admin.findOne({ email });
 
-        console.log(email);
+        // console.log(email);
 
         if (admin) {
             if (password === admin.password) {
@@ -88,7 +88,7 @@ const orderList = async (req,res)=>{
     try {
         const usersAndOrders = await User.find({ orders: { $exists: true, $ne: [] } });
 
-        console.log('this is userOrder',usersAndOrders);
+        // console.log('this is userOrder',usersAndOrders);
 
       res.render("admin/order-list",{usersAndOrders})
     } catch (error) {
@@ -102,7 +102,7 @@ const orderList = async (req,res)=>{
   const orderDetails = async (req, res) => {
     try {
         const orderId = req.params.id;
-        console.log("this is the orderId", orderId);
+        // console.log("this is the orderId", orderId);
 
         // Find the user with the specific order and retrieve only the matching order
         const userAndOneOrder = await User.aggregate([
@@ -116,7 +116,7 @@ const orderList = async (req,res)=>{
             return res.status(404).send("Order not found");
         }
 
-        console.log("this is my user find the ", userAndOneOrder);
+        // console.log("this is my user find the ", userAndOneOrder);
 
         // Pass the order details to the view
 
@@ -136,7 +136,7 @@ const orderStatus = async (req, res) => {
     try {
         const { statusValue, orderID } = req.body;
 
-        console.log("this is status value", statusValue,"then you have id ", orderID);
+        // console.log("this is status value", statusValue,"then you have id ", orderID);
 
         // Find the user and update the status of the matching order
         const updatedUser = await User.findOneAndUpdate(
@@ -145,7 +145,7 @@ const orderStatus = async (req, res) => {
             { new: true }
         );
 
-        console.log("this is updausers",updatedUser);
+        // console.log("this is updausers",updatedUser);
         if (!updatedUser) {
             // Handle case where user or order is not found
             return res.status(404).send("User or Order not found");

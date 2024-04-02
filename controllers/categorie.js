@@ -43,7 +43,7 @@ let categoryEdit = async (req, res) => {
   try {
     let categoryId = req.params.id;
 
-    console.log("categoryId",categoryId);
+    // console.log("categoryId",categoryId);
 
     let category = await Categorie.findById(categoryId);
 
@@ -52,7 +52,7 @@ let categoryEdit = async (req, res) => {
     }
  
     res.render("admin/categories-edit",{category});
-    console.log(category.categorie);
+    // console.log(category.categorie);
   } catch (error) {
     res.status(500).send("Internal Server Error in category Edit");
   }
@@ -90,7 +90,7 @@ let categoryUpdate = async (req, res) => {
 let categoryDelete = async (req, res) => {
   try {
     let categoryId = req.params.id;
-    console.log("categoryId from delete ", categoryId);
+    // console.log("categoryId from delete ", categoryId);
 
     // findByAndDelete
     let category = await Categorie.findByIdAndDelete(categoryId);

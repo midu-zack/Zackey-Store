@@ -115,7 +115,7 @@ const placeOrder = async (req, res) => {
       updatedUser.bookings = [];
       await updatedUser.save();
 
-      return res.redirect("/?success=orderSuccessfully");
+      return res.redirect("/checkout?success=orderSuccessfully");
     } else {
       // Handle other payment methods
       return res.redirect("/ERROR");

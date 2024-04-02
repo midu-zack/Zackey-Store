@@ -4,7 +4,7 @@ const router = express.Router();
 const verifyToken = require("../middleware/jwtmiddleware");
  
 
-router.get("/", homePage);
+router.get("/",  homePage);
 
 // router.get('/account',account)
 

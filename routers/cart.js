@@ -3,7 +3,7 @@ const { showCart,addCart, updateQuantity, removeProductCart, clearCart} = requir
 const router = express.Router()
 const verifyToken = require('../middleware/jwtmiddleware');
  
-router.get('/cart',verifyToken,showCart)
+router.get("/cart" ,verifyToken,showCart)
 
 router.get('/addCart/:id',verifyToken ,addCart)
 router.post('/updateQuantity',verifyToken,updateQuantity)
