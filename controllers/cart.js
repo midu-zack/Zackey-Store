@@ -115,7 +115,7 @@ const removeProductCart = async (req, res) => {
     if (!updatedUserCart) {
       return res.status(404).send("Product not found in cart");
     }
-
+          
     // Redirect to the cart page after deletion
     res.redirect("/cart");
   } catch (error) {

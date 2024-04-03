@@ -16,6 +16,13 @@
     <!-- CSS
 	============================================ -->
 
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="/assets/css/vendor/bootstrap.min.css">
     <!-- Icon Font CSS -->
@@ -46,8 +53,8 @@
                             <div class="main-menu menu-common-style menu-lh-1 menu-margin-4 menu-font-3 ml-20 menu-others-page">
                                 <nav>
                                     <ul>
-                                        <li class="angle-shape"><a href="index.html">Home</a>
-                                            <ul class="submenu">
+                                        <li class="angle-shape"><a href="/">Home</a>
+                                            {{!-- <ul class="submenu">
                                                 <li><a href="index.html">Home version 1 </a></li>
                                                 <li><a href="index-2.html">Home version 2 </a></li>
                                                 <li><a href="index-3.html">Home version 3 </a></li>
@@ -58,10 +65,10 @@
                                                 <li><a href="index-8.html">Home version 8 </a></li>
                                                 <li><a href="index-9.html">Home version 9 </a></li>
                                                 <li><a href="index-10.html">Home version 10 </a></li>
-                                            </ul>
+                                            </ul> --}}
                                         </li>
-                                        <li class="angle-shape"><a href="shop.html">Shop </a>
-                                            <ul class="mega-menu">
+                                        <li class="angle-shape"><a href="/shop">Shop </a>
+                                            {{!-- <ul class="mega-menu">
                                                 <li><a class="menu-title" href="#">Shop Layout</a>
                                                     <ul>
                                                         <li><a href="shop.html">standard style</a></li>
@@ -97,11 +104,11 @@
                                                         <li><a href="product-details-affiliate.html">Affiliate style</a></li>
                                                     </ul>
                                                 </li>
-                                            </ul>
+                                            </ul> --}}
                                         </li>
-                                        <li><a href="shop.html">Mens</a></li>
-                                        <li class="angle-shape"><a href="#">Pages</a>
-                                            <ul class="submenu">
+                                        {{!-- <li><a href="shop.html">Mens</a></li> --}}
+                                        <li class="angle-shape"><a href="/about">About</a>
+                                            {{!-- <ul class="submenu">
                                                 <li><a href="about-us.html">about us </a></li>
                                                 <li><a href="cart.html">cart page </a></li>
                                                 <li><a href="checkout.html">checkout </a></li>
@@ -110,16 +117,16 @@
                                                 <li><a href="my-account.html">my account </a></li>
                                                 <li><a href="contact.html">contact us </a></li>
                                                 <li><a href="login-register.html">login/register </a></li>
-                                            </ul>
+                                            </ul> --}}
                                         </li>
-                                        <li class="angle-shape"><a href="blog.html">Blog</a>
+                                        {{!-- <li class="angle-shape"><a href="blog.html">Blog</a>
                                             <ul class="submenu">
                                                 <li><a href="blog.html">standard style </a></li>
                                                 <li><a href="blog-2col.html">blog 2 column </a></li>
                                                 <li><a href="blog-sidebar.html">blog sidebar </a></li>
                                                 <li><a href="blog-details.html">blog details </a></li>
                                             </ul>
-                                        </li>
+                                        </li> --}}
                                         <li><a href="contact.html">Contact</a></li>
                                     </ul>
                                 </nav>
@@ -128,17 +135,17 @@
                         <div class="col-xl-3 col-lg-3 position-relative">
                             <div class="header-right-wrap mt-10">
                                 <div class="header-wishlist">
-                                    <a href="wishlist.html"><i class="la la-heart-o"></i></a>
+                                    <a href="/wishlist"><i class="la la-heart-o"></i></a>
                                 </div>
                                 <div class="header-login ml-40">
-                                    <a href="login-register.html"><i class="la la-user"></i></a>
+                                    <a href="/profile"><i class="la la-user"></i></a>
                                 </div>
                                 <div class="cart-wrap common-style ml-35">
                                     <button class="cart-active cart-3">
-                                        <span class="mini-cart-price">$240</span>
+                                         
                                         <i class="la la-shopping-cart"></i>
                                     </button>
-                                    <div class="shopping-cart-content">
+                                    {{!-- <div class="shopping-cart-content">
                                         <div class="shopping-cart-top">
                                             <h4>Your Cart</h4>
                                             <a class="cart-close" href="#"><i class="la la-close"></i></a>
@@ -198,7 +205,7 @@
                                                 <a class="black-color" href="checkout.html">Continue to Chackout</a>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -713,18 +720,87 @@ document.addEventListener('DOMContentLoaded', function() {
                                         </div>
                                         <!-- Single Tab Content End -->
                                         <!-- Single Tab Content Start -->
-                                        <div class="tab-pane fade" id="address-edit" role="tabpanel">
-                                            <div class="myaccount-content">
-                                                <h3>Billing Address</h3>
-                                                <address>
-                                                    <p><strong>Alex Tuntuni</strong></p>
-                                                    <p>1355 Market St, Suite 900 <br>
-                                                    San Francisco, CA 94103</p>
-                                                    <p>Mobile: (123) 456-7890</p>
-                                                </address>
-                                                <a href="#" class="check-btn sqr-btn "><i class="fa fa-edit"></i> Edit Address</a>
-                                            </div>
-                                        </div>
+                               
+                                        {{!-- <div class="tab-pane fade" id="address-edit" role="tabpanel">
+                                              
+            <div class="myaccount-content mb-25">
+    <h3>Billing Addresses</h3>
+    <div class="address-list">
+        {{#each user.address}}
+        <div class="address-item border rounded p-3 mb-3">
+            <p><strong>{{this.firstName}}, {{this.phone}}</strong></p>
+            <p>{{this.address}}, {{this.city}}, {{this.state}}, <br>
+            {{this.postcode}}</p>
+
+
+        </div>
+        {{/each}}
+    </div>
+</div>
+    
+
+                                            
+                                        </div> --}}
+
+<!-- HTML -->
+<div class="tab-pane fade" id="address-edit" role="tabpanel">
+    <div class="myaccount-content mb-25">
+        <h3>Billing Addresses</h3>
+        <div class="address-list">
+            {{#each user.address}}
+            <div class="address-item border rounded p-3 mb-3 position-relative">
+                <p><strong>{{this.firstName}}, {{this.phone}}</strong></p>
+                <p>{{this.address}}, {{this.city}}, {{this.state}}, <br>{{this.postcode}}</p>
+                <div class="edit-delete-options position-absolute top-0 end-0 m-3">
+                    {{!-- <button class="edit-address btn btn-outline-primary btn-sm" data-index="{{@index}}"><i class="fa fa-pencil"></i> Edit</button> --}}
+                    <button class="delete-address btn btn-outline-danger btn-sm" data-id="{{this._id}}"><i class="fa fa-trash"></i> </button>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script>
+// JavaScript
+document.querySelectorAll('.delete-address').forEach(button => {
+    button.addEventListener('click', async function(event) {
+        event.preventDefault(); // Prevent default behavior of button click
+
+        const addressId = this.getAttribute('data-id');
+        
+        try {
+            const response = await fetch(`/deleteAddress/${addressId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+
+            if (response.ok) {
+                // If the deletion was successful, remove the deleted address from the DOM
+                const addressItem = this.closest('.address-item');
+                addressItem.remove();
+            } else {
+                // If there was an error, log it
+                console.error('Error deleting address:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error deleting address:', error);
+        }
+    });
+});
+
+
+</script>
+
+
+                                       
+                                        
                                         <!-- Single Tab Content End -->
                                         <!-- Single Tab Content Start -->
                                         <div class="tab-pane fade" id="account-info" role="tabpanel">

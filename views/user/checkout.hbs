@@ -403,75 +403,103 @@
                             <div class="billing-info-wrap mr-50">
                                 <h3>Billing Details</h3>
                                 
-                                 {{#if address}}
-                                <div class="row">
-                                    <div class="col-lg-6 col-md-6">
-                                        <div class="billing-info mb-20">
-                                            <label>First Name <abbr class="required"  title="required">*</abbr></label>
-                                            <input type="text" value="{{address.[0].firstName}}">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6">
-                                        <div class="billing-info mb-20">
-                                            <label>Last Name <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" value="{{address.[0].lastName}}">
-                                        </div>
-                                    </div>
-                                    {{!-- <div class="col-lg-12">
-                                        <div class="billing-info mb-20">
-                                            <label>Company Name <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text">
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="col-lg-12">
-                                        <div class="billing-select mb-20">
-                                            <label>Country <abbr class="required" title="required">*</abbr></label>
-                                            <select>
-                                                <option data-display="{{address.[0].country}}">{{address.[0].country}}</option>
-                                            </select>
-                                        </div>
-                                    </div> --}}
+                 <div class="row">
+    <div class="col-lg-12">
+        {{#if address}}
+        <div class="billing-select mb-20">
+            <label>Select Address</label>
+            {{#each address}}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="address" id="address{{@index}}" value="{{@index}}" {{#if @index}} checked {{/if}}>
+                <label class="form-check-label" for="address{{@index}}">
+                    {{this.firstName}} {{this.lastName}} - {{this.address}}, {{this.city}}, {{this.state}}, {{this.postcode}}
+                </label>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <p>No addresses available. Please add a new address.</p>
+        {{/if}}
+    </div>
+</div>
 
-                                    <div class="col-lg-12">
-                                        <div class="billing-info mb-20">
-                                            <label>Street Address <abbr class="required" title="required">*</abbr></label>
-                                            <input class="billing-address" value="{{address.[0].address}}" type="text">
-                                            {{!-- <input placeholder="Apartment, suite, unit etc." type="text"> --}}
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="billing-info mb-20">
-                                            <label>Town / City <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" value="{{address.[0].city}}">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 col-md-12">
-                                        <div class="billing-info mb-20">
-                                            <label>State <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" value="{{address.[0].state}}">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 col-md-12">
-                                        <div class="billing-info mb-20">
-                                            <label>Postcode <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" value="{{address.[0].postcode}}">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 col-md-12">
-                                        <div class="billing-info mb-20">
-                                            <label>Phone <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" value="{{address.[0].phone}}">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 col-md-12">
-                                        <div class="billing-info mb-20">
-                                            <label>Email Address <abbr class="required" title="required">*</abbr></label>
-                                            <input type="text" value="{{address.[0].email}}">
-                                        </div>
-                                    </div>
-                                </div>
-                                {{else}}
+<div class="row" id="addressDetails">
+    <!-- Address details will be displayed here -->
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const addressRadios = document.querySelectorAll('input[name="address"]');
+        const addressDetailsContainer = document.getElementById('addressDetails');
+
+        // Function to update address details based on selected radio button
+        function updateAddressDetails() {
+            const selectedAddressIndex = document.querySelector('input[name="address"]:checked').value;
+            const selectedAddress = address[selectedAddressIndex];
+            const addressDetailsHTML = `
+                <div class="col-lg-12">
+                    <div class="billing-info mb-20">
+                        <label>First Name <abbr class="required"  title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.firstName}">
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="billing-info mb-20">
+                        <label>Last Name <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.lastName}">
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="billing-info mb-20">
+                        <label>Street Address <abbr class="required" title="required">*</abbr></label>
+                        <input class="billing-address" value="${selectedAddress.address}" type="text">
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="billing-info mb-20">
+                        <label>Town / City <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.city}">
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="billing-info mb-20">
+                        <label>State <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.state}">
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="billing-info mb-20">
+                        <label>Postcode <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.postcode}">
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="billing-info mb-20">
+                        <label>Phone <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.phone}">
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="billing-info mb-20">
+                        <label>Email Address <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.email}">
+                    </div>
+                </div>
+            `;
+            addressDetailsContainer.innerHTML = addressDetailsHTML;
+        }
+
+        // Add event listener to each radio button
+        addressRadios.forEach(function(radio) {
+            radio.addEventListener('change', updateAddressDetails);
+        });
+
+        // Initially update address details
+        updateAddressDetails();
+    });
+</script>
+
+
                                 {{!-- <div class="checkout-account mb-25">
                                     <input class="checkout-toggle2" type="checkbox">
                                     <span>Create an account?</span>
@@ -485,9 +513,30 @@
 
                             
                                 <div class="checkout-account mt-25">
-                                    <input class="checkout-toggle" type="checkbox">
-                                    <span>Add your address</span>
-                                </div>
+    <input id="addNewAddressToggle" class="checkout-toggle" type="checkbox">
+    <label for="addNewAddressToggle">   Add New Address</label>
+</div>
+
+<div id="newAddressSection" class="new-address-section" style="display: none;">
+    <!-- Your new address form or content goes here -->
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const addNewAddressToggle = document.getElementById('addNewAddressToggle');
+    const newAddressSection = document.getElementById('newAddressSection');
+
+    addNewAddressToggle.addEventListener('change', function() {
+        if (this.checked) {
+            newAddressSection.style.display = 'block';
+        } else {
+            newAddressSection.style.display = 'none';
+        }
+    });
+});
+
+</script>
+
                         
                             <form action="/addAddress" method="post">
                                 <div class="different-address open-toggle mt-30">
@@ -570,7 +619,7 @@
                                     <label>Order notes</label>
                                     <textarea placeholder="Notes about your order, e.g. special notes for delivery. " name="message"></textarea>
                                 </div> --}}
- {{/if}}
+ 
 
                  
                             </div>

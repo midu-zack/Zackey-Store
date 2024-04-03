@@ -65,7 +65,7 @@ const account = async (req, res) => {
       return res.status(404).send("User not found");
     }
 
-    res.render("user/my-account", { user });
+    res.render("user/my-account", {user});
   } catch (error) {
     console.error("Error fetching user data:", error);
     res.status(500).send("Internal Server Error");
@@ -146,6 +146,34 @@ const getOrderDetails = async (req, res) => {
 };
 
 
+
+
+const deleteAddress = async (req, res) => {
+    try {
+        const userId = req.user.id; // Assuming you have user data stored in the request object
+        const addressId = req.params.id;
+
+        // Find the user by ID
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Delete the address from the user's address array
+        user.address = user.address.filter(address => address._id != addressId);
+        await user.save();
+
+        res.status(200).json({ message: 'Address deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting address:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+ 
+ 
+
 module.exports = {
   homePage,
   showShop,
@@ -154,4 +182,5 @@ module.exports = {
   blockUnblock,
   getOrderDetails,
   cancelOrder,
+  deleteAddress
 };

@@ -69,6 +69,10 @@
     font-size: 16px; /* Adjust font size for delete option */
 }
 
+
+
+
+
 </style>
    
     <!-- Bootstrap CSS -->
@@ -459,21 +463,27 @@
                             <div class="table-content table-responsive cart-table-content">
 
 
-
-{{#each wishlistItems}}
-<div class="product-container">
+<div class="product-grid-container">
+  {{#each wishlistItems}}
+  <div class="product-container">
     <div class="product-thumbnail">
        <img class="w120 rounded img-fluid" src="{{this.items.images.[0]}}" alt="noImage">
     </div>
     <div class="product-details">
         <div class="product-name"><a href="#">{{this.items.name}}</a></div>
-        <div class="product-material">{{this.items.meterial}}</div>
+        <div class="product-material">{{this.items.material}}</div>
         <div class="product-price">${{this.items.price}}</div>
     </div>
-   <div class="product-actions">
-    <a href="/DeleteWishlist/{{this.items._id}}">
-        <i class="fas fa-trash"></i> <!-- Font Awesome trash icon -->
-    </a>
+    <div class="product-actions ">
+      <a href="/DeleteWishlist/{{this.items._id}}">
+        <i class="fas fa-trash m-2"></i> <!-- Font Awesome trash icon -->
+      </a>
+      <a href="/addCart/{{this.items._id}}">
+      <i class="fas fa-shopping-cart m-1"></i>
+      </a>
+    </div>
+  </div>
+  {{/each}}
 </div>
 
 
@@ -483,12 +493,6 @@
         <i class="bi bi-trash"></i> <!-- Assuming you're using Bootstrap icons -->
     </a>
 </div> --}}
-
-
-</div>
-
-{{/each}}
-
 
 
                             </div>
