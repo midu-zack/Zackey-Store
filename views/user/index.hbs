@@ -496,28 +496,30 @@
                 <div class="section-title-4 text-center">
                     <h2>Featured Product</h2>
                 </div>
-                    {{#each products}}
-                <div class="product-slider-active-3 owl-carousel">
-                    <div class="product-wrap product-border-2 pro-hover-shadow mb-40">
-                        <div class="product-img mb-15">
-                            <a href="product-details.html">
-                               <img class="w120 rounded img-fluid" src="{{this.images.[0]}}" alt="noImage">
-                            <div class="product-action-3">
-                                <a data-bs-toggle="modal" data-bs-target="#exampleModal" title="Quick View" href="#"><i class="la la-arrows"></i></a>
-                                <a title="Wishlist" href="#"><i class="la la-heart-o"></i></a>
-                                <a title="Add To Cart" href="#"><i class="la la-cart-plus"></i></a>
-                            </div>
-                        </div>
-                        <div class="product-content-2">
-                            <h4><a href="product-details.html">{{this.name}}</a></h4>
-                            <span>{{this.meterial}}</span>
-                            <div class="pro-price-2">
-                                <span>{{this.price}}</span>
-                            </div>
-                        </div>
-                    </div>
+     <div class="product-slider-active-3 owl-carousel">
+    {{#each products}}
+    <div class="product-wrap product-border-2 pro-hover-shadow mb-40">
+        <div class="product-img mb-15">
+            <a href="product-details.html">
+                <img class="w120 rounded img-fluid" src="{{this.images.[0]}}" alt="noImage">
+                <div class="product-action-3">
+                    {{!-- <a data-bs-toggle="modal" data-bs-target="#exampleModal" title="Quick View" href="#"><i class="la la-arrows"></i></a> --}}
+                    <a title="Wishlist" href="/wishlist/{{this._id}}"><i class="la la-heart-o"></i></a>
+                    <a title="Add To Cart" href="/addCart/{{this._id}}"><i class="la la-cart-plus"></i></a>
                 </div>
-                    {{/each}}
+            </a>
+        </div>
+        <div class="product-content-2">
+            <h4><a href="product-details.html">{{this.name}}</a></h4>
+            <span>{{this.meterial}}</span>
+            <div class="pro-price-2">
+                <span>{{this.price}}</span>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</div>
+
             </div>
         </div>
         <div class="banner-area pb-75">

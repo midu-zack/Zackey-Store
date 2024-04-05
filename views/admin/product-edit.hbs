@@ -78,7 +78,7 @@
                             <li><a class="ms-link" href="customer-detail.html">Customers Details</a></li>
                         </ul>
                     </li>
-                    <li class="collapsed">
+                    {{!-- <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-sale" href="#">
                         <i class="icofont-sale-discount fs-5"></i> <span>Sales Promotion</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
                         <!-- Menu: Sub menu ul -->
@@ -136,7 +136,7 @@
                             <li><a class="ms-link" href="contact.html">Contact Us</a></li>
                             <li><a class="ms-link" href="todo-list.html">Todo List</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                     
                 </ul>
                 <!-- Menu: menu collepce btn -->
@@ -391,13 +391,17 @@
                                 <div class="card-body">
                                   
                                         <div class="row g-3 align-items-center">
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <label  class="form-label">Name</label>
                                                 <input type="text" name="productName"  id="productName" value="{{product.name}}" class="form-control">
                                             </div>
                                             <div class="col-md-6">
                                                 <label  class="form-label">Material</label>
                                                 <input type="text" name="materiel"  id="materiel" value="{{product.meterial}}" class="form-control">
+                                            </div>
+                                             <div class="col-md-6">
+                                                <label  class="form-label">Color</label>
+                                                <input type="text" name="color"  id="color" value="{{product.color}}" class="form-control">
                                             </div>
                                             
                                             <div class="col-md-12">

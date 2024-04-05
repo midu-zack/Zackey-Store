@@ -144,6 +144,7 @@ const updateProduct = async (req, res) => {
       coupon,
       category,
       material,
+      color,
       description,
     } = req.body;
 
@@ -154,6 +155,7 @@ const updateProduct = async (req, res) => {
       name: productName,
       mrp: mrp,
       price: price,
+      color:color,
       coupon: coupon,
       category: category,
       material: material, 

@@ -17,6 +17,9 @@
     <link rel="stylesheet" href="/assets/plugin/datatables/responsive.dataTables.min.css"><!-- Datatable Css -->
     <link rel="stylesheet" href="/assets/plugin/datatables/dataTables.bootstrap5.min.css"><!-- Datatable Css -->
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
     <!-- Project css file  -->
     <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
 </head>
@@ -76,7 +79,7 @@
                             <li><a class="ms-link" href="customer-detail.html">Customers Details</a></li>
                         </ul>
                     </li>
-                    <li class="collapsed">
+                    {{!-- <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-sale" href="#">
                         <i class="icofont-sale-discount fs-5"></i> <span>Sales Promotion</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
                         <!-- Menu: Sub menu ul -->
@@ -134,7 +137,7 @@
                             <li><a class="ms-link" href="contact.html">Contact Us</a></li>
                             <li><a class="ms-link" href="todo-list.html">Todo List</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                     
                 </ul>
                 <!-- Menu: menu collepce btn -->
@@ -389,13 +392,17 @@
                                 <div class="card-body">
                                   
                                         <div class="row g-3 align-items-center">
-                                            <div class="col-md-6">
+                                            <div class="col-md-12">
                                                 <label  class="form-label">Name</label>
                                                 <input type="text" name="productName" id="productName" class="form-control">
                                             </div>
                                             <div class="col-md-6">
                                                 <label  class="form-label">Material</label>
                                                 <input type="text" name="meterial" id="materiel" class="form-control">
+                                            </div>
+                                             <div class="col-md-6">
+                                                <label  class="form-label">Color</label>
+                                                <input type="text" name="color" id="color" class="form-control">
                                             </div>
                                             
                                             <div class="col-md-12">
@@ -434,7 +441,7 @@
                                                             <thead>
                                                                 <tr>
                                                                     <th class="product">Product Images Upload</th> 
-                                                                    <th class="quantity">Color</th>
+                                                                    {{!-- <th class="quantity">Color</th> --}}
                                                                     <th class="quantity">Quantity</th>
                                                                     
                                                                 </tr>
@@ -442,16 +449,31 @@
                                                             <tbody>
                                                                 <tr>
                                                                     <td>
-                                                                        <div class="product-cart d-flex align-items-center">
+                                                                        {{!-- <div class="product-cart d-flex align-items-center">
                                                                             <div class="product-thumb">
                                                                                  <label class="form-label col-3" for="image"></label>
                                                                                    <input class="col-lg-12" type="file" name="image">
                                                                             </div>
+                                                                        </div> --}}
+
+
+
+                                                                        <div class="product-cart d-flex align-items-center">
+                                                                        <div class="product-thumb">
+                                                                            <label class="form-label col-3" for="image"></label>
+                                                                            <input class="col-lg-12" type="file" id="image" name="image">
+                                                                            <img id="preview-image" src="#" alt="Preview" style="display: none;">
                                                                         </div>
+                                                                    </div>
+ 
+
                                                                     </td>
-                                                                     <td>
-                                                                        <input type="color" name="color" class="form-control">
-                                                                    </td>
+                                                                    
+
+                                                                     {{!-- <td>
+                                                                         <label class="form-label col-3" for="color" ></label>
+                                                                            <input class="col-lg-12" type="color" name="color">
+                                                                    </td> --}}
                                                                     <td>
                                                                         <div class="product-quantity d-inline-flex">
                                                                             <input type="number">

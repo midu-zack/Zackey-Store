@@ -1,5 +1,10 @@
 const User = require("../model/user");
 const uuid = require("uuid");
+const dotenv = require("dotenv");
+dotenv.config();
+const Razorpay = require('razorpay');
+
+
 const addAddress = async (req, res) => {
   try {
     const formData = req.body;
@@ -63,10 +68,12 @@ const showCheckout = async (req, res) => {
   }
 };
 
+
+
 const placeOrder = async (req, res) => {
   const { paymentMethod } = req.body;
   try {
-    if (paymentMethod === "cod") {
+    // if (paymentMethod === "cod") {
       const userId = req.user.id;
       if (!userId) {
         return res.redirect("/login-register");
@@ -116,10 +123,10 @@ const placeOrder = async (req, res) => {
       await updatedUser.save();
 
       return res.redirect("/checkout?success=orderSuccessfully");
-    } else {
+    // } else {
       // Handle other payment methods
-      return res.redirect("/ERROR");
-    }
+      // return res.redirect("/ERROR");
+    // }
   } catch (error) {
     console.error(error);
     return res
@@ -131,8 +138,117 @@ const placeOrder = async (req, res) => {
   }
 };
 
+// Razorpay instance
+const razorpay = new Razorpay({
+  key_id: process.env.KEY_ID,
+  key_secret: process.env.KEY_SECRET
+});
+
+// Function to create Razorpay order
+async function createRazorpayOrder(req, res) {
+  try {
+    const userId = req.user.id;
+    if (!userId) {
+      return res.redirect("/login-register");
+    }
+     
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    const grandtotal = user.grandtotal;
+      const { totalAmount } = req.body;
+       const total =  totalAmount + grandtotal
+      const options = {
+          amount:  total*100, // Amount in paise
+          currency: 'INR',
+          receipt: uuid.v4(),
+      };
+
+      const order = await razorpay.orders.create(options);
+      res.status(200).json({ order, key_id: process.env.KEY_ID });
+  } catch (error) {
+      console.error('Error:', error);
+      res.status(500).send('An error occurred while creating Razorpay order.');
+  }
+}
+ 
+
+
+
+// const razorpay = new Razorpay({
+//   key_id: process.env.KEY_ID,
+//   key_secret: process.env.KEY_SECRET
+// });
+
+
+// const createRazorpayOrder = async (req, res) => {
+//   try {
+   
+//     const { totalAmount } = req.body;
+//     console.log("this is boyd", req.body);
+//     const key_id = process.env.KEY_ID;
+//     const options = {
+//       amount: totalAmount * 100, // Amount in paise
+//       currency: 'INR',
+//       receipt: uuid.v4(),
+//     };
+
+//     console.log("this is options", options);
+//     const order = await razorpay.orders.create(options);
+//     res.status(200).json({ order, key_id }); // Wrap order and key_id in an object for proper JSON response
+
+//     console.log("this is new Options", order);
+//   } catch (error) {
+//     console.error('Error:', error);
+//     res.status(500).send('An error occurred while creating Razorpay order.');
+//   }
+// };
+
+
+
+// const saveRazorpayResponse = async (req, res) => {
+//   try {
+//     const { razorpayResponse, userId } = req.body;
+    
+//     // Extract relevant data from razorpayResponse
+//     const { order_id, status } = razorpayResponse;
+
+//     // Update the order status in the User collection
+//     const updatedUser = await User.findByIdAndUpdate(
+//       userId,
+//       { $set: { "orders.$[elem].status": status } }, // Update the status of the relevant order
+//       { arrayFilters: [{ "elem.orderId": order_id }], new: true }
+//     );
+
+//     if (!updatedUser) {
+//       return res.status(404).send("User not found");
+//     }
+
+//     // Clear the user's bookings after placing the order
+//     updatedUser.bookings = [];
+//     await updatedUser.save();
+
+//     return res.redirect("/checkout?success=orderSuccessfully");
+//     // Handle other updates as per your requirement
+
+//     // res.status(200).send("Razorpay response saved successfully");
+//   } catch (error) {
+//     console.error('Error while saving Razorpay response:', error);
+//     res.status(500).send('An error occurred while saving Razorpay response.');
+//   }
+// }
+
+
+ 
+
+
 module.exports = {
   showCheckout,
   addAddress,
   placeOrder,
+  createRazorpayOrder,
+  // saveRazorpayResponse
+  
 };
