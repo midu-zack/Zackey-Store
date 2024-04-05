@@ -24,38 +24,86 @@ const adminLoginPage = (req, res) => {
 // }
 
 
+// const dashboard = async (req, res) => {
+//     try {
+//         const tenDaysAgo = new Date();
+//         tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+
+//         console.log("thsi is datea", tenDaysAgo);
+//         const orderDate = await User.aggregate([
+//             {
+//                 $unwind: "$orders" // Unwind the orders array
+//             },
+//             {
+//                 $project: {
+//                     _id: 0,
+//                     orderDate: "$orders.date" // Include only the orders.date field
+//                 }
+//             }
+//         ]);
+//         // console.log("this is ", orderDate);
+        
+//         // Iterate through each document in the array and convert the orderDate to ISODate format
+//         const isoDateStrings = orderDate.map(doc => {
+//             const dateObject = new Date(doc.orderDate);
+//             return dateObject.toISOString();
+//         });
+        
+//         console.log("this is changed ", isoDateStrings);
+        
+        
+//         const salesData = await User.aggregate([
+//             {
+//                 $match: {
+//                     "orderDate": { $gte: tenDaysAgo }
+//                 }
+//             },
+//             {
+//                 $addFields: {
+//                     formattedDate: {
+//                         $dateToString: { format: "%Y-%m-%d", date: "$orders.date" }
+//                     }
+//                 }
+//             },
+//             {
+//                 $group: {
+//                     _id: "$formattedDate",
+//                     totalAmount: { $sum: "$orders.totalAmountUserPaid" }
+//                 }
+//             },
+//             {
+//                 $sort: { _id: 1 }
+//             }
+//         ]);
+
+//         console.log("editd" , salesData);
+
+//         const labels = salesData.map(entry => entry._id);
+//         const data = salesData.map(entry => entry.totalAmount);
+
+//         res.render("admin/dashboard", { labels, data });
+//     } catch (error) {
+//         console.error("Error fetching sales data:", error);
+//         res.status(500).send("Internal Server Error");
+//     }
+// }
+
+ 
+
 const dashboard = async (req, res) => {
     try {
         const tenDaysAgo = new Date();
         tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
 
-        console.log("thsi is datea", tenDaysAgo);
-        const orderDate = await User.aggregate([
+        console.log("this is date", tenDaysAgo);
+
+        const salesData = await User.aggregate([
             {
                 $unwind: "$orders" // Unwind the orders array
             },
             {
-                $project: {
-                    _id: 0,
-                    orderDate: "$orders.date" // Include only the orders.date field
-                }
-            }
-        ]);
-        // console.log("this is ", orderDate);
-        
-        // Iterate through each document in the array and convert the orderDate to ISODate format
-        const isoDateStrings = orderDate.map(doc => {
-            const dateObject = new Date(doc.orderDate);
-            return dateObject.toISOString();
-        });
-        
-        console.log("this is changed ", isoDateStrings);
-        
-        
-        const salesData = await User.aggregate([
-            {
                 $match: {
-                    "orderDate": { $gte: tenDaysAgo }
+                    "orders.date": { $gte: tenDaysAgo }
                 }
             },
             {
@@ -76,11 +124,13 @@ const dashboard = async (req, res) => {
             }
         ]);
 
-        console.log("editd" , salesData);
+        console.log("edited", salesData);
 
-        const labels = salesData.map(entry => entry._id);
-        const data = salesData.map(entry => entry.totalAmount);
+        // Stringify labels and data
+        const labels = JSON.stringify(salesData.map(entry => entry._id));
+        const data = JSON.stringify(salesData.map(entry => entry.totalAmount));
 
+        // Pass stringified labels and data to the template
         res.render("admin/dashboard", { labels, data });
     } catch (error) {
         console.error("Error fetching sales data:", error);

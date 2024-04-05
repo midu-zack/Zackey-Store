@@ -1,3 +1,4 @@
+const exphbs = require("express-handlebars");
 const express = require("express");
 const path = require('path')
 const dotenv = require("dotenv")
@@ -13,6 +14,8 @@ const cartRouter =require("./routers/cart")
 const wishlistRouter = require("./routers/wishlist")
 const checkoutRouter = require("./routers/checkout")
 
+ 
+
 
 const bodyParser = require("body-parser");
 const connectDatabase = require("./config/database");
@@ -23,6 +26,22 @@ const cookieParser = require('cookie-parser');
 const app = express();
 app.use(cookieParser());
 const port = 2005;
+
+// Register a custom helper function for JSON.stringify
+const handlebars = exphbs.create({
+  helpers: {
+    stringify: function (context) {
+      return JSON.stringify(context);
+    },
+  },
+});
+
+// Configure Handlebars
+app.engine("handlebars", handlebars.engine);
+app.set("view engine", "handlebars");
+
+
+
 
 app.set("view engine", "hbs");
 app.use(express.static(path.join(__dirname, "public")));

@@ -113,7 +113,7 @@ const userSchema = new mongoose.Schema({
         },
       ],
       totalAmountUserPaid: { type: Number, required: true },
-      date: { type: String },
+      date: { type: Date },
       time: { type: String },
       orderId: { type: String, default: uuid.v4 },
       status: {
