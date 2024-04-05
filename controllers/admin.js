@@ -1,12 +1,12 @@
  
 const Admin = require("../model/admin")
-const User = require("../model/user")
+const User = require('../model/user');  
 const jwt = require("jsonwebtoken")
 const dotenv = require("dotenv")
 dotenv.config()
 
 // ADMIN LOGIN PAGE SHOW
-let adminLoginPage = (req, res) => {
+const adminLoginPage = (req, res) => {
     try {
       res.render('admin/admin-login');
     } catch (error) {
@@ -15,14 +15,84 @@ let adminLoginPage = (req, res) => {
     }
   }
   
-const dashboard = (req,res)=>{
-    try {
-        res.render("admin/dashboard")
-    } catch (error) {
+// const dashboard = (req,res)=>{
+//     try {
+//         res.render("admin/dashboard")
+//     } catch (error) {
         
+//     }
+// }
+
+
+const dashboard = async (req, res) => {
+    try {
+        const tenDaysAgo = new Date();
+        tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+
+        console.log("thsi is datea", tenDaysAgo);
+        const orderDate = await User.aggregate([
+            {
+                $unwind: "$orders" // Unwind the orders array
+            },
+            {
+                $project: {
+                    _id: 0,
+                    orderDate: "$orders.date" // Include only the orders.date field
+                }
+            }
+        ]);
+        // console.log("this is ", orderDate);
+        
+        // Iterate through each document in the array and convert the orderDate to ISODate format
+        const isoDateStrings = orderDate.map(doc => {
+            const dateObject = new Date(doc.orderDate);
+            return dateObject.toISOString();
+        });
+        
+        console.log("this is changed ", isoDateStrings);
+        
+        
+        const salesData = await User.aggregate([
+            {
+                $match: {
+                    "orderDate": { $gte: tenDaysAgo }
+                }
+            },
+            {
+                $addFields: {
+                    formattedDate: {
+                        $dateToString: { format: "%Y-%m-%d", date: "$orders.date" }
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: "$formattedDate",
+                    totalAmount: { $sum: "$orders.totalAmountUserPaid" }
+                }
+            },
+            {
+                $sort: { _id: 1 }
+            }
+        ]);
+
+        console.log("editd" , salesData);
+
+        const labels = salesData.map(entry => entry._id);
+        const data = salesData.map(entry => entry.totalAmount);
+
+        res.render("admin/dashboard", { labels, data });
+    } catch (error) {
+        console.error("Error fetching sales data:", error);
+        res.status(500).send("Internal Server Error");
     }
 }
-  let adminLogout = (req, res) => {
+
+
+
+ 
+
+  const adminLogout = (req, res) => {
     try {
         req.session.destroy((err) => {
             if (err) {
@@ -66,7 +136,7 @@ let adminSubmitlogin = async (req, res) => {
                     // secure: process.env.NODE_ENV === "production"
                 });
 
-                res.render("admin/dashboard")
+                res.redirect("/dashboard")
             } else {
                
                 res.render('admin/admin-login', { error: 'Incorrect email or password' });
