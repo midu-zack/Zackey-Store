@@ -334,53 +334,13 @@
                                                 <th>Id</th>
                                                 <th>Item</th>
                                                 <th>Customer Name</th>
-                                                {{!-- <th>Payment Info</th> --}}
+                                              
                                                 <th>Price</th>
                                                 <th>Status</th>
                                                 <th>View</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{!-- <tr>
-                                                <td><a href="order-details.html"><strong>#Order-78414</strong></a></td>
-                                                <td><img src="assets/images/product/product-1.jpg" class="avatar lg rounded me-2" alt="profile-image"><span> Oculus VR </span></td>
-                                                <td>Molly</td>
-                                                <td>Credit Card</td>
-                                                <td>
-                                                    $420
-                                                </td>
-                                                <td><span class="badge bg-warning">Progress</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="order-details.html"><strong>#Order-58414</strong></a></td>
-                                                <td><img src="assets/images/product/product-2.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Wall Clock</span></td>
-                                                <td>Brian</td>
-                                                <td>Debit Card</td>
-                                                <td>
-                                                    $220
-                                                </td>
-                                                <td><span class="badge bg-success">Complited</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="order-details.html"><strong>#Order-48414</strong></a></td>
-                                                <td><img src="assets/images/product/product-3.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Note Diaries</span></td>
-                                                <td>Julia</td>
-                                                <td>Debit Card</td>
-                                                <td>
-                                                    $250
-                                                </td>
-                                                <td><span class="badge bg-success">Complited</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="order-details.html"><strong>#Order-38414</strong></a></td>
-                                                <td><img src="assets/images/product/product-4.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Flower Port</span></td>
-                                                <td>Sonia</td>
-                                                <td>Credit Card</td>
-                                                <td>
-                                                    $320
-                                                </td>
-                                                <td><span class="badge bg-warning">Progress</span></td>
-                                            </tr> --}}
                                            
                                              
                                             {{#each usersAndOrders}}
@@ -388,9 +348,7 @@
                                             <tr>
                                                 <td><a href="order-details.html"><strong>{{this.orderId}}</strong></a></td>
 
-                                                <td>
-
-                                                      
+                                                <td> 
                                                       <span>{{this.items.[0].productName}} ({{this.items.[0].quantity}})</span>
                                                 </td>
 
@@ -398,7 +356,7 @@
                                                   {{!-- <img src="{{this.images.[0]}}" class="avatar lg rounded me-2" alt="product-image"> --}}
                                                 
                                                 <td>{{../name}}</td>
-                                                {{!-- <td></td> --}}
+                                                 
                                                 <td>
                                                     {{this.totalAmountUserPaid}}
                                                 </td>

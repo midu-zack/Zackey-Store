@@ -256,8 +256,8 @@
                                 <div class="d-flex align-items-center">
                                     <div class="avatar rounded no-thumbnail bg-success text-light"><i class="fa fa-dollar fa-lg"></i></div>
                                     <div class="flex-fill ms-3 text-truncate">
-                                        <div class="h6 mb-0">Revenue</div>
-                                        <span class="small">$18,925</span>
+                                        <div class="h6 mb-0">Delivered</div>
+                                        <span class="small">{{totalNumberOfDeliveredOrders}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -267,8 +267,8 @@
                                 <div class="d-flex align-items-center">
                                     <div class="avatar rounded no-thumbnail bg-danger text-light"><i class="fa fa-credit-card fa-lg"></i></div>
                                     <div class="flex-fill ms-3 text-truncate">
-                                        <div class="h6 mb-0">Expense</div>
-                                        <span class="small">$11,024</span>
+                                        <div class="h6 mb-0">Cancelled</div>
+                                        <span class="small">{{cancelledOrdersCount}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -278,8 +278,8 @@
                                 <div class="d-flex align-items-center">
                                     <div class="avatar rounded no-thumbnail bg-warning text-light"><i class="fa fa-smile-o fa-lg"></i></div>
                                     <div class="flex-fill ms-3 text-truncate">
-                                        <div class="h6 mb-0">Happy Clients</div>
-                                        <span class="small">8,925</span>
+                                        <div class="h6 mb-0">Delivery-pending</div>
+                                        <span class="small">{{pendingOrdersCount}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -289,8 +289,8 @@
                                 <div class="d-flex align-items-center">
                                     <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fa fa-shopping-bag" aria-hidden="true"></i></div>
                                     <div class="flex-fill ms-3 text-truncate">
-                                        <div class="h6 mb-0">New StoreOpen</div>
-                                        <span class="small">8,925</span>
+                                        <div class="h6 mb-0">Shipped</div>
+                                        <span class="small">{{shippedOrdersCount}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -299,7 +299,7 @@
 
                     <div class="row g-3">
                         <div class="col-lg-12 col-md-12">
-                            <div class="tab-filter d-flex align-items-center justify-content-between mb-3 flex-wrap">
+                            {{!-- <div class="tab-filter d-flex align-items-center justify-content-between mb-3 flex-wrap">
                                 <ul class="nav nav-tabs tab-card tab-body-header rounded  d-inline-flex w-sm-100">
                                     <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#summery-today" >Today</a></li>
                                     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#summery-week" >Week</a></li>
@@ -312,7 +312,7 @@
                                         <button class="btn btn-primary" type="button"><i class="icofont-filter fs-5"></i></button>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="tab-content mt-1">
                                 <div class="tab-pane fade show active" id="summery-today">
                                     <div class="row g-1 g-sm-3 mb-3 row-deck">
@@ -321,7 +321,7 @@
                                                 <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                                                     <div class="left-info">
                                                         <span class="text-muted">Customers</span>
-                                                        <div><span class="fs-6 fw-bold me-2">14,208</span></div>
+                                                        <div><span class="fs-6 fw-bold me-2">{{totalNumberOfUsers}}</span></div>
                                                     </div>
                                                     <div class="right-icon">
                                                         <i class="icofont-student-alt fs-3 color-light-orange"></i>
@@ -333,8 +333,8 @@
                                             <div class="card">
                                                 <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                                                     <div class="left-info">
-                                                        <span class="text-muted">Order</span>
-                                                        <div><span class="fs-6 fw-bold me-2">2314</span></div>
+                                                        <span class="text-muted">Total Orders</span>
+                                                        <div><span class="fs-6 fw-bold me-2">{{totalNumberOfOrders}}</span></div>
                                                     </div>
                                                     <div class="right-icon">
                                                         <i class="icofont-shopping-cart fs-3 color-lavender-purple"></i>
@@ -342,7 +342,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                                        {{!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
                                             <div class="card">
                                                 <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                                                     <div class="left-info">
@@ -367,13 +367,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
                                             <div class="card">
                                                 <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                                                     <div class="left-info">
                                                         <span class="text-muted">Total Sale</span>
-                                                        <div><span class="fs-6 fw-bold me-2">$35000</span></div>
+                                                        <div><span class="fs-6 fw-bold me-2">${{totalSalesAmount}}</span></div>
                                                     </div>
                                                     <div class="right-icon">
                                                         <i class="icofont-calculator-alt-1 fs-3 color-lightblue"></i>
@@ -381,7 +381,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                                        {{!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
                                             <div class="card">
                                                 <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                                                     <div class="left-info">
@@ -393,13 +393,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
                                             <div class="card">
                                                 <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                                                     <div class="left-info">
                                                         <span class="text-muted">Total Products</span>
-                                                        <div><span class="fs-6 fw-bold me-2">184511</span></div>
+                                                        <div><span class="fs-6 fw-bold me-2">{{totalProduct}}</span></div>
                                                     </div>
                                                     <div class="right-icon">
                                                         <i class="icofont-bag fs-3 color-light-orange"></i>
@@ -407,7 +407,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                                        {{!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
                                             <div class="card">
                                                 <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                                                     <div class="left-info">
@@ -432,7 +432,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     </div> <!-- row end -->
                                 </div>
                                 <div class="tab-pane fade" id="summery-week">
@@ -937,41 +937,83 @@
                         </div>
                     </div> --}}
                     <!-- Row end  -->
+{{!-- 
+    <canvas id="lineChart" width="400" height="200"></canvas>
 
-                    
-  <canvas id="lineChart" width="400" height="200"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const labels = {{labels}}; // Use the stringified version of labels
+        const data = {{data}}; // Use the stringified version of data
+
+        // Parse the labels and data from stringified JSON
+        const parsedLabels = JSON.parse(labels);
+        const parsedData = JSON.parse(data);
+
+        console.log("Parsed Labels:", parsedLabels);
+        console.log("Parsed Data:", parsedData);
+
+        // Define the chart data
+        const chartData = {
+            labels: parsedLabels,
+            datasets: [{
+                label: 'Sales Data',
+                data: parsedData,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        };
+
+        // Configure the chart
+        const config = {
+            type: 'line',
+            data: chartData
+        };
+
+        // Get the canvas context and render the chart
+        const ctx = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctx, config);
+    });
+</script> --}}
+
+
+{{!-- {{labels}} --}}
+
+<!-- Include Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Canvas element to render the chart -->
+<canvas id="lineChart" width="400" height="200"></canvas>
 
 <script>
-   document.addEventListener("DOMContentLoaded", function() {
-      const labels = {{labels}}; // Use the stringified version of labels
-      const data = {{data}}; // Use the stringified version of data
+    document.addEventListener("DOMContentLoaded", function() {
+        // Parse the labels and data from the server-side
+        const labels = {{{labels}}}; // Use triple braces to prevent HTML escaping
+        const data = {{{data}}}; // Use triple braces to prevent HTML escaping
 
-      // Parse the labels and data from stringified JSON
-      const parsedLabels = JSON.parse(labels);
-      const parsedData = JSON.parse(data);
+        // Define the chart data
+        const chartData = {
+            labels: labels,
+            datasets: [{
+                label: [{{#each labels }} {{this}} {{/each}}],
+                data: data,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        };
 
-      // Define the chart data
-      const chartData = {
-          labels: parsedLabels,
-          datasets: [{
-              label: 'Sales Data',
-              data: parsedData,
-              fill: false,
-              borderColor: 'rgb(75, 192, 192)',
-              tension: 0.1
-          }]
-      };
+        // Configure the chart
+        const config = {
+            type: 'line',
+            data: chartData
+        };
 
-      // Configure the chart
-      const config = {
-          type: 'line',
-          data: chartData
-      };
-
-      // Get the canvas context and render the chart
-      const ctx = document.getElementById('lineChart').getContext('2d');
-      new Chart(ctx, config);
-  });
+        // Get the canvas context and render the chart
+        const ctx = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctx, config);
+    });
 </script>
 
 
