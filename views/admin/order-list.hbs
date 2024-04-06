@@ -348,12 +348,14 @@
                                             <tr>
                                                 <td><a href="order-details.html"><strong>{{this.orderId}}</strong></a></td>
 
+                                                              {{!-- <td><a href="order-details.html"><strong>{{this.shortOrderId}}</strong></a></td>   --}}
+
                                                 <td> 
                                                       <span>{{this.items.[0].productName}} ({{this.items.[0].quantity}})</span>
                                                 </td>
 
                                                  
-                                                  {{!-- <img src="{{this.images.[0]}}" class="avatar lg rounded me-2" alt="product-image"> --}}
+                                                   {{!-- <img src="{{this.images.[0]}}" class="avatar lg rounded me-2" alt="product-image">   --}}
                                                 
                                                 <td>{{../name}}</td>
                                                  
@@ -373,6 +375,10 @@
                                         <p>No orders found.</p>
                                     {{/if}}
                                 </div>
+
+
+           
+
                             </div>
                         </div>
                     </div> <!-- Row end  -->

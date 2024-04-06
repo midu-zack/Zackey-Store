@@ -182,29 +182,29 @@ const dashboard = async (req, res) => {
 
     // Total customers
     const totalUsers = await User.aggregate([
-      {
-        $unwind: "$orders", // Unwind the orders array
-      },
-      {
-        $match: {
-          "orders.date": { $gte: tenDaysAgo },
+        {
+            $match: {
+                lastLogin: { $gte: tenDaysAgo } // Match users who have logged in within the last 10 days
+            }
         },
-      },
-      {
-        $group: {
-          _id: "$_id", // Group by the unique user ID
+        {
+            $group: {
+                _id: "$_id", // Group by the unique user ID
+            }
         },
-      },
-      {
-        $group: {
-          _id: null,
-          count: { $sum: 1 }, // Count the number of unique users
-        },
-      },
+        {
+            $group: {
+                _id: null,
+                count: { $sum: 1 } // Count the number of unique users
+            }
+        }
     ]);
-
-    // Now `totalUsers` contains an array with a single object, which holds the count of unique users
+    
+    // Now `totalUsers` contains an array with a single object, which holds the count of unique users who have logged in
     const totalNumberOfUsers = totalUsers.length > 0 ? totalUsers[0].count : 0;
+    
+    console.log("Total number of login users:", totalNumberOfUsers);
+    
 
     // Total delivery orders
     const totalDeliveredOrders = await User.aggregate([
@@ -297,58 +297,54 @@ const dashboard = async (req, res) => {
     const shippedOrdersCount =
       shippedOrders.length > 0 ? shippedOrders[0].count : 0;
 
-
     //   Total of Product
     const totalProduct = await Product.countDocuments();
 
-
     // Total cancellation
     const cancelledOrders = await User.aggregate([
-        {
-            $unwind: "$orders" // Unwind the orders array
+      {
+        $unwind: "$orders", // Unwind the orders array
+      },
+      {
+        $match: {
+          "orders.date": { $gte: tenDaysAgo },
+          "orders.status": "Cancelled", // Filter for orders with status "Cancelled"
         },
-        {
-            $match: {
-                "orders.date": { $gte: tenDaysAgo },
-                "orders.status": "Cancelled" // Filter for orders with status "Cancelled"
-            }
+      },
+      {
+        $group: {
+          _id: null,
+          count: { $sum: 1 }, // Count the number of cancelled orders
         },
-        {
-            $group: {
-                _id: null,
-                count: { $sum: 1 } // Count the number of cancelled orders
-            }
-        }
+      },
     ]);
 
     // Extract the count of cancelled orders
-    const cancelledOrdersCount = cancelledOrders.length > 0 ? cancelledOrders[0].count : 0;
-
-
-
+    const cancelledOrdersCount =
+      cancelledOrders.length > 0 ? cancelledOrders[0].count : 0;
 
     // Total Siles
     const totalSalesData = await User.aggregate([
-        {
-            $unwind: "$orders" // Unwind the orders array
+      {
+        $unwind: "$orders", // Unwind the orders array
+      },
+      {
+        $match: {
+          "orders.date": { $gte: tenDaysAgo },
+          "orders.status": { $ne: "Cancelled" }, // Exclude cancelled orders
         },
-        {
-            $match: {
-                "orders.date": { $gte: tenDaysAgo },
-                "orders.status": { $ne: "Cancelled" } // Exclude cancelled orders
-            }
+      },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: "$orders.totalAmountUserPaid" }, // Sum of totalAmountUserPaid
         },
-        {
-            $group: {
-                _id: null,
-                totalAmount: { $sum: "$orders.totalAmountUserPaid" } // Sum of totalAmountUserPaid
-            }
-        }
+      },
     ]);
 
     // Extract the total sales amount
-    const totalSalesAmount = totalSalesData.length > 0 ? totalSalesData[0].totalAmount : 0;
-
+    const totalSalesAmount =
+      totalSalesData.length > 0 ? totalSalesData[0].totalAmount : 0;
 
     // Pass stringified labels and data to the template
     res.render("admin/dashboard", {
@@ -361,7 +357,7 @@ const dashboard = async (req, res) => {
       shippedOrdersCount,
       totalProduct,
       cancelledOrdersCount,
-      totalSalesAmount
+      totalSalesAmount,
     });
   } catch (error) {
     console.error("Error fetching sales data:", error);
@@ -474,8 +470,6 @@ const orderList = async (req, res) => {
       orders: { $exists: true, $ne: [] },
     });
 
-    // console.log('this is userOrder',usersAndOrders);
-
     res.render("admin/order-list", { usersAndOrders });
   } catch (error) {
     console.error(error);
@@ -549,4 +543,5 @@ module.exports = {
   orderList,
   orderDetails,
   orderStatus,
+  //   getSalesData
 };

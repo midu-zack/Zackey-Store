@@ -18,6 +18,8 @@ router.get("/orderDetails/:id",orderDetails)
 
 router.post("/orderStatus",orderStatus)
 // router.get('/categorie',categorieListShow)
+
+// router.get('/sales', getSalesData);
  
 
 module.exports = router;
