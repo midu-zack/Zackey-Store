@@ -104,8 +104,40 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+
+
   orders: [
     {
+      address: {
+        type: {
+          firstName: {
+            type: String,
+          },
+          lastName: {
+            type: String,
+          },
+          address: {
+            type: String,
+          },
+          city: {
+            type: String,
+          },
+          state: {
+            type: String,
+          },
+          postcode: {
+            type: String,
+          },
+          email: {
+            type: String,
+          },
+          phone: {
+            type: String,
+          },
+        },
+        default: {}
+      },
+
       items: [
         {
           productName: { type: String, required: true },
@@ -121,7 +153,11 @@ const userSchema = new mongoose.Schema({
         enum: ["Pending", "Shipped", "Delivered", "Cancelled"],
         default: "Pending",
       },
-      paymentMethod: { type: String },
+      // paymentMethod: { type: String },
+      paymentMethod:{
+        type:String,
+        // enum:["cash on delivery","razorpay"]
+      }
     },
   ],
 });

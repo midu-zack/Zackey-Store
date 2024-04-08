@@ -397,7 +397,7 @@
                 <p><strong>Name:</strong> {{user.name}}</p>
                 <p><strong>Email:</strong> {{user.email}}</p>
                 <p><strong>Phone Number:</strong> {{user.phoneNumber}}</p>
-                <p><strong>Address:</strong> {{user.address.firstName}} {{user.address.lastName}}, {{user.address.address}}, {{user.address.city}}, {{user.address.state}}, {{user.address.postcode}}</p>
+                {{!-- <p><strong>Address:</strong> {{user.address.firstName}} {{user.address.lastName}}, {{user.address.address}}, {{user.address.city}}, {{user.address.state}}, {{user.address.postcode}}</p> --}}
             </div>
                                             </div>
                                             {{/if}}
@@ -515,6 +515,10 @@ document.addEventListener('DOMContentLoaded', function() {
         totalInfo.textContent = 'Total Amount: ' + orderDetails.totalAmountUserPaid;
         modalBody.appendChild(totalInfo);
 
+         var addressInfo = document.createElement('p');
+            addressInfo.textContent = 'Address: ' + formatAddress(orderDetails.address);
+            modalBody.appendChild(addressInfo);
+
         // Add more details as needed
         if (orderDetails.items && orderDetails.items.length > 0) {
             var itemsInfo = document.createElement('p');
@@ -574,6 +578,10 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error updating order status:', error);
         });
     }
+     // Function to format address
+        function formatAddress(address) {
+            return `${address.firstName} ${address.lastName}, ${address.address}, ${address.city}, ${address.state}, ${address.postcode}, ${address.email}, ${address.phone}`;
+        }
 });
 </script>
 

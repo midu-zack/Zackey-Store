@@ -7,16 +7,14 @@ router.get("/addProduct",ShowAddProduct)
 
 router.get("/listProduct",listProduct)
 
-router.get("/editProduct/:id",editProduct)
+router.get("/editProduct/:id" ,editProduct)
 
 router.post("/editProduct/:id",upload.single("image"),updateProduct)
+ 
+router.post("/addProduct",upload.single("image"),productAdding)
 
 
 router.get("/deleteProduct/:id",deleteProduct)
-
-
-
-router.post("/addProduct",upload.single("image"),productAdding)
 
 router.get("/singleProduct/:id",singleProductDetails)
 

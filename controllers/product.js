@@ -241,14 +241,7 @@ const singleProductDetails = async (req, res) => {
 
  
 
-
  
-
-
-
- 
-
-
 
 module.exports = {
   listProduct,

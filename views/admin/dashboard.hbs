@@ -86,7 +86,7 @@
                     <div class="container-xxl">
 
                         <!-- header rightbar icon -->
-                        <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
+                        {{!-- <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
                             <div class="d-flex">
                                 <a class="nav-link text-primary collapsed" href="help.html" title="Get Help">
                                     <i class="icofont-info-square fs-5"></i>
@@ -227,8 +227,10 @@
                             <div class="setting ms-2">
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#Settingmodal"><i class="icofont-gear-alt fs-5"></i></a>
                             </div>
-                        </div>
+                        </div> --}}
         
+
+
                         <!-- menu toggler -->
                         <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
                             <span class="fa fa-bars"></span>
@@ -316,7 +318,7 @@
                             <div class="tab-content mt-1">
                                 <div class="tab-pane fade show active" id="summery-today">
                                     <div class="row g-1 g-sm-3 mb-3 row-deck">
-                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
+                                        {{!-- <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
                                             <div class="card">
                                                 <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                                                     <div class="left-info">
@@ -328,7 +330,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6">
                                             <div class="card">
                                                 <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
@@ -372,7 +374,7 @@
                                             <div class="card">
                                                 <div class="card-body py-xl-4 py-3 d-flex flex-wrap align-items-center justify-content-between">
                                                     <div class="left-info">
-                                                        <span class="text-muted">Total Sale</span>
+                                                        <span class="text-muted">Total Revenue</span>
                                                         <div><span class="fs-6 fw-bold me-2">${{totalSalesAmount}}</span></div>
                                                     </div>
                                                     <div class="right-icon">
@@ -937,89 +939,83 @@
                         </div>
                     </div> --}}
                     <!-- Row end  -->
-{{!-- 
-    <canvas id="lineChart" width="400" height="200"></canvas>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const labels = {{labels}}; // Use the stringified version of labels
-        const data = {{data}}; // Use the stringified version of data
+                    <!-- Canvas element to render the chart -->
+                <canvas id="lineChart" width="400" height="200"></canvas>
+                 <div class="row">
+                <div class="col-md-6 d-flex">
+                    <canvas id="myPieChart" width="400" height="100"></canvas>
+                    <canvas id="paymentMethodChart" width="400" height="100"></canvas>
+                </div>
+            </div>
+         </div>
+   
+  
 
-        // Parse the labels and data from stringified JSON
-        const parsedLabels = JSON.parse(labels);
-        const parsedData = JSON.parse(data);
+    <!-- Script for rendering the chart -->
+    {{!-- <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Retrieve chart data from server
+            const chartData = {{{chartDataJSON}}}; // Using triple curly braces to prevent HTML escaping
+            
+            // Get the chart canvas context
+            const ctx = document.getElementById('paymentMethodChart').getContext('2d');
 
-        console.log("Parsed Labels:", parsedLabels);
-        console.log("Parsed Data:", parsedData);
-
-        // Define the chart data
-        const chartData = {
-            labels: parsedLabels,
-            datasets: [{
-                label: 'Sales Data',
-                data: parsedData,
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        };
-
-        // Configure the chart
-        const config = {
-            type: 'line',
-            data: chartData
-        };
-
-        // Get the canvas context and render the chart
-        const ctx = document.getElementById('lineChart').getContext('2d');
-        new Chart(ctx, config);
-    });
-</script> --}}
-
-
-{{!-- {{labels}} --}}
-
-<!-- Include Chart.js library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- Canvas element to render the chart -->
-<canvas id="lineChart" width="400" height="200"></canvas>
+            // Create new pie chart instance
+            new Chart(ctx, {
+                type: 'pie',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Payment Method Distribution'
+                        }
+                    }
+                }
+            });
+        });
+    </script> --}}
+ 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Parse the labels and data from the server-side
-        const labels = {{{labels}}}; // Use triple braces to prevent HTML escaping
-        const data = {{{data}}}; // Use triple braces to prevent HTML escaping
+    document.addEventListener('DOMContentLoaded', function () {
+        // Retrieve chart data from server
+        const chartData = {{{chartDataJSON}}}; // Using triple curly braces to prevent HTML escaping
+        
+        // Get the chart canvas context
+        const ctx = document.getElementById('paymentMethodChart').getContext('2d');
 
-        // Define the chart data
-        const chartData = {
-            labels: labels,
-            datasets: [{
-                label: [{{#each labels }} {{this}} {{/each}}],
-                data: data,
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
+        // Define chart configuration
+        const chartConfig = {
+            type: 'doughnut', // Change to 'doughnut' for a doughnut chart or 'pie' for a pie chart
+            data: chartData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Payment Method Distribution'
+                    }
+                }
+            }
         };
 
-        // Configure the chart
-        const config = {
-            type: 'line',
-            data: chartData
-        };
+          // Customize background colors
+        chartConfig.data.datasets[0].backgroundColor = ['rgb(148, 0, 211)', 'rgb(47, 79, 79)']; // Violet and dark colors
 
-        // Get the canvas context and render the chart
-        const ctx = document.getElementById('lineChart').getContext('2d');
-        new Chart(ctx, config);
+        // Create new chart instance
+        new Chart(ctx, chartConfig);
     });
 </script>
 
-  
- 
-
-    
 
 
                     {{!-- <div class="row g-3 mb-3"> 
@@ -1121,6 +1117,9 @@
                     
                 </div>
             </div>
+
+
+
         
             <!-- Modal Custom Settings-->
             <div class="modal fade right" id="Settingmodal" tabindex="-1"  aria-hidden="true">
@@ -1265,6 +1264,8 @@
         </div>
     
     </div>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Jquery Core Js -->
     <script src="assets/bundles/libscripts.bundle.js"></script>
@@ -1287,6 +1288,90 @@
             ]
         });
     </script>
+
+
+        
+{{!-- {{labels}} --}}
+ 
+ {{!-- line chart 10 days --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Parse the labels and data from the server-side
+        const labels = {{{labels}}}; // Use triple braces to prevent HTML escaping
+        const data = {{{data}}}; // Use triple braces to prevent HTML escaping
+
+        // Define the chart data
+        const chartData = {
+            labels: labels,
+            datasets: [{
+                label: [{{#each labels }} {{this}} {{/each}}],
+                data: data,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        };
+
+        // Configure the chart
+        const config = {
+            type: 'line',
+            data: chartData
+        };
+
+        // Get the canvas context and render the chart
+        const ctx = document.getElementById('lineChart').getContext('2d');
+        new Chart(ctx, config);
+    });
+</script>
+
+  
+ 
+{{!-- PIE CHART --}}
+ 
+
+    <script>
+        // Parse the data passed from the backend
+        const totalNumberOfDeliveredOrders = {{totalNumberOfDeliveredOrders}};
+        const cancelledOrdersCount = {{cancelledOrdersCount}};
+        const shippedOrdersCount = {{shippedOrdersCount}};
+        const pendingOrdersCount = {{pendingOrdersCount}};
+
+        // Create the pie chart
+        const ctx = document.getElementById('myPieChart').getContext('2d');
+        const myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Delivered', 'Cancelled', 'Shipped', 'Pending'],
+                datasets: [{
+                    label: 'Order Status',
+                    data: [totalNumberOfDeliveredOrders, cancelledOrdersCount, shippedOrdersCount, pendingOrdersCount],
+                    backgroundColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)'
+                    ],
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Order Status'
+                    }
+                }
+            }
+        });
+    </script>
+    
+
+
+
 </body>
 
 <!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Feb 2024 06:56:09 GMT -->

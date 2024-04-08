@@ -25,6 +25,7 @@ const addAddress = async (req, res) => {
       postcode: formData.postcode,
       email: formData.email,
       phone: formData.phone,
+      
     };
 
     // Assuming user.address is an array field in the User model
@@ -86,6 +87,7 @@ const placeOrder = async (req, res) => {
 
       const grandtotal = user.grandtotal;
 
+
       const currentDate = new Date();
       const currentTime = currentDate.toLocaleTimeString();
 
@@ -104,6 +106,7 @@ const placeOrder = async (req, res) => {
           time: currentTime,
           orderId: orderId,
           status: "Pending",
+          paymentMethod:paymentMethod,
         },
       ];
 
