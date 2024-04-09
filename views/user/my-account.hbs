@@ -471,6 +471,7 @@
     </div>
 </div>
 
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Handle click on "View" button
@@ -514,10 +515,6 @@ document.addEventListener('DOMContentLoaded', function() {
         var totalInfo = document.createElement('p');
         totalInfo.textContent = 'Total Amount: ' + orderDetails.totalAmountUserPaid;
         modalBody.appendChild(totalInfo);
-
-         var addressInfo = document.createElement('p');
-            addressInfo.textContent = 'Address: ' + formatAddress(orderDetails.address);
-            modalBody.appendChild(addressInfo);
 
         // Add more details as needed
         if (orderDetails.items && orderDetails.items.length > 0) {
@@ -578,19 +575,11 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error updating order status:', error);
         });
     }
-     // Function to format address
-        function formatAddress(address) {
-            return `${address.firstName} ${address.lastName}, ${address.address}, ${address.city}, ${address.state}, ${address.postcode}, ${address.email}, ${address.phone}`;
-        }
 });
 </script>
 
-
-
-
-
-
-  
+ 
+ 
 
                                         <!-- Single Tab Content End -->
                                         <!-- Single Tab Content Start -->

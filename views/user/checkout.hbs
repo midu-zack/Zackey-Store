@@ -404,6 +404,8 @@
                                 <h3>Billing Details</h3>
                                 
          <div class="row">
+
+            
     <div class="col-lg-12">
         {{#if address}}
         <div class="billing-select mb-20">
@@ -421,88 +423,17 @@
         <p>No addresses available. Please add a new address.</p>
         {{/if}}
     </div> 
+    
      
 
  
-        </div>
+                            </div>
 
-<div class="row" id="addressDetails">
-    <!-- Address details will be displayed here -->
-</div>
+                            <div class="row" id="addressDetails">
+                                <!-- Address details will be displayed here -->
+                            </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const addressRadios = document.querySelectorAll('input[name="address"]');
-        const addressDetailsContainer = document.getElementById('addressDetails');
-
-        // Function to update address details based on selected radio button
-        function updateAddressDetails() {
-            const selectedAddressIndex = document.querySelector('input[name="address"]:checked').value;
-            const selectedAddress = address[selectedAddressIndex];
-            const addressDetailsHTML = `
-                <div class="col-lg-12">
-                    <div class="billing-info mb-20">
-                        <label>First Name <abbr class="required"  title="required">*</abbr></label>
-                        <input type="text" value="${selectedAddress.firstName}">
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="billing-info mb-20">
-                        <label>Last Name <abbr class="required" title="required">*</abbr></label>
-                        <input type="text" value="${selectedAddress.lastName}">
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="billing-info mb-20">
-                        <label>Address <abbr class="required" title="required">*</abbr></label>
-                        <input class="billing-address" value="${selectedAddress.address}" type="text">
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div class="billing-info mb-20">
-                        <label>Town / City <abbr class="required" title="required">*</abbr></label>
-                        <input type="text" value="${selectedAddress.city}">
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12">
-                    <div class="billing-info mb-20">
-                        <label>State <abbr class="required" title="required">*</abbr></label>
-                        <input type="text" value="${selectedAddress.state}">
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12">
-                    <div class="billing-info mb-20">
-                        <label>Postcode <abbr class="required" title="required">*</abbr></label>
-                        <input type="text" value="${selectedAddress.postcode}">
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12">
-                    <div class="billing-info mb-20">
-                        <label>Phone <abbr class="required" title="required">*</abbr></label>
-                        <input type="text" value="${selectedAddress.phone}">
-                    </div>
-                </div>
-                <div class="col-lg-12 col-md-12">
-                    <div class="billing-info mb-20">
-                        <label>Email Address <abbr class="required" title="required">*</abbr></label>
-                        <input type="text" value="${selectedAddress.email}">
-                    </div>
-                </div>
-            `;
-            addressDetailsContainer.innerHTML = addressDetailsHTML;
-        }
-
-        // Add event listener to each radio button
-        addressRadios.forEach(function(radio) {
-            radio.addEventListener('change', updateAddressDetails);
-        });
-
-        // Initially update address details
-        updateAddressDetails();
-    });
-</script>
-
-
+ 
                                 {{!-- <div class="checkout-account mb-25">
                                     <input class="checkout-toggle2" type="checkbox">
                                     <span>Create an account?</span>
@@ -511,36 +442,16 @@
                                     <label>Email Address</label>
                                     <input placeholder="Password" type="password">
                                 </div> --}}
-
-
-
-                            
+ 
                                 <div class="checkout-account mt-25">
-    <input id="addNewAddressToggle" class="checkout-toggle" type="checkbox">
-    <label for="addNewAddressToggle">   Add New Address</label>
-</div>
+                                    <input id="addNewAddressToggle" class="checkout-toggle" type="checkbox">
+                                    <label for="addNewAddressToggle"> Add New Address</label>
+                                </div>
 
-<div id="newAddressSection" class="new-address-section" style="display: none;">
-    <!-- Your new address form or content goes here -->
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const addNewAddressToggle = document.getElementById('addNewAddressToggle');
-    const newAddressSection = document.getElementById('newAddressSection');
-
-    addNewAddressToggle.addEventListener('change', function() {
-        if (this.checked) {
-            newAddressSection.style.display = 'block';
-        } else {
-            newAddressSection.style.display = 'none';
-        }
-    });
-});
-
-</script>
-
-                        
+                            <div id="newAddressSection" class="new-address-section" style="display: none;">
+                                <!-- Your new address form or content goes here -->
+                            </div>
+              
                             <form action="/addAddress" method="post">
                                 <div class="different-address open-toggle mt-30">
                                     <div class="row">
@@ -673,138 +584,33 @@
                                             <!-- Date and Time will be displayed here -->
                                         </div>
 
-                                    {{!-- <form action="/placeOrder" method="post">
+ 
+                                <form id="orderForm" action="/placeOrder" method="post">
+
+
                                     
-                                    <div class="payment-method" >
-                                      
+                                    <div class="payment-method">
                                         <div class="pay-top sin-payment">
                                             <input id="payment-method-2" class="input-radio" type="radio" value="razorpay" name="paymentMethod">
                                             <label for="payment-method-2">Razorpay</label>
                                             <div class="payment-box payment_method_bacs">
-                                                <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference.</p>
+                                                <p>Make your payment using Razorpay.</p>
                                             </div>
                                         </div>
                                         <div class="pay-top sin-payment">
                                             <input id="payment-method-3" class="input-radio" type="radio" value="cod" name="paymentMethod">
                                             <label for="payment-method-3">Cash on delivery </label>
                                             <div class="payment-box payment_method_bacs">
-                                                <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference.</p>
+                                                <p>Pay cash on delivery.</p>
                                             </div>
                                         </div>
-                                    
-                  -----                    
                                         <div class="Place-order mt-40">
-_---------------------
-
-
-
-
-                                              <a class="Place-order " >
-                                                  <button  type="submit">Place Order</button>
-                                              </a>
-                                                 
-                                              
-                                           
-
-----
-                                           <a href="" type="submit" >Place Order</a>
-                                       </div>
-----
-
-
-                                       
+                                            <button id="placeOrderBtn" type="button">Place Order</button>
+                                        </div>
                                     </div>
-                                    
-                                  </form> --}}
-
-
-
-
-
-<form id="orderForm" action="/placeOrder" method="post">
-    <div class="payment-method">
-        <div class="pay-top sin-payment">
-            <input id="payment-method-2" class="input-radio" type="radio" value="razorpay" name="paymentMethod">
-            <label for="payment-method-2">Razorpay</label>
-            <div class="payment-box payment_method_bacs">
-                <p>Make your payment using Razorpay.</p>
-            </div>
-        </div>
-        <div class="pay-top sin-payment">
-            <input id="payment-method-3" class="input-radio" type="radio" value="cod" name="paymentMethod">
-            <label for="payment-method-3">Cash on delivery </label>
-            <div class="payment-box payment_method_bacs">
-                <p>Pay cash on delivery.</p>
-            </div>
-        </div>
-        <div class="Place-order mt-40">
-            <button id="placeOrderBtn" type="button">Place Order</button>
-        </div>
-    </div>
-</form>
-
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script>
-    document.getElementById("placeOrderBtn").addEventListener("click", async function() {
-        const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-        if (selectedPaymentMethod === "razorpay") {
-            
-            try {
-                const response = await fetch('/createRazorpayOrder', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ totalAmount: 0 }) // Replace 1000 with actual total amount
-                });
-                const data = await response.json();
-                console.log("Razorpay order data:", data);
-                const options = {
-                    key: data.key_id,
-                    amount: data.order.amount,
-                    currency: 'INR',
-                    order_id: data.order.id,
-                    handler: function(response) {
-                        console.log('Razorpay response:', response);
-                        
-                        fetch('/placeOrder', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ paymentMethod: "razorpay" })
-                        })
-                        .then(response => {
-                            if (response.ok) {
-                                window.location.href = '/checkout?success=orderSuccessfully';
-                            } else {
-                                console.error('Error in database update:', response.statusText);
-                                // Handle error
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error while saving Razorpay response:', error);
-                            // Handle error
-                        });
-                    },
-                };
-                const rzp = new Razorpay(options);
-                rzp.open();
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        } else {
-            document.getElementById("orderForm").submit();
-        }
-    });
-</script>
-
-
-
-                                </div>
-                                
- 
-
+                                </form>
+                             </div>
+                    
                             </div>
                         </div>
                     </div>
@@ -938,8 +744,159 @@ _---------------------
     <!-- Bootstrap JS -->
     <script src="assets/js/vendor/bootstrap.min.js"></script>
 
+    {{!-- Add new address section show and disable --}}
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            const addNewAddressToggle = document.getElementById('addNewAddressToggle');
+            const newAddressSection = document.getElementById('newAddressSection');
+
+            addNewAddressToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    newAddressSection.style.display = 'block';
+                } else {
+                    newAddressSection.style.display = 'none';
+                }
+            });
+        });
+
+        </script>
+
+    {{!-- Razorpay  --}}
+    
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.getElementById("placeOrderBtn").addEventListener("click", async function() {
+        const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+        if (selectedPaymentMethod === "razorpay") {
+            
+            try {
+                const response = await fetch('/createRazorpayOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ totalAmount: 0 }) // Replace 1000 with actual total amount
+                });
+                const data = await response.json();
+                console.log("Razorpay order data:", data);
+                const options = {
+                    key: data.key_id,
+                    amount: data.order.amount,
+                    currency: 'INR',
+                    order_id: data.order.id,
+                    handler: function(response) {
+                        console.log('Razorpay response:', response);
+                        
+                        fetch('/placeOrder', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ paymentMethod: "razorpay" })
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.href = '/checkout?success=orderSuccessfully';
+                            } else {
+                                console.error('Error in database update:', response.statusText);
+                                // Handle error
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error while saving Razorpay response:', error);
+                            // Handle error
+                        });
+                    },
+                };
+                const rzp = new Razorpay(options);
+                rzp.open();
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        } else {
+            document.getElementById("orderForm").submit();
+        }
+    });
+</script>
+
+
+
     {{!-- Tox --}}
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    {{!-- Add New Address --}}
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const addressRadios = document.querySelectorAll('input[name="address"]');
+        const addressDetailsContainer = document.getElementById('addressDetails');
+
+        // Function to update address details based on selected radio button
+        function updateAddressDetails() {
+            const selectedAddressIndex = document.querySelector('input[name="address"]:checked').value;
+            const selectedAddress = address[selectedAddressIndex];
+            const addressDetailsHTML = `
+                <div class="col-lg-12">
+                    <div class="billing-info mb-20">
+                        <label>First Name <abbr class="required"  title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.firstName}">
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="billing-info mb-20">
+                        <label>Last Name <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.lastName}">
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="billing-info mb-20">
+                        <label>Address <abbr class="required" title="required">*</abbr></label>
+                        <input class="billing-address" value="${selectedAddress.address}" type="text">
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="billing-info mb-20">
+                        <label>Town / City <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.city}">
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="billing-info mb-20">
+                        <label>State <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.state}">
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="billing-info mb-20">
+                        <label>Postcode <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.postcode}">
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="billing-info mb-20">
+                        <label>Phone <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.phone}">
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12">
+                    <div class="billing-info mb-20">
+                        <label>Email Address <abbr class="required" title="required">*</abbr></label>
+                        <input type="text" value="${selectedAddress.email}">
+                    </div>
+                </div>
+            `;
+            addressDetailsContainer.innerHTML = addressDetailsHTML;
+        }
+
+        // Add event listener to each radio button
+        addressRadios.forEach(function(radio) {
+            radio.addEventListener('change', updateAddressDetails);
+        });
+
+        // Initially update address details
+        updateAddressDetails();
+    });
+</script>
 
     <!-- Slick Slider JS -->
     <script src="assets/js/plugins/countdown.js"></script>

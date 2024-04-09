@@ -108,8 +108,11 @@ const userSchema = new mongoose.Schema({
 
   orders: [
     {
-      address: {
-        type: {
+        
+        address: {
+          state: {
+            type: String,
+          },
           firstName: {
             type: String,
           },
@@ -133,11 +136,9 @@ const userSchema = new mongoose.Schema({
           },
           phone: {
             type: String,
-          },
+          }
         },
-        default: {}
-      },
-
+      
       items: [
         {
           productName: { type: String, required: true },
@@ -184,3 +185,6 @@ userSchema.pre("save", async function (next) {
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
+
+
+ 
