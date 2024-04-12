@@ -3,6 +3,7 @@
 
 
 <!-- Mirrored from template.hasthemes.com/daxone/daxone/cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Feb 2024 10:44:49 GMT -->
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -17,7 +18,7 @@
 	============================================ -->
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="/assets/css/vendor/bootstrap.min.css">  
+    <link rel="stylesheet" href="/assets/css/vendor/bootstrap.min.css">
     <!-- Icon Font CSS -->
     <link rel="stylesheet" href="/assets/css/vendor/line-awesome.css">
     <link rel="stylesheet" href="/assets/css/vendor/themify.css">
@@ -43,7 +44,8 @@
                             </div>
                         </div>
                         <div class="col-xl-7 col-lg-6">
-                            <div class="main-menu menu-common-style menu-lh-1 menu-margin-4 menu-font-3 ml-20 menu-others-page">
+                            <div
+                                class="main-menu menu-common-style menu-lh-1 menu-margin-4 menu-font-3 ml-20 menu-others-page">
                                 <nav>
                                     <ul>
                                         <li class="angle-shape"><a href="/">Home</a>
@@ -74,7 +76,8 @@
                                                 </li>
                                                 <li><a class="menu-title" href="#">Shop Layout</a>
                                                     <ul>
-                                                        <li><a href="shop-fullwide-no-sidebar.html">fullwide no sidebar </a></li>
+                                                        <li><a href="shop-fullwide-no-sidebar.html">fullwide no sidebar
+                                                            </a></li>
                                                         <li><a href="shop-list.html">list style</a></li>
                                                         <li><a href="shop-list-2col.html">list 2 column</a></li>
                                                         <li><a href="shop-list-no-sidebar.html">list no sidebar</a></li>
@@ -91,10 +94,12 @@
                                                 </li>
                                                 <li><a class="menu-title" href="#">Product Details</a>
                                                     <ul>
-                                                        <li><a href="product-details-gallery.html">gallery style </a></li>
+                                                        <li><a href="product-details-gallery.html">gallery style </a>
+                                                        </li>
                                                         <li><a href="product-details-sticky.html">sticky style</a></li>
                                                         <li><a href="product-details-slider.html">slider style</a></li>
-                                                        <li><a href="product-details-affiliate.html">Affiliate style</a></li>
+                                                        <li><a href="product-details-affiliate.html">Affiliate style</a>
+                                                        </li>
                                                     </ul>
                                                 </li>
                                             </ul> --}}
@@ -134,16 +139,16 @@
                                     <a href="/profile"><i class="la la-user"></i></a>
                                 </div>
                                 <div class="cart-wrap common-style ml-35">
-                                <button class="cart-active cart-3" onclick="navigateToCart()">
-                                    <i class="la la-shopping-cart"></i>
-                                </button>
-                            </div>
+                                    <button class="cart-active cart-3" onclick="navigateToCart()">
+                                        <i class="la la-shopping-cart"></i>
+                                    </button>
+                                </div>
 
-<script>
-    function navigateToCart() {
-        window.location.href = '/cart';
-    }
-</script>
+                                <script>
+                                    function navigateToCart() {
+                                        window.location.href = '/cart';
+                                    }
+                                </script>
 
                             </div>
                         </div>
@@ -292,7 +297,8 @@
                                                 <li><a href="shop-2-col.html">shop 2 column</a></li>
                                                 <li><a href="shop-no-sidebar.html">shop no sidebar</a></li>
                                                 <li><a href="shop-fullwide.html">shop fullwide</a></li>
-                                                <li><a href="shop-fullwide-no-sidebar.html">fullwide no sidebar </a></li>
+                                                <li><a href="shop-fullwide-no-sidebar.html">fullwide no sidebar </a>
+                                                </li>
                                             </ul>
                                         </li>
                                         <li class="menu-item-has-children"><a href="#">shop list layout</a>
@@ -399,7 +405,7 @@
                 </div>
             </div>
         </div>
-        {{#if bookings}}
+        {{#if cart.products}}
         <div class="cart-main-area pt-85 pb-90">
             <div class="container">
                 <h3 class="cart-page-title">Your cart items</h3>
@@ -419,42 +425,55 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                         
-                                        {{#each bookings}}
+
+                                        {{#each cart.products}}
                                         <tr>
                                             <td class="product-thumbnail">
-                                                <a href="#"> 
-                                                    <img class="w120 rounded img-fluid" src="{{this.product.images.[0]}}" alt="noImage">
+                                                <a href="#">
+                                                    <img class="w120 rounded img-fluid"
+                                                        src="{{this.product.images.[0]}}" alt="noImage">
                                                 </a>
-                                                
+
                                             </td>
                                             <td class="product-name"><a href="#">{{this.product.name}}</a></td>
-                                            <td class="product-price-cart"><span class="amount">{{this.product.price}}</span></td>
-                                                <td class="product-quantity">
-                                                    <div class="input-group input-group-sm">
-                                                        <div class="input-group-prepend">
-                                                            <button class="btn btn-outline-secondary" type="button" onclick="decrementQuantity('{{this.product._id}}')" style="background-color: white; color: black;" onmouseover="this.style.backgroundColor='red'" onmouseout="this.style.backgroundColor='white'">-</button>
-                                                        </div>
-                                                        <input id="quantityInput{{this.product._id}}" class="form-control" value="{{this.quantity}}" type="text" style="width:10px; height: 35px; border-radius: 28px; text-align: center;">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-outline-secondary" type="button" onclick="incrementQuantity('{{this.product._id}}')" style="background-color: white; color: black;" onmouseover="this.style.backgroundColor='red'" onmouseout="this.style.backgroundColor='white'">+</button>
-                                                        </div>
+                                            <td class="product-price-cart"><span
+                                                    class="amount">{{this.product.price}}</span></td>
+                                            <td class="product-quantity">
+                                                <div class="input-group input-group-sm">
+                                                    <div class="input-group-prepend">
+                                                        <button class="btn btn-outline-secondary" type="button"
+                                                            onclick="decrementQuantity('{{this.product._id}}')"
+                                                            style="background-color: white; color: black;"
+                                                            onmouseover="this.style.backgroundColor='red'"
+                                                            onmouseout="this.style.backgroundColor='white'">-</button>
                                                     </div>
-                                                </td>
+                                                    <input id="quantityInput{{this.product._id}}" class="form-control"
+                                                        value="{{this.quantity}}" type="text"
+                                                        style="width:10px; height: 35px; border-radius: 28px; text-align: center;">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary" type="button"
+                                                            onclick="incrementQuantity('{{this.product._id}}')"
+                                                            style="background-color: white; color: black;"
+                                                            onmouseover="this.style.backgroundColor='red'"
+                                                            onmouseout="this.style.backgroundColor='white'">+</button>
+                                                    </div>
+                                                </div>
+                                            </td>
 
 
 
-                                           <td class="product-subtotal">
-                                                    {{#if this.total}}
-                                                        {{this.total}}
-                                                    {{else}}
-                                                        {{this.product.price}}
-                                                    {{/if}}
-                                             </td>
+                                            <td class="product-subtotal">
+                                                {{#if this.total}}
+                                                {{this.total}}
+                                                {{else}}
+                                                {{this.product.price}}
+                                                {{/if}}
+                                            </td>
                                             <td class="product-remove">
                                                 {{!-- <a href="#"><i class="la la-pencil"></i></a> --}}
-                                                <a href="/deleteProductCart/{{this.product._id}}"><i class="la la-close"></i></a>
-                                                
+                                                <a href="/deleteProductCart/{{this.product._id}}"><i
+                                                        class="la la-close"></i></a>
+
                                             </td>
                                         </tr>
                                         {{/each}}
@@ -518,7 +537,7 @@
                                             <button class="cart-btn-2" type="submit">Get A Quote</button>
                                         </div>
                                     </div> --}}
-                                {{!-- </div> --}}
+                                    {{!-- </div> --}}
                             </div>
                             {{!-- <div class="col-lg-4 col-md-6">
                                 <div class="discount-code-wrapper">
@@ -534,7 +553,7 @@
                                     </div>
                                 </div>
                             </div> --}}
- 
+
                             <div class="col-lg-4 col-md-12">
                                 <div class="grand-totall">
                                     <div class="title-wrap">
@@ -543,25 +562,25 @@
                                     {{!-- <h5>Total products <span>$260.00</span></h5> --}}
                                     <div class="total-shipping">
                                         <h5>Total shipping</h5>
-                                         <ul>
-                                            <li>Price <span>${{subtotal}}</span> </li>
-                                            <li>Delivery Charges <span>$40</span></li>
+                                        <ul>
+                                            <li>Price <span>${{cart.subtotal}}</span> </li>
+                                            <li>Delivery Charges <span>${{cart.shippingcost}}</span></li>
                                         </ul>
-                                        
+
                                     </div>
-                                    <h4 class="grand-totall-title">Grand Total <span>${{grandtotal}}</span></h4>
+                                    <h4 class="grand-totall-title">Grand Total <span>${{cart.grandtotal}}</span></h4>
                                     <a href="/checkOut">Proceed to Checkout</a>
                                 </div>
                             </div>
-                             
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-          {{else}}
+        {{else}}
         <div class="total m-5">
-        <p class="text-center">Cart is empty!</p>
+            <p class="text-center">Cart is empty!</p>
         </div>
         {{/if}}
 
@@ -574,7 +593,8 @@
                             <div class="footer-widget mb-30">
                                 <a href="#"><img src="/assets/images/logo/logo-1.png" alt="logo"></a>
                                 <div class="footer-about">
-                                    <p>On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms. </p>
+                                    <p>On the other hand, we denounce with righteous indignation and dislike men who are
+                                        so beguiled and demoralized by the charms. </p>
                                 </div>
                             </div>
                         </div>
@@ -689,63 +709,80 @@
 
 
     <script>
-  // Function to increment the quantity
-const incrementQuantity = (productId) => {
-    const quantityInput = document.getElementById(`quantityInput${productId}`);
-    const currentValue = parseInt(quantityInput.value);
-    const newValue = currentValue + 1;
-    quantityInput.value = newValue;
+        // Function to increment the quantity
+        const incrementQuantity = (productId) => {
+            const quantityInput = document.getElementById(`quantityInput${productId}`);
+            const currentValue = parseInt(quantityInput.value);
+            const newValue = currentValue + 1;
+            quantityInput.value = newValue;
 
-    // Call a function to send the updated quantity to the backend
-    updateQuantity(productId, newValue);
-}
-
-// Function to decrement the quantity
- const decrementQuantity = (productId) => {
-    const quantityInput = document.getElementById(`quantityInput${productId}`);
-    const currentValue = parseInt(quantityInput.value);
-    // Ensure quantity does not go below 1
-    const newValue = currentValue > 1 ? currentValue - 1 : 1;
-    quantityInput.value = newValue;
-
-    // Call a function to send the updated quantity to the backend
-    updateQuantity(productId, newValue);
-}
-
-
-
-// Function to send the updated quantity to the backend
-const updateQuantity = async (productId, newQuantity) => {
-    try {
-        // Your fetch or axios request to send the updated quantity to the backend
-        const response = await fetch('/updateQuantity', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ productId, newQuantity })
-        });
-
-        // Handle the response
-        if (response.ok) {
-            const data = await response.json();
-             window.location.reload();
-        
-        } else {
-            console.error('Error updating quantity:', response.statusText);
+            // Call a function to send the updated quantity to the backend
+            updateQuantity(productId, "inc");
         }
-    } catch (error) {
-        // Handle errors
-        console.error('Error updating quantity:', error);
-    }
-};
+
+        // Function to decrement the quantity
+        const decrementQuantity = (productId) => {
+            const quantityInput = document.getElementById(`quantityInput${productId}`);
+            const currentValue = parseInt(quantityInput.value);
+            // Ensure quantity does not go below 1
+
+            if (currentValue === 1) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Product Remove!',
+                    text: 'Do you want to remove it?',
+                    showCancelButton: true, // Show the cancel button
+                    confirmButtonText: 'Yes, remove it' // Show the confirm button with appropriate text
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // delete product from cart manage
+                    }
+                });
 
 
-   
+            } else {
+                const newValue = currentValue > 1 ? currentValue - 1 : 1;
+                quantityInput.value = newValue;
+
+                // Call a function to send the updated quantity to the backend
+                updateQuantity(productId, "dec");
+            }
+        }
 
 
-</script>
 
+        // Function to send the updated quantity to the backend
+        const updateQuantity = async (productId, type) => {
+            try {
+                // Your fetch or axios request to send the updated quantity to the backend
+                const response = await fetch('/updateQuantity', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ productId, type })
+                });
+
+                // Handle the response
+                if (response.ok) {
+                    const data = await response.json();
+                    window.location.reload();
+
+                } else {
+                    console.error('Error updating quantity:', response.statusText);
+                }
+            } catch (error) {
+                // Handle errors
+                console.error('Error updating quantity:', error);
+            }
+        };
+
+
+
+
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Modernizer JS -->
     <script src="/assets/js/vendor/modernizr-3.11.7.min.js"></script>
@@ -778,4 +815,5 @@ const updateQuantity = async (productId, newQuantity) => {
 
 
 <!-- Mirrored from template.hasthemes.com/daxone/daxone/cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Feb 2024 10:44:50 GMT -->
+
 </html>

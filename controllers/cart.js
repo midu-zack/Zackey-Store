@@ -2,11 +2,9 @@ const User = require("../model/user");
 const Product = require("../model/product");
 
 const showCart = async (req, res) => {
-
   try {
     const userId = req.user.id;
 
-  
     if (!userId) {
       return res.render("user/login-register");
     }
@@ -14,29 +12,24 @@ const showCart = async (req, res) => {
     // console.log('this is useri',userId);
 
     // Find the user by ID and populate the bookings array with product details
-    const user = await User.findById(userId).populate("bookings.product");
+    const user = await User.findById(userId)
+      .populate("cart.products.product")
+      .select("cart")
+      .lean();
 
     if (!user) {
       return res.render("user/login-register");
     }
-
-    let subtotal = 0;
-    user.bookings.forEach(booking => {
-        subtotal += booking.quantity * booking.product.price;
-    });
-
-    user.subtotal = subtotal;
-
-    user.grandtotal = user.subtotal + user.shippingcost;
-
-    await user.save();
-
+    const { cart } = user;
+    cart.grandtotal = cart.subtotal + cart.shippingcost;
+    if (cart.products.length <= 0) {
+      cart.shippingcost = 0;
+      cart.grandtotal = 0;
+    }
     // console.log('this is grand total ',grandtotal);
     // Render the cart page with the user's bookings
     res.render("user/cart", {
-      bookings: user.bookings,
-      subtotal: user.subtotal,
-      grandtotal: user.grandtotal,
+      cart: user.cart,
     });
 
     // console.log('this is render  subtotal and grand : ' , subtotal,grandtotal);
@@ -51,23 +44,39 @@ const addCart = async (req, res) => {
   const userId = req.user.id; // Corrected to use req.user.id
 
   try {
+    const user = await User.findById(userId).select("cart").exec();
 
-    const product = await Product.findById(productId);
-    if (!product) {
-        return res.status(404).send('Product not found');
+    if (!user) {
+      return res.render("user/login-register");
     }
 
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: userId, "bookings.product": { $ne: productId } }, // Check if the product is not already in the cart
-      { $addToSet: { bookings: { productName : product.name , product: productId, cart: true } } }, // Update the 'cart' field to true
-      { new: true }
+    const product = await Product.findById(productId).select("price").lean();
+    if (!product) {
+      return;
+    }
+    const { cart } = user;
+
+    const productIndex = cart.products.findIndex(
+      (item) => String(item.product) === productId
     );
 
-     if (updatedUser) {
-      res.redirect("/shop?success=addedToCart");
+    if (productIndex >= 0) {
+      cart.products[productIndex].quantity++;
+      cart.products[productIndex].total =
+        cart.products[productIndex].quantity * product.price;
+      cart.subtotal = product.price + cart.subtotal;
     } else {
-      res.redirect("/Shop?failed=ItemIsAlreadyInCart");
+      const newCartProduct = {
+        product: product._id,
+        quantity: 1,
+        total: product.price,
+      };
+      cart.subtotal = product.price + cart.subtotal;
+      cart.products.push(newCartProduct);
     }
+
+    await user.save();
+    return res.redirect("/shop?success=addedToCart");
   } catch (error) {
     // Handle errors
     console.error("Error adding product to cart:", error);
@@ -75,28 +84,44 @@ const addCart = async (req, res) => {
   }
 };
 
-let updateQuantity = async (req, res) => {
+const updateQuantity = async (req, res) => {
   try {
-    const { productId, newQuantity } = req.body;
+    const { productId, type } = req.body;
     const userId = req.user.id;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("cart");
+    const { cart } = user;
 
-    const bookings = user.bookings.find(
-      (bookings) => bookings.product.toString() === productId
+    const product = await Product.findById(productId).select("price").lean();
+    if (!product) {
+      return;
+    }
+    const productIndex = cart.products.findIndex(
+      (item) => String(item.product) === productId
     );
 
-    if (bookings) {
-      bookings.quantity = newQuantity;
+    if (productIndex >= 0) {
+      if (type === "dec") {
+        cart.products[productIndex].quantity--;
+        cart.products[productIndex].total =
+          cart.products[productIndex].quantity * product.price;
+        cart.subtotal = cart.subtotal - product.price;
+      } else if (type === "inc") {
+        cart.products[productIndex].quantity++;
+        cart.products[productIndex].total =
+          cart.products[productIndex].quantity * product.price;
+        cart.subtotal = cart.subtotal + product.price;
+      }
     } else {
       return res.status(404).json({ message: "booking not found" });
     }
 
     await user.save();
 
-    res
-      .status(200)
-      .json({ message: "Quantity update successfully", newQuantity });
+    return res.status(200).json({
+      message: "Quantity update successfully",
+      newQuantity: cart.products[productIndex].quantity,
+    });
   } catch (error) {
     console.error("Error updating quantity:", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -106,18 +131,27 @@ let updateQuantity = async (req, res) => {
 const removeProductCart = async (req, res) => {
   try {
     const productId = req.params.id;
-    const updatedUserCart = await User.findOneAndUpdate(
-      { "bookings.product": productId },
-      { $pull: { bookings: { product: productId } } },
-      { new: true }
+    const userId = req.user.id;
+
+    const user = await User.findById(userId).select("cart");
+    // no user manage
+    const { cart } = user;
+
+    const index = cart.products.findIndex(
+      (item) => String(item.product) === productId
     );
 
-    if (!updatedUserCart) {
-      return res.status(404).send("Product not found in cart");
+    if (index !== -1) {
+      const amount = cart.products[index].total;
+      cart.subtotal = cart.subtotal - amount;
+      // Remove the object from the array
+      cart.products.splice(index, 1);
+      await user.save();
+      return res.redirect("/cart");
     }
-          
-    // Redirect to the cart page after deletion
-    res.redirect("/cart");
+
+    return res.status(404).send("Product not found in cart");
+
   } catch (error) {
     console.error("Error deleting product from cart:", error);
     res
@@ -126,13 +160,20 @@ const removeProductCart = async (req, res) => {
   }
 };
 
-
 const clearCart = async (req, res) => {
   try {
     const userId = req.user.id;
 
     // Find the user by ID and clear the bookings array
-    const updatedUser = await User.findByIdAndUpdate(userId, { bookings: [] }, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { cart: {
+        products:[],
+        shippingcost:40,
+        subtotal:0 
+      } },
+      { new: true }
+    );
 
     if (!updatedUser) {
       return res.status(404).send("User not found");

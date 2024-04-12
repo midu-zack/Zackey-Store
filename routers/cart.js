@@ -8,7 +8,7 @@ router.get("/cart" ,verifyToken,showCart)
 router.get('/addCart/:id',verifyToken ,addCart)
 router.post('/updateQuantity',verifyToken,updateQuantity)
 
-router.get('/deleteProductCart/:id',removeProductCart)
+router.get('/deleteProductCart/:id',verifyToken,removeProductCart)
 router.get('/clearToCart',verifyToken,clearCart)
 
 module.exports = router;
