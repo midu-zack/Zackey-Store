@@ -259,7 +259,7 @@
                                     <div class="avatar rounded no-thumbnail bg-success text-light"><i class="fa fa-dollar fa-lg"></i></div>
                                     <div class="flex-fill ms-3 text-truncate">
                                         <div class="h6 mb-0">Delivered</div>
-                                        <span class="small">{{totalNumberOfDeliveredOrders}}</span>
+                                        <span class="small">0</span>
                                     </div>
                                 </div>
                             </div>
@@ -270,7 +270,7 @@
                                     <div class="avatar rounded no-thumbnail bg-danger text-light"><i class="fa fa-credit-card fa-lg"></i></div>
                                     <div class="flex-fill ms-3 text-truncate">
                                         <div class="h6 mb-0">Cancelled</div>
-                                        <span class="small">{{cancelledOrdersCount}}</span>
+                                        <span class="small">{{ordersCount.cancelled}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -281,7 +281,7 @@
                                     <div class="avatar rounded no-thumbnail bg-warning text-light"><i class="fa fa-smile-o fa-lg"></i></div>
                                     <div class="flex-fill ms-3 text-truncate">
                                         <div class="h6 mb-0">Delivery-pending</div>
-                                        <span class="small">{{pendingOrdersCount}}</span>
+                                        <span class="small">{{ordersCount.pending}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -292,7 +292,7 @@
                                     <div class="avatar rounded no-thumbnail bg-info text-light"><i class="fa fa-shopping-bag" aria-hidden="true"></i></div>
                                     <div class="flex-fill ms-3 text-truncate">
                                         <div class="h6 mb-0">Shipped</div>
-                                        <span class="small">{{shippedOrdersCount}}</span>
+                                        <span class="small">{{ordersCount.shipped}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -1290,51 +1290,56 @@
     </script>
 
 
-        
-{{!-- {{labels}} --}}
+{{!--         
+{{lineChartData}}
+{{lineChart}} --}}
  
  {{!-- line chart 10 days --}}
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Parse the labels and data from the server-side
-        const labels = {{{labels}}}; // Use triple braces to prevent HTML escaping
-        const data = {{{data}}}; // Use triple braces to prevent HTML escaping
+   document.addEventListener("DOMContentLoaded", function() {
 
-        // Define the chart data
-        const chartData = {
-            labels: labels,
-            datasets: [{
-                label: [{{#each labels }} {{this}} {{/each}}],
-                data: data,
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        };
+    const lineChartData = {{ lineChartData }}
+const lineChartLabels = {{ lineChartLabels }}
+    
 
-        // Configure the chart
-        const config = {
-            type: 'line',
-            data: chartData
-        };
+    // Define the chart data
+    const chartData = {
+        labels: lineChartLabels,
+        datasets: [{
+            label: "Revenue", // This should be a string representing the label, not an array of dates
+            data: lineChartData,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }]
+    };
 
-        // Get the canvas context and render the chart
-        const ctx = document.getElementById('lineChart').getContext('2d');
-        new Chart(ctx, config);
-    });
+    // Configure the chart
+    const config = {
+        type: 'line',
+        data: chartData
+    };
+
+    // Get the canvas context and render the chart
+    const ctx = document.getElementById('lineChart').getContext('2d');
+    new Chart(ctx, config);
+});
+
 </script>
 
   
  
 {{!-- PIE CHART --}}
  
-
+{{!-- 
     <script>
         // Parse the data passed from the backend
-        const totalNumberOfDeliveredOrders = {{totalNumberOfDeliveredOrders}};
-        const cancelledOrdersCount = {{cancelledOrdersCount}};
-        const shippedOrdersCount = {{shippedOrdersCount}};
-        const pendingOrdersCount = {{pendingOrdersCount}};
+        const ordersCount = {{ ordersCount }}
+        const totalNumberOfDeliveredOrders = 0;
+        const cancelledOrdersCount = 4;
+        const shippedOrdersCount = 6;
+        const pendingOrdersCount =1;
 
         // Create the pie chart
         const ctx = document.getElementById('myPieChart').getContext('2d');
@@ -1367,9 +1372,52 @@
                 }
             }
         });
-    </script>
+    </script> --}}
     
 
+{{!-- <canvas id="myPieChart"></canvas> --}}
+
+
+<script>
+    // Parse the data passed from the backend
+        const ordersCount = {{{ ordersCount }}}
+        const totalNumberOfDeliveredOrders = ordersCount?.delivered||0;
+        const cancelledOrdersCount = ordersCount?.cancelled ||0;
+        const shippedOrdersCount = ordersCount?.shipped||0;
+        const pendingOrdersCount =ordersCount?.pending||0;
+
+    // Create the pie chart
+    const ctx = document.getElementById('myPieChart').getContext('2d');
+    const myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Delivered', 'Cancelled', 'Shipped', 'Pending'],
+            datasets: [{
+                label: 'Order Status',
+                data: [totalNumberOfDeliveredOrders, cancelledOrdersCount, shippedOrdersCount, pendingOrdersCount],
+                backgroundColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(54, 162, 235)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)'
+                ],
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Order Status'
+                }
+            }
+        }
+    });
+</script>
 
 
 </body>

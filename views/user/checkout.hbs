@@ -421,7 +421,7 @@
                                             {{#each address}}
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="address"
-                                                    id="address{{this._id}}" value="{{this}}" {{#if this._id}} checked
+                                                    id="address{{this._id}}" value="{{this._id}}" {{#if this._id}} checked
                                                     {{/if}}>
                                                 <label class="form-check-label" for="address{{@index}}">
                                                     {{this.firstName}} {{this.lastName}} - {{this.address}},
@@ -556,7 +556,7 @@
                                 <h3>Your order</h3>
                                 <div class="your-order-wrap gray-bg-4">
 
-                                    {{#if user}}
+                                    {{#if cart}}
 
                                     <div class="your-order-info-wrap">
                                         <div class="your-order-info">
@@ -564,17 +564,17 @@
                                                 <li>Product <span>Total</span></li>
                                             </ul>
                                         </div>
-                                        {{#each user.bookings}}
+                                        {{#each cart.products}}
                                         <div class="your-order-middle">
                                             <ul>
                                                 {{!-- <li>{{this.productName}} <span>${{this.total}}</span></li> --}}
-                                                <li>{{this.productName}} <span>${{this.total}} </span></li>
+                                                <li>{{this.product.name}} <span>${{this.total}} </span></li>
                                             </ul>
                                         </div>
                                         {{/each}}
                                         <div class="your-order-info order-subtotal">
                                             <ul>
-                                                <li>Subtotal <span>${{user.subtotal}} </span></li>
+                                                <li>Subtotal <span>${{cart.subtotal}} </span></li>
                                             </ul>
                                         </div>
                                         <div class="your-order-info order-shipping">
@@ -585,7 +585,7 @@
                                         </div>
                                         <div class="your-order-info order-total">
                                             <ul>
-                                                <li>Total <span>$ {{user.grandtotal}} </span></li>
+                                                <li>Total <span>$ {{cart.grandtotal}} </span></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -598,14 +598,14 @@
                                     </div>
 
 
-                                    <form id="orderForm" action="/placeOrder" method="post">
+                                    <form id="orderForm">
 
 
 
                                         <div class="payment-method">
                                             <div class="pay-top sin-payment">
                                                 <input id="payment-method-2" class="input-radio" type="radio"
-                                                    value="razorpay" name="paymentMethod">
+                                                    value="online" name="paymentMethod">
                                                 <label for="payment-method-2">Razorpay</label>
                                                 <div class="payment-box payment_method_bacs">
                                                     <p>Make your payment using Razorpay.</p>
@@ -786,7 +786,7 @@
             const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
             const selectedAddress = document.querySelector('input[name="address"]:checked').value;
 
-            if (selectedPaymentMethod === "razorpay") {
+            if (selectedPaymentMethod === "online") {
 
                 try {
                     const response = await fetch('/createRazorpayOrder', {
@@ -811,7 +811,7 @@
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify({ paymentMethod: "razorpay", selectedAddress })
+                                body: JSON.stringify({ paymentMethod: "online", selectedAddress })
                             })
                                 .then(response => {
                                     if (response.ok) {
@@ -832,8 +832,29 @@
                 } catch (error) {
                     console.error('Error:', error);
                 }
-            } else {
-                document.getElementById("orderForm").submit();
+            }
+
+            if(selectedPaymentMethod==="cod"){
+                
+                 fetch('/placeOrder', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ paymentMethod: "cod", selectedAddress })
+                            })
+                                .then(response => {
+                                    if (response.ok) {
+                                        window.location.href = '/checkout?success=orderSuccessfully';
+                                    } else {
+                                        console.error('Error in database update:', response.statusText);
+                                        // Handle error
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error while saving Razorpay response:', error);
+                                    // Handle error
+                                });
             }
         });
     </script>

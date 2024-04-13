@@ -2,37 +2,34 @@ const User = require("../model/user");
 const Product = require("../model/product");
 const Category = require("../model/categorie");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const Orders = require("../model/orders");
 
+require("dotenv").config();
 
 // get homepage
 let homePage = async (req, res) => {
-
-    const token = req.cookies.jwt;
+  const token = req.cookies.jwt;
 
   if (!token) {
     return res.render("user/index");
   }
-    try {
-   
-      const decoded = jwt.verify(token, process.env.JWT_KEY);
-      req.user = decoded;
-      
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_KEY);
+    req.user = decoded;
 
-      // console.log("req.user", req.user);
+    // console.log("req.user", req.user);
 
-      const user = await User.findOne({_id:req.user.id})
-      const products = await Product.find();
-       
-     return  res.render("user/index", { products, user});
-    } catch (error) {
-      console.error(error);
-      res
-        .status(500)
-        .render("error", { message: "Internal Server Error in home page" });
-    }
+    const user = await User.findOne({ _id: req.user.id });
+    const products = await Product.find();
+
+    return res.render("user/index", { products, user });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .render("error", { message: "Internal Server Error in home page" });
   }
-
+};
 
 // get shop page
 let showShop = async (req, res) => {
@@ -60,12 +57,18 @@ const account = async (req, res) => {
     const userId = req.user.id;
 
     const user = await User.findById(userId);
-
     if (!user) {
       return res.status(404).send("User not found");
     }
+    const orders = await Orders.find({ orderedBy: req.user.id })
+      .populate("products.product", "name")
+      .select("products status  total payment date orderId")
+      .sort({ createdAt: -1 }) //latest first it will come
+      .lean();
 
-    res.render("user/my-account", {user});
+    // console.log("this is ", orders);
+
+    res.render("user/my-account", { user, orders });
   } catch (error) {
     console.error("Error fetching user data:", error);
     res.status(500).send("Internal Server Error");
@@ -89,7 +92,7 @@ const blockUnblock = async (req, res) => {
       user.blocked = !user.blocked;
       await user.save();
 
-      console.log("block status :", user.blocked);
+      // console.log("block status :", user.blocked);
     }
     res.redirect("/customersList");
   } catch (error) {
@@ -97,82 +100,84 @@ const blockUnblock = async (req, res) => {
   }
 };
 
-
-
-
 const getOrderDetails = async (req, res) => {
   try {
-      const orderId = req.query.orderId; 
-      const user = await User.findOne({ 'orders.orderId': orderId });
-
-      const order = user.orders.find(order => order.orderId === orderId);
-      if (!order) {
-          return res.status(404).json({ error: 'Order not found in user\'s orders array' });
-      }
-
-  // If order found, return the order details
-  res.json(order);
-
-      }  catch(error){
-    console.error(error);
-    res.status(500).json({ error: 'Error fetching order details' });
-  }};
-
-
-
-  const cancelOrder = async (req, res) => {
-    try {
-        const orderId = req.query.orderId; 
-        const user = await User.findOne({ 'orders.orderId': orderId });
-
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        const order = user.orders.find(order => order.orderId === orderId);
-        if (!order) {
-            return res.status(404).json({ error: 'Order not found' });
-        }
-
-        // Update order status to "Cancelled"
-        order.status = 'Cancelled';
-        await user.save();
-
-        res.json({ message: 'Order cancelled successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Error cancelling order' });
+    const orderId = req.query.orderId;
+    console.log(orderId);
+    const order = await Orders.findById(orderId).populate(
+      "products.product",
+      "name "
+    );
+    if (!order) {
+      return res
+        .status(404)
+        .json({ error: "Order not found in user's orders array" });
     }
+
+    // If order found, return the order details
+    res.json(order);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching order details" });
+  }
 };
 
+const cancelOrder = async (req, res) => {
+  try {
+    const { orderId, productId } = req.body;
 
+    const order = await Orders.findById(orderId);
 
+    // Check if the order exists
+    if (!order) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+    const { products } = order;
+
+    // Find the product within the order by productId
+    const product = products.find((item) => String(item.product) === productId);
+    console.log("this is product ", product);
+
+    // Check if the product exists within the order
+    if (!product) {
+      return res.status(404).json({ error: "Product not found in the order" });
+    }
+
+    // Update the status of the product to "cancelled"
+    product.status = "cancelled";
+
+    // Save the updated order
+    await order.save();
+
+    res.json({ message: "Product cancelled successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error cancelling product" });
+  }
+};
 
 const deleteAddress = async (req, res) => {
-    try {
-        const userId = req.user.id; // Assuming you have user data stored in the request object
-        const addressId = req.params.id;
+  try {
+    const userId = req.user.id; // Assuming you have user data stored in the request object
+    const addressId = req.params.id;
 
-        // Find the user by ID
-        const user = await User.findById(userId);
+    // Find the user by ID
+    const user = await User.findById(userId);
 
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        // Delete the address from the user's address array
-        user.address = user.address.filter(address => address._id != addressId);
-        await user.save();
-
-        res.status(200).json({ message: 'Address deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting address:', error);
-        res.status(500).json({ error: 'Internal server error' });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-};
 
- 
- 
+    // Delete the address from the user's address array
+    user.address = user.address.filter((address) => address._id != addressId);
+    await user.save();
+
+    res.status(200).json({ message: "Address deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting address:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 module.exports = {
   homePage,
@@ -182,5 +187,5 @@ module.exports = {
   blockUnblock,
   getOrderDetails,
   cancelOrder,
-  deleteAddress
+  deleteAddress,
 };

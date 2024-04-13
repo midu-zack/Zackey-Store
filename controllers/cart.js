@@ -134,7 +134,9 @@ const removeProductCart = async (req, res) => {
     const userId = req.user.id;
 
     const user = await User.findById(userId).select("cart");
-    // no user manage
+    if (!user) {
+      return res.render("user/login-register");
+    }
     const { cart } = user;
 
     const index = cart.products.findIndex(

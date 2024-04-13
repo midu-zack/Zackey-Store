@@ -1,72 +1,74 @@
 const mongoose = require("mongoose");
 
+// Product Schema
+const productSchema = new mongoose.Schema({
+  product: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    min: 1,
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ["pending", "shipped", "delivered", "cancelled"],
+    default: "pending",
+  },
+  amount: {
+    type: Number,
+    required: true,
+  },
+});
+
+// Address Schema
+const addressSchema = new mongoose.Schema({
+  firstName: String,
+  lastName: String,
+  address: String,
+  city: String,
+  state: String,
+  postcode: String,
+  email: String,
+  phone: String,
+});
+
+// Orders Schema
 const ordersSchema = new mongoose.Schema(
   {
-    products: [
-      {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-        },
-        quantity: {
-          type: Number,
-          min: 1,
-        },
-        status: {
-          type: String,
-          enum: ["pending", "shipped", "delivered", "cancelled"],
-          default: "pending",
-        },
-        amount: {
-          type: Number,
-        },
-      },
-    ],
-    address: {
-      state: {
-        type: String,
-      },
-      firstName: {
-        type: String,
-      },
-      lastName: {
-        type: String,
-      },
-      address: {
-        type: String,
-      },
-      city: {
-        type: String,
-      },
-      state: {
-        type: String,
-      },
-      postcode: {
-        type: String,
-      },
-      email: {
-        type: String,
-      },
-      phone: {
-        type: String,
-      },
+    orderId: {
+      type: String,
+      required: true,
+      trim: true,
     },
+    products: [productSchema],
     orderedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     total: {
       type: Number,
+      required: true,
+    },
+    date: {
+      type: String,
+      required: true,
+      trim: true,
     },
     payment: {
       method: {
         type: String,
-        enum: ("cod", "online"),
+        enum: ["cod", "online"],
         required: true,
       },
-      paymentId: {
-        type: String,
-      },
+      paymentId: String,
+    },
+    address: {
+      type: addressSchema,
+      required: true,
     },
   },
   { timestamps: true }
@@ -74,4 +76,4 @@ const ordersSchema = new mongoose.Schema(
 
 const Orders = mongoose.model("Orders", ordersSchema);
 
-module.exports = Orders; // export the module
+module.exports = Orders;
