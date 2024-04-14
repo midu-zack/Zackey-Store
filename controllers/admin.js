@@ -4,6 +4,7 @@ const Product = require("../model/product");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const Orders = require("../model/orders");
+const { log } = require("handlebars/runtime");
 dotenv.config();
 
 // ADMIN LOGIN PAGE SHOW
@@ -246,171 +247,12 @@ const adminLoginPage = (req, res) => {
 
 const dashboard = async (req, res) => {
   try {
-    const tenDaysAgo = new Date();
-    tenDaysAgo.setDate(tenDaysAgo.getDate() - 9); // Subtract 9 days instead of 10
-
-    // const allStatuses = ["pending", "shipped", "delivered", "cancelled"];
-
-    const ordersCountByStatus = await Orders.aggregate([
-      {
-        $unwind: "$products",
-      },
-      {
-        $group: {
-          _id: "$products.status",
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $facet: {
-          counts: [
-            {
-              $project: {
-                status: "$_id",
-                count: 1,
-                _id: 0,
-              },
-            },
-          ],
-        },
-      },
-    ]);
-
-    // Convert the result to an object for easier manipulation
-    const countsObj = {};
-    ordersCountByStatus[0].counts.forEach((status) => {
-      countsObj[status.status] = status.count;
-    });
-    let ordersCount = {
-      pending: countsObj?.pending || 0,
-      delivered: countsObj?.delivered || 0,
-      cancelled: countsObj?.cancelled || 0,
-      shipped: countsObj?.shipped || 0,
-    };
-    ordersCount = JSON.stringify(ordersCount);
-
-    const lineChart = await Orders.aggregate([
-      // Match documents within the last 10 days
-      {
-        $match: {
-          createdAt: { $gte: tenDaysAgo },
-        },
-      },
-      // Group by date and payment method
-      {
-        $group: {
-          _id: {
-            date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-            paymentMethod: "$payment.method",
-          },
-          totalSales: { $sum: "$total" },
-        },
-      },
-      // Group again to merge the data for each date
-      {
-        $group: {
-          _id: "$_id.date",
-          sales: {
-            $push: {
-              paymentMethod: "$_id.paymentMethod",
-              totalSales: "$totalSales",
-            },
-          },
-        },
-      },
-      // Project to calculate total revenue
-      {
-        $project: {
-          date: "$_id",
-          sales: {
-            $reduce: {
-              input: "$sales",
-              initialValue: 0,
-              in: {
-                $add: ["$$value", "$$this.totalSales"],
-              },
-            },
-          },
-        },
-      },
-    ]);
-    let lineChartLabels = lineChart.map((item) => item.date);
-    let lineChartData = lineChart.map((item) => item.sales);
-
-    res.locals.labels = lineChartLabels;
-    res.locals.data = lineChartData;
-    
-    console.log(lineChartLabels, lineChartData);
-
-    lineChartLabels = JSON.stringify(lineChartLabels);
-    lineChartData = JSON.stringify(lineChartData);
-    console.log(lineChartLabels, lineChartData);
-    const totalProduct = await Product.countDocuments();
-
-    // Total sales amount
-    const totalSalesData = await Orders.aggregate([
-      {
-        $match: {
-          "products.date": { $gte: tenDaysAgo },
-          "products.status": { $ne: "cancelled" },
-        },
-      },
-      {
-        $group: {
-          _id: null,
-          totalAmount: { $sum: "$products.amount" },
-        },
-      },
-    ]);
-
-    const totalSalesAmount =
-      totalSalesData.length > 0 ? totalSalesData[0].totalAmount : 0;
-
-    // Payment method counts
-    const paymentMethodCounts = await Orders.aggregate([
-      {
-        $unwind: "$payment",
-      },
-      {
-        $group: {
-          _id: "$payment.method",
-          count: { $sum: 1 },
-        },
-      },
-    ]);
-
-    const cashOnDeliveryCount =
-      paymentMethodCounts.find((method) => method._id === "cod")?.count || 0;
-    const onlinePaymentCount =
-      paymentMethodCounts.find((method) => method._id === "online")?.count || 0;
-
-    // Prepare data for rendering
-    const labels = ["Delivered", "Pending", "Shipped", "Cancelled"];
-    const data = [
-      // totalNumberOfDeliveredOrders,
-      // totalNumberOfPendingOrders,
-      // totalNumberOfShippedOrders,
-      // totalNumberOfCancelledOrders,
-    ];
-
-    // Pass data to the view
-    res.render("admin/dashboard", {
-      // orders,
-      ordersCount, // for pie chart
-      lineChartData, // for line chart
-      lineChartLabels,
-
-      totalProduct,
-      totalSalesAmount,
-      cashOnDeliveryCount,
-      onlinePaymentCount,
-    });
+    res.render("admin/dashboard");
   } catch (error) {
     console.error("Error fetching data:", error);
     res.status(500).send("Internal Server Error");
   }
 };
-
 // Get the current date
 
 // Calculate the start date of the current period (10 days ago)
@@ -581,6 +423,144 @@ const orderStatus = async (req, res) => {
   }
 };
 
+const dashboardData = async (req, res) => {
+  try {
+    const tenDaysAgo = new Date();
+    tenDaysAgo.setDate(tenDaysAgo.getDate() - 9); // Subtract 9 days instead of 10
+
+    const lineChart = await Orders.aggregate([
+      // Match documents within the last 10 days
+      {
+        $match: {
+          createdAt: { $gte: tenDaysAgo },
+        },
+      },
+      // Group by date and payment method
+      {
+        $group: {
+          _id: {
+            date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+            paymentMethod: "$payment.method",
+          },
+          totalSales: { $sum: "$total" },
+        },
+      },
+      // Group again to merge the data for each date
+      {
+        $group: {
+          _id: "$_id.date",
+          sales: {
+            $push: {
+              paymentMethod: "$_id.paymentMethod",
+              totalSales: "$totalSales",
+            },
+          },
+        },
+      },
+      // Project to calculate total revenue
+      {
+        $project: {
+          date: "$_id",
+          sales: {
+            $reduce: {
+              input: "$sales",
+              initialValue: 0,
+              in: {
+                $add: ["$$value", "$$this.totalSales"],
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    const lineChartLabels = lineChart.map((item) => item.date);
+    const lineChartData = lineChart.map((item) => item.sales);
+
+    /// round Chart
+    const ordersCountByStatus = await Orders.aggregate([
+      {
+        $unwind: "$products",
+      },
+      {
+        $group: {
+          _id: "$products.status",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $facet: {
+          counts: [
+            {
+              $project: {
+                status: "$_id",
+                count: 1,
+                _id: 0,
+              },
+            },
+          ],
+        },
+      },
+    ]);
+
+    // Convert the result to an object for easier manipulation
+    const countsObj = {};
+    ordersCountByStatus[0].counts.forEach((status) => {
+      countsObj[status.status] = status.count;
+    });
+    let ordersCount = {
+      pending: countsObj?.pending || 0,
+      delivered: countsObj?.delivered || 0,
+      cancelled: countsObj?.cancelled || 0,
+      shipped: countsObj?.shipped || 0,
+    };
+
+    const paymentGraphData = await Orders.aggregate([
+      {
+        $match: {
+          "products.status": "delivered",
+        },
+      },
+      {
+        $group: {
+          _id: "$payment.method",
+          totalRevenue: { $sum: "$total" },
+        },
+      },
+      // Restructure the data to separate COD and Online payments
+      {
+        $project: {
+          _id: 0,
+          paymentMethod: "$_id",
+          totalRevenue: 1,
+        },
+      },
+    ]);
+
+    const totalOrders = await Orders.countDocuments();
+
+    const totalProducts = await Product.countDocuments();
+
+
+  
+    const totalRevenue = paymentGraphData.reduce((acc, cur) => acc + cur.totalRevenue, 0);
+    console.log("Total Revenue:", totalRevenue);
+
+
+   return res.json({
+      lineChartLabels,
+      lineChartData,
+      ordersCount,
+      paymentGraphData,
+      totalOrders,
+      totalProducts,
+      totalRevenue
+    });
+  } catch (error) {
+    console.log(error, 11111111111);
+  }
+};
+
 module.exports = {
   adminLoginPage,
   adminSubmitlogin,
@@ -589,5 +569,6 @@ module.exports = {
   orderList,
   orderDetails,
   orderStatus,
+  dashboardData,
   //   getSalesData
 };

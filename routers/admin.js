@@ -1,6 +1,6 @@
 const express =require('express');
  
-const {  adminLoginPage, adminSubmitlogin, adminLogout, dashboard, orderList, orderDetails, orderStatus } = require('../controllers/admin');
+const {  adminLoginPage, adminSubmitlogin, adminLogout, dashboard, orderList, orderDetails, orderStatus, dashboardData } = require('../controllers/admin');
  
  
 const router = express.Router()
@@ -10,6 +10,7 @@ router.get('/admin',adminLoginPage);
 router.get('admin/logout',adminLogout);
 
 router.get('/dashboard',dashboard)
+router.get('/dashboard-data',dashboardData)
 
 router.post('/dashboard',adminSubmitlogin)
 
