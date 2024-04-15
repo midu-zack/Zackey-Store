@@ -498,57 +498,91 @@ const orderStatus = async (req, res) => {
 
 const dashboardData = async (req, res) => {
   try {
+    // const tenDaysAgo = new Date();
+    // tenDaysAgo.setDate(tenDaysAgo.getDate() - 9); // Subtract 9 days instead of 10
+
+    // const lineChart = await Orders.aggregate([
+    //   // Match documents within the last 10 days
+    //   {
+    //     $match: {
+    //       createdAt: { $gte: tenDaysAgo },
+    //     },
+    //   },
+    //   // Group by date and payment method
+    //   {
+    //     $group: {
+    //       _id: {
+    //         date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+    //         paymentMethod: "$payment.method",
+    //       },
+    //       totalSales: { $sum: "$total" },
+    //     },
+    //   },
+    //   // Group again to merge the data for each date
+    //   {
+    //     $group: {
+    //       _id: "$_id.date",
+    //       sales: {
+    //         $push: {
+    //           paymentMethod: "$_id.paymentMethod",
+    //           totalSales: "$totalSales",
+    //         },
+    //       },
+    //     },
+    //   },
+    //   // Project to calculate total revenue
+    //   {
+    //     $project: {
+    //       date: "$_id",
+    //       sales: {
+    //         $reduce: {
+    //           input: "$sales",
+    //           initialValue: 0,
+    //           in: {
+    //             $add: ["$$value", "$$this.totalSales"],
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // ]);
+
+    // const lineChartLabels = lineChart.map((item) => item.date);
+    // const lineChartData = lineChart.map((item) => item.sales);
+
+
+
+
     const tenDaysAgo = new Date();
     tenDaysAgo.setDate(tenDaysAgo.getDate() - 9); // Subtract 9 days instead of 10
 
+    // Fetch sales data for the last 10 days
     const lineChart = await Orders.aggregate([
-      // Match documents within the last 10 days
-      {
-        $match: {
-          createdAt: { $gte: tenDaysAgo },
-        },
-      },
-      // Group by date and payment method
-      {
-        $group: {
-          _id: {
-            date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-            paymentMethod: "$payment.method",
-          },
-          totalSales: { $sum: "$total" },
-        },
-      },
-      // Group again to merge the data for each date
-      {
-        $group: {
-          _id: "$_id.date",
-          sales: {
-            $push: {
-              paymentMethod: "$_id.paymentMethod",
-              totalSales: "$totalSales",
+        // Match documents within the last 10 days
+        {
+            $match: {
+                createdAt: { $gte: tenDaysAgo },
             },
-          },
         },
-      },
-      // Project to calculate total revenue
-      {
-        $project: {
-          date: "$_id",
-          sales: {
-            $reduce: {
-              input: "$sales",
-              initialValue: 0,
-              in: {
-                $add: ["$$value", "$$this.totalSales"],
-              },
+        // Group by date to calculate total sales for each day
+        {
+            $group: {
+                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+                totalSales: { $sum: "$total" },
             },
-          },
         },
-      },
+        // Sort the data by date in ascending order
+        {
+            $sort: { _id: 1 },
+        },
     ]);
 
-    const lineChartLabels = lineChart.map((item) => item.date);
-    const lineChartData = lineChart.map((item) => item.sales);
+    // Extract labels (dates) and data (revenue)
+    const lineChartLabels = lineChart.map(item => item._id);
+    const lineChartData = lineChart.map(item => item.totalSales);
+
+
+
 
     /// round Chart
     const ordersCountByStatus = await Orders.aggregate([
@@ -615,12 +649,15 @@ const dashboardData = async (req, res) => {
     const totalProducts = await Product.countDocuments();
 
 
+    // console.log("this is paymentGreapgh data", paymentGraphData);
   
     const totalRevenue = paymentGraphData.reduce((acc, cur) => acc + cur.totalRevenue, 0);
     console.log("Total Revenue:", totalRevenue);
 
 
    return res.json({
+      // lineChartLabels,
+      // lineChartData,
       lineChartLabels,
       lineChartData,
       ordersCount,
