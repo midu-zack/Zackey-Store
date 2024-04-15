@@ -103,7 +103,7 @@ const blockUnblock = async (req, res) => {
 const getOrderDetails = async (req, res) => {
   try {
     const orderId = req.query.orderId;
-    console.log(orderId);
+    // console.log(orderId);
     const order = await Orders.findById(orderId).populate(
       "products.product",
       "name "

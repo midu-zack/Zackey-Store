@@ -4,7 +4,8 @@ const Product = require("../model/product");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const Orders = require("../model/orders");
-const { log } = require("handlebars/runtime");
+ 
+ 
 dotenv.config();
 
 // ADMIN LOGIN PAGE SHOW
@@ -352,40 +353,81 @@ let adminSubmitlogin = async (req, res) => {
   }
 };
 
+// const orderList = async (req, res) => {
+//   try {
+//     const usersAndOrders = await Orders.find({
+//       orders: { $exists: true, $ne: [] },
+//     });
+
+//     res.render("admin/order-list", { usersAndOrders });
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
+
+
+
+
 const orderList = async (req, res) => {
   try {
-    const usersAndOrders = await User.find({
-      orders: { $exists: true, $ne: [] },
+    const ordersWithProducts = await Orders.find({
+      'products': { $exists: true, $not: { $size: 0 } }
+    }).populate({
+      path: 'orderedBy',
+      select: 'name' // Specify the fields you want to select from the referenced document
     });
 
-    res.render("admin/order-list", { usersAndOrders });
+    // console.log(ordersWithProducts);
+
+    res.render("admin/order-list", { ordersWithProducts });
   } catch (error) {
     console.error(error);
+    // Handle the error appropriately, maybe send an error response
+    res.status(500).send("Internal Server Error");
   }
 };
 
+
+
+
+
+
 const orderDetails = async (req, res) => {
   try {
-    const orderId = req.params.id;
+    // const orderId = req.params.id;
     // console.log("this is the orderId", orderId);
 
-    // Find the user with the specific order and retrieve only the matching order
-    const userAndOneOrder = await User.aggregate([
-      { $match: { "orders.orderId": orderId } },
-      { $unwind: "$orders" },
-      { $match: { "orders.orderId": orderId } },
-    ]);
+    const orderId = req.query.orderId;
+    console.log(orderId);
 
-    if (userAndOneOrder.length === 0) {
-      // Handle case where user (and hence order) is not found
-      return res.status(404).send("Order not found");
+    // Find the user with the specific order and retrieve only the matching order
+
+    const order = await Orders.findById(orderId).populate("products.product", "name");
+
+    // console.log("this is order " , order);
+    if (!order){
+      return res.status(404)
+      .json({error: "order not fount in user's,"})
     }
 
-    // console.log("this is my user find the ", userAndOneOrder);
+    console.log("thsi is tezt ", order);
+    res.json(order)
 
+    // const userAndOneOrder = await User.aggregate([
+    //   { $match: { "orders.orderId": orderId } },
+    //   { $unwind: "$orders" },
+    //   { $match: { "orders.orderId": orderId } },
+    // ]);
+
+    // if (userAndOneOrder.length === 0) {
+    //   // Handle case where user (and hence order) is not found
+    //   return res.status(404).send("Order not found");
+    // }
+ 
     // Pass the order details to the view
 
-    res.render("admin/order-details", { userAndOneOrder });
+    // res.render("admin/order-details", { userAndOneOrder });
   } catch (error) {
     // Handle errors
     console.error("Error fetching order details:", error);
@@ -394,32 +436,63 @@ const orderDetails = async (req, res) => {
 };
 
 // orderStatus
+
+// const orderStatus = async (req, res) => {
+//   try {
+//     const { statusValue, orderID } = req.body;
+
+//     // console.log("this is status value", statusValue,"then you have id ", orderID);
+
+//     // Find the user and update the status of the matching order
+//     const updatedUser = await Orders.findOneAndUpdate(
+//       { "orders.orderId": orderID },
+//       { $set: { "orders.$.status": statusValue } },
+//       { new: true }
+//     );
+
+//     // console.log("this is updausers",updatedUser);
+//     if (!updatedUser) {
+//       // Handle case where user or order is not found
+//       return res.status(404).send("User or Order not found");
+//     }
+
+//     // Redirect or render success page
+//     // res.render("admin/order-list");
+//     res.redirect("/orderList");
+//   } catch (error) {
+//     // Handle errors
+//     console.error("Error updating order status:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
+
+
+
 const orderStatus = async (req, res) => {
   try {
-    const { statusValue, orderID } = req.body;
+      const statusUpdates = req.body;
 
-    // console.log("this is status value", statusValue,"then you have id ", orderID);
+      // Use Promise.all to update statuses of all products in parallel
+      const promises = statusUpdates.map(async update => {
+          const { productId, statusValue } = update;
+          return await Orders.findOneAndUpdate(
+              { 'products._id': productId },
+              { $set: { 'products.$.status': statusValue } },
+              { new: true }
+          );
+      });
 
-    // Find the user and update the status of the matching order
-    const updatedUser = await User.findOneAndUpdate(
-      { "orders.orderId": orderID },
-      { $set: { "orders.$.status": statusValue } },
-      { new: true }
-    );
+      // Wait for all updates to complete
+      const updatedOrders = await Promise.all(promises);
 
-    // console.log("this is updausers",updatedUser);
-    if (!updatedUser) {
-      // Handle case where user or order is not found
-      return res.status(404).send("User or Order not found");
-    }
+      if (!updatedOrders.every(order => order)) {
+          return res.status(404).send('Order not found');
+      }
 
-    // Redirect or render success page
-    // res.render("admin/order-list");
-    res.redirect("/orderList");
+      res.send('Order statuses updated successfully');
   } catch (error) {
-    // Handle errors
-    console.error("Error updating order status:", error);
-    res.status(500).send("Internal Server Error");
+      console.error('Error updating order status:', error);
+      res.status(500).send('Internal Server Error');
   }
 };
 
@@ -557,7 +630,8 @@ const dashboardData = async (req, res) => {
       totalRevenue
     });
   } catch (error) {
-    console.log(error, 11111111111);
+    console.error("Error in dashboardData:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

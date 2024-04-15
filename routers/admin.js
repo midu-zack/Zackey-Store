@@ -15,7 +15,9 @@ router.get('/dashboard-data',dashboardData)
 router.post('/dashboard',adminSubmitlogin)
 
 router.get("/orderList",orderList)
-router.get("/orderDetails/:id",orderDetails)
+// router.get("/orderDetails/:id",orderDetails)
+router.get("/orderDetails",orderDetails)
+
 
 router.post("/orderStatus",orderStatus)
 // router.get('/categorie',categorieListShow)
