@@ -4,8 +4,8 @@ const Product = require("../model/product");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const Orders = require("../model/orders");
- 
- 
+const { Coupon } = require("../model/admin");
+
 dotenv.config();
 
 // ADMIN LOGIN PAGE SHOW
@@ -365,17 +365,13 @@ let adminSubmitlogin = async (req, res) => {
 //   }
 // };
 
-
-
-
-
 const orderList = async (req, res) => {
   try {
     const ordersWithProducts = await Orders.find({
-      'products': { $exists: true, $not: { $size: 0 } }
+      products: { $exists: true, $not: { $size: 0 } },
     }).populate({
-      path: 'orderedBy',
-      select: 'name' // Specify the fields you want to select from the referenced document
+      path: "orderedBy",
+      select: "name", // Specify the fields you want to select from the referenced document
     });
 
     // console.log(ordersWithProducts);
@@ -388,11 +384,6 @@ const orderList = async (req, res) => {
   }
 };
 
-
-
-
-
-
 const orderDetails = async (req, res) => {
   try {
     // const orderId = req.params.id;
@@ -403,16 +394,18 @@ const orderDetails = async (req, res) => {
 
     // Find the user with the specific order and retrieve only the matching order
 
-    const order = await Orders.findById(orderId).populate("products.product", "name");
+    const order = await Orders.findById(orderId).populate(
+      "products.product",
+      "name"
+    );
 
     // console.log("this is order " , order);
-    if (!order){
-      return res.status(404)
-      .json({error: "order not fount in user's,"})
+    if (!order) {
+      return res.status(404).json({ error: "order not fount in user's," });
     }
 
     console.log("thsi is tezt ", order);
-    res.json(order)
+    res.json(order);
 
     // const userAndOneOrder = await User.aggregate([
     //   { $match: { "orders.orderId": orderId } },
@@ -424,7 +417,7 @@ const orderDetails = async (req, res) => {
     //   // Handle case where user (and hence order) is not found
     //   return res.status(404).send("Order not found");
     // }
- 
+
     // Pass the order details to the view
 
     // res.render("admin/order-details", { userAndOneOrder });
@@ -466,33 +459,31 @@ const orderDetails = async (req, res) => {
 //   }
 // };
 
-
-
 const orderStatus = async (req, res) => {
   try {
-      const statusUpdates = req.body;
+    const statusUpdates = req.body;
 
-      // Use Promise.all to update statuses of all products in parallel
-      const promises = statusUpdates.map(async update => {
-          const { productId, statusValue } = update;
-          return await Orders.findOneAndUpdate(
-              { 'products._id': productId },
-              { $set: { 'products.$.status': statusValue } },
-              { new: true }
-          );
-      });
+    // Use Promise.all to update statuses of all products in parallel
+    const promises = statusUpdates.map(async (update) => {
+      const { productId, statusValue } = update;
+      return await Orders.findOneAndUpdate(
+        { "products._id": productId },
+        { $set: { "products.$.status": statusValue } },
+        { new: true }
+      );
+    });
 
-      // Wait for all updates to complete
-      const updatedOrders = await Promise.all(promises);
+    // Wait for all updates to complete
+    const updatedOrders = await Promise.all(promises);
 
-      if (!updatedOrders.every(order => order)) {
-          return res.status(404).send('Order not found');
-      }
+    if (!updatedOrders.every((order) => order)) {
+      return res.status(404).send("Order not found");
+    }
 
-      res.send('Order statuses updated successfully');
+    res.send("Order statuses updated successfully");
   } catch (error) {
-      console.error('Error updating order status:', error);
-      res.status(500).send('Internal Server Error');
+    console.error("Error updating order status:", error);
+    res.status(500).send("Internal Server Error");
   }
 };
 
@@ -550,39 +541,33 @@ const dashboardData = async (req, res) => {
     // const lineChartLabels = lineChart.map((item) => item.date);
     // const lineChartData = lineChart.map((item) => item.sales);
 
-
-
-
     const tenDaysAgo = new Date();
     tenDaysAgo.setDate(tenDaysAgo.getDate() - 9); // Subtract 9 days instead of 10
 
     // Fetch sales data for the last 10 days
     const lineChart = await Orders.aggregate([
-        // Match documents within the last 10 days
-        {
-            $match: {
-                createdAt: { $gte: tenDaysAgo },
-            },
+      // Match documents within the last 10 days
+      {
+        $match: {
+          createdAt: { $gte: tenDaysAgo },
         },
-        // Group by date to calculate total sales for each day
-        {
-            $group: {
-                _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-                totalSales: { $sum: "$total" },
-            },
+      },
+      // Group by date to calculate total sales for each day
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          totalSales: { $sum: "$total" },
         },
-        // Sort the data by date in ascending order
-        {
-            $sort: { _id: 1 },
-        },
+      },
+      // Sort the data by date in ascending order
+      {
+        $sort: { _id: 1 },
+      },
     ]);
 
     // Extract labels (dates) and data (revenue)
-    const lineChartLabels = lineChart.map(item => item._id);
-    const lineChartData = lineChart.map(item => item.totalSales);
-
-
-
+    const lineChartLabels = lineChart.map((item) => item._id);
+    const lineChartData = lineChart.map((item) => item.totalSales);
 
     /// round Chart
     const ordersCountByStatus = await Orders.aggregate([
@@ -648,14 +633,15 @@ const dashboardData = async (req, res) => {
 
     const totalProducts = await Product.countDocuments();
 
-
     // console.log("this is paymentGreapgh data", paymentGraphData);
-  
-    const totalRevenue = paymentGraphData.reduce((acc, cur) => acc + cur.totalRevenue, 0);
+
+    const totalRevenue = paymentGraphData.reduce(
+      (acc, cur) => acc + cur.totalRevenue,
+      0
+    );
     console.log("Total Revenue:", totalRevenue);
 
-
-   return res.json({
+    return res.json({
       // lineChartLabels,
       // lineChartData,
       lineChartLabels,
@@ -664,11 +650,62 @@ const dashboardData = async (req, res) => {
       paymentGraphData,
       totalOrders,
       totalProducts,
-      totalRevenue
+      totalRevenue,
     });
   } catch (error) {
     console.error("Error in dashboardData:", error);
     return res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// coupon list
+const couponsList = async (req, res) => {
+  try {
+    res.render("admin/coupons-list");
+  } catch (error) {}
+};
+
+const addCoupon = async (req, res) => {
+  try {
+    res.render("admin/coupon-add");
+  } catch (error) {}
+};
+
+const addCouponController = async (req, res) => {
+  try {
+    console.log("this is req.body", req.body);
+
+    // Extract data from the request body
+    const { couponCode, couponLimit, startDate, endDate, discountAmount } =
+      req.body;
+
+    // Find the admin document by its ID
+    const admin = await Admin.findOne();
+
+    // If admin is not found, return an error
+    if (!admin) {
+      return res.status(404).json({ message: "Admin not found" });
+    }
+
+    const newCoupon = {
+      couponCode,
+      couponLimit,
+      createdAt: startDate, // Assuming createdAt should be set to the current date
+      endDate,
+      discountAmount, // Assuming discountAmount should be initialized to 0
+    };
+    console.log("this is admin", admin);
+    // Add the new coupon to the coupons array
+    admin.coupons.push(newCoupon);
+
+    // Save the updated admin document
+    const coupons = await admin.save();
+
+    // Return the updated admin document as JSON response
+    res.status(201).render("admin/coupons-list", coupons);
+  } catch (error) {
+    console.error("Error adding coupon:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -681,5 +718,8 @@ module.exports = {
   orderDetails,
   orderStatus,
   dashboardData,
+  couponsList,
+  addCoupon,
+  addCouponController,
   //   getSalesData
 };
