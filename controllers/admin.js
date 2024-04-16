@@ -4,8 +4,8 @@ const Product = require("../model/product");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const Orders = require("../model/orders");
-const { Coupon } = require("../model/admin");
-
+// const { Coupon } = require("../model/admin");
+const moment = require('moment');
 dotenv.config();
 
 // ADMIN LOGIN PAGE SHOW
@@ -386,12 +386,10 @@ const orderList = async (req, res) => {
 
 const orderDetails = async (req, res) => {
   try {
-    // const orderId = req.params.id;
-    // console.log("this is the orderId", orderId);
+   
 
     const orderId = req.query.orderId;
-    console.log(orderId);
-
+  
     // Find the user with the specific order and retrieve only the matching order
 
     const order = await Orders.findById(orderId).populate(
@@ -399,12 +397,12 @@ const orderDetails = async (req, res) => {
       "name"
     );
 
-    // console.log("this is order " , order);
+  
     if (!order) {
       return res.status(404).json({ error: "order not fount in user's," });
     }
 
-    console.log("thsi is tezt ", order);
+    
     res.json(order);
 
     // const userAndOneOrder = await User.aggregate([
@@ -661,43 +659,66 @@ const dashboardData = async (req, res) => {
 // coupon list
 const couponsList = async (req, res) => {
   try {
-    res.render("admin/coupons-list");
-  } catch (error) {}
-};
-
-const addCoupon = async (req, res) => {
-  try {
-    res.render("admin/coupon-add");
-  } catch (error) {}
-};
-
-const addCouponController = async (req, res) => {
-  try {
-    console.log("this is req.body", req.body);
-
-    // Extract data from the request body
-    const { couponCode, couponLimit, startDate, endDate, discountAmount } =
-      req.body;
-
-    // Find the admin document by its ID
+    // Find the admin document
     const admin = await Admin.findOne();
 
     // If admin is not found, return an error
     if (!admin) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+
+    // Render the 'coupons-list' view with the admin's coupons data
+    res.render("admin/coupons-list", { coupons: admin.coupons });
+  } catch (error) {
+    console.error('Error rendering coupons list:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+const addCoupon = async (req, res) => {
+  try {
+    res.render("admin/coupon-add");
+  } catch (error) {
+    console.error('Error rendering coupon add form:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+
+
+// addCouponController
+const addCouponController = async (req, res) => {
+  try {
+ 
+
+    // Extract data from the request body
+    const { couponCode, couponLimit, startDate, endDate, discountAmount } =
+      req.body;
+ 
+    const admin = await Admin.findOne();
+ 
+    if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
     }
+
+    // Format dates using Moment.js
+    const formattedStartDate = moment(startDate).format('DD/MM/YYYY');
+    const formattedEndDate = moment(endDate).format('DD/MM/YYYY');
 
     const newCoupon = {
       couponCode,
       couponLimit,
-      createdAt: startDate, // Assuming createdAt should be set to the current date
-      endDate,
-      discountAmount, // Assuming discountAmount should be initialized to 0
+      createdAt: formattedStartDate,  
+      endDate: formattedEndDate,
+      discountAmount,  
     };
-    console.log("this is admin", admin);
-    // Add the new coupon to the coupons array
+ 
     admin.coupons.push(newCoupon);
 
+ 
     // Save the updated admin document
     const coupons = await admin.save();
 
@@ -709,6 +730,111 @@ const addCouponController = async (req, res) => {
   }
 };
 
+
+// delete Coupon
+const deleteCouponController = async (req, res) => {
+  try {
+ 
+    const couponId = req.params.id;  
+  
+    const admin = await Admin.findOne();
+ 
+    if (!admin) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+ 
+    const couponIndex = admin.coupons.findIndex(coupon => coupon._id.toString() === couponId);
+ 
+    if (couponIndex === -1) {
+      return res.status(404).json({ message: 'Coupon not found' });
+    }
+ 
+    admin.coupons.splice(couponIndex, 1);
+ 
+    await admin.save();
+ 
+    res.status(200).redirect("/couponsList");
+  } catch (error) {
+    console.error('Error deleting coupon:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+// show display edit page
+const showCouponEditPage = async (req, res) => {
+  try {
+    // Extract the coupon ID from the route parameters
+    const couponId = req.params.id;
+
+    // Find any admin document
+    const admin = await Admin.findOne();
+
+    // If no admin is found, return an error
+    if (!admin) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+
+    // Find the coupon within the admin's coupons array by its ID
+    const coupon = admin.coupons.find(coupon => coupon._id.toString() === couponId);
+
+    // If coupon is not found, return an error
+    if (!coupon) {
+      return res.status(404).json({ message: 'Coupon not found' });
+    }
+
+    // Render the 'coupon-edit' view and pass the coupon data to it
+    res.render("admin/coupon-edit", { coupon });
+  } catch (error) {
+    console.error('Error rendering coupon edit page:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+// updateCoupon
+const updateCoupon = async (req, res) => {
+  try {
+    
+
+    const couponId = req.params.id;
+   
+
+    const admin = await Admin.findOne();
+  
+    if (!admin) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+ 
+    // Find the index of the coupon in the admin's coupons array
+    const couponIndex = admin.coupons.findIndex(coupon => coupon._id.toString() === couponId);
+
+    // If coupon is not found, return an error
+    if (couponIndex === -1) {
+      return res.status(404).json({ message: 'Coupon not found' });
+    }
+ 
+    const { startDate, endDate, couponCode, couponLimit, discountAmount } = req.body;
+ 
+
+    admin.coupons[couponIndex].startDate = startDate;
+    admin.coupons[couponIndex].endDate = endDate;
+    admin.coupons[couponIndex].couponCode = couponCode;
+    admin.coupons[couponIndex].couponLimit = couponLimit;
+    admin.coupons[couponIndex].discountAmount = discountAmount;
+ 
+    await admin.save();
+ 
+    res.redirect('/couponsList');  
+  } catch (error) {
+    console.error('Error editing coupon:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+ 
 module.exports = {
   adminLoginPage,
   adminSubmitlogin,
@@ -721,5 +847,8 @@ module.exports = {
   couponsList,
   addCoupon,
   addCouponController,
+  deleteCouponController,
+  showCouponEditPage,
+  updateCoupon
   //   getSalesData
 };

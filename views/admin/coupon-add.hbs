@@ -28,7 +28,7 @@
                 </a>
                 <!-- Menu: main ul -->
                 <ul class="menu-list flex-grow-1 mt-3">
-                    <li><a class="m-link" href="index.html"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a>
+                    <li><a class="m-link" href="/dashboard"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a>
                     </li>
                     <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-product" href="#">
@@ -83,12 +83,12 @@
                                 class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
                         <!-- Menu: Sub menu ul -->
                         <ul class="sub-menu collapse show" id="menu-sale">
-                            <li><a class="ms-link" href="coupons-list.html">Coupons List</a></li>
-                            <li><a class="ms-link active" href="coupon-add.html">Coupons Add</a></li>
-                            <li><a class="ms-link" href="coupon-edit.html">Coupons Edit</a></li>
+                            <li><a class="ms-link" href="/couponsList">Coupons List</a></li>
+                            {{!-- <li><a class="ms-link active" href="coupon-add.html">Coupons Add</a></li> --}}
+                            {{!-- <li><a class="ms-link" href="coupon-edit.html">Coupons Edit</a></li> --}}
                         </ul>
                     </li>
-                    <li class="collapsed">
+                    {{!-- <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-inventory" href="#">
                             <i class="icofont-chart-histogram fs-5"></i> <span>Inventory</span> <span
                                 class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
@@ -142,7 +142,7 @@
                             <li><a class="ms-link" href="contact.html">Contact Us</a></li>
                             <li><a class="ms-link" href="todo-list.html">Todo List</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                 </ul>
                 <!-- Menu: menu collepce btn -->
                 <button type="button" class="btn btn-link sidebar-mini-btn text-light">
@@ -378,9 +378,7 @@
                                 <h3 class="fw-bold mb-0">Coupons Add</h3>
                             </div>
                         </div>
-                    </div> <!-- Row end  -->
-
-                    {{!-- ////////////////////// --}}
+                    </div> 
                     <form id="couponForm" action="/addCoupon" method="post">
                         <div class="row clearfix g-3">
                             <div class="col-lg-4">

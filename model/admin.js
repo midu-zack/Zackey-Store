@@ -15,8 +15,8 @@ const adminSchema = new mongoose.Schema({
     {
       couponCode: { type: String },
       couponLimit: { type: Number },
-      createdAt: { type: Date },
-      endDate: { type: Date },
+      createdAt: { type: String },
+      endDate: { type: String },
       discountAmount: { type: Number },
     },
   ],
