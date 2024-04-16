@@ -14,6 +14,10 @@
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
 
+    <!-- Add SweetAlert CSS and JS files -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
     <!-- CSS
 	============================================ -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
@@ -353,7 +357,7 @@
         <div class="checkout-main-area pt-90 pb-90">
             <div class="container">
                 <div class="customer-zone mb-20">
-                    <p class="cart-page-title">Returning customer? <a href="/login-register">Click here to login</a></p>
+                    {{!-- <p class="cart-page-title">Returning customer? <a href="/login-register">Click here to login</a></p> --}}
                     {{!-- <div class="checkout-login-info">
                         <p>If you have shopped with us before, please enter your details in the boxes below. If you are
                             a new customer, please proceed to the Billing & Shipping section.</p>
@@ -394,16 +398,90 @@
                     </div> --}}
                 </div>
 
-                {{!-- <div class="customer-zone mb-20">
-                    <p class="cart-page-title">Have a coupon? <a class="checkout-click3" href="#">Click here to enter
-                            your code</a></p>
-                    <div class="checkout-login-info3">
-                        <form action="#">
-                            <input type="text" placeholder="Coupon code">
-                            <input type="submit" value="Apply Coupon">
-                        </form>
-                    </div>
-                </div> --}}
+              <div class="customer-zone mb-20">
+    <p class="cart-page-title">Have a coupon? <a class="checkout-click3" href="#">Click here to enter your code</a></p>
+    <div class="checkout-login-info3">
+        <form action="#" id="coupon-form">
+            <input type="text" id="coupon-code-input" placeholder="Coupon code">
+            <input type="submit" value="Apply Coupon">
+             <input type="submit" id="remove-coupon-btn" value="Remove Coupon">
+              <p id="error-message" style="color: red;"></p>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('coupon-form').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Get the coupon code input value
+        const couponCode = document.getElementById('coupon-code-input').value;
+
+        // Call function to send coupon code to the server for validation
+        await validateCouponCode(couponCode);
+    });
+
+    // Event listener for Remove Coupon button
+    document.getElementById('remove-coupon-btn').addEventListener('click', function() {
+        // Clear the input field
+        document.getElementById('coupon-code-input').value = '';
+        // Clear error message
+        document.getElementById('error-message').textContent = '';
+        // Clear discount amount
+        document.getElementById('discount-amount').textContent = '';
+    });
+});
+
+async function validateCouponCode(couponCode) {
+    try {
+        // Fetch API request to send coupon code to the server
+        const response = await fetch('/checkCoupon', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ couponCode: couponCode }) // Convert to JSON string
+        });
+
+        // Get response data as JSON
+        const data = await response.json();
+
+        // Check if the coupon code is valid
+        if (data.valid) {
+            // Show success message using SweetAlert
+            Swal.fire({
+                icon: 'success',
+                title: 'Coupon Applied',
+                text: 'Coupon code applied successfully!',
+                timer: 1000, // Auto close timer in milliseconds (1 second)
+                showConfirmButton: false // Hide the "OK" button
+            });
+            // Display discount amount
+            document.getElementById('discount-amount').textContent = `$ ${data.discountAmount}`;
+        } else {
+            // Show error message in <p> tag
+            if (response.status === 400) {
+                // If response status is 400, it means the coupon has expired
+                document.getElementById('error-message').textContent = 'Coupon has expired.';
+            } else {
+                document.getElementById('error-message').textContent = 'Invalid coupon code. Please try again.';
+            }
+            // Clear discount amount if coupon is not valid
+            document.getElementById('discount-amount').textContent = '';
+        }
+    } catch (error) {
+        console.error('Error validating coupon code:', error);
+        alert('An error occurred while validating the coupon code. Please try again later.');
+    }
+}
+
+</script>
+
+
+
+
 
                 <div class="checkout-wrap pt-30">
                     <div class="row">
@@ -583,6 +661,19 @@
                                                 </li>
                                             </ul>
                                         </div>
+                                         {{!-- <div class="your-order-info order-shipping">
+                                            <ul>
+                                                <li>DiscountAmount <p></p>
+                                                </li>
+                                            </ul>
+                                        </div> --}}
+
+                                        <div class="your-order-info order-shipping">
+                                            <ul>
+                                                <li >Discount Amount: <span id="discount-amount" ></span> </li>
+                                            </ul>
+                                        </div>
+
                                         <div class="your-order-info order-total">
                                             <ul>
                                                 <li>Total <span>$ {{cart.grandtotal}} </span></li>

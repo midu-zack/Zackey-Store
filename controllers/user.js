@@ -1,5 +1,6 @@
 const User = require("../model/user");
 const Product = require("../model/product");
+const Admin =require("../model/admin")
 const Category = require("../model/categorie");
 const jwt = require("jsonwebtoken");
 const Orders = require("../model/orders");
@@ -22,7 +23,13 @@ let homePage = async (req, res) => {
     const user = await User.findOne({ _id: req.user.id });
     const products = await Product.find();
 
-    return res.render("user/index", { products, user });
+    const admin = await Admin.findOne();
+
+    if (!admin) {
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+
+    return res.render("user/index", { products, user, coupons: admin.coupons  });
   } catch (error) {
     console.error(error);
     res

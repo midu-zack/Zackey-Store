@@ -2,6 +2,7 @@ const User = require("../model/user");
 const uuid = require("uuid");
 const dotenv = require("dotenv");
 dotenv.config();
+const Admin = require("../model/admin")
 const Razorpay = require("razorpay");
 const Orders = require("../model/orders");
 const Product = require("../model/product");
@@ -64,12 +65,12 @@ const showCheckout = async (req, res) => {
     }
     const { cart } = user;
     cart.grandtotal = cart.subtotal + cart.shippingcost;
-    // console.log('User:', user);
-    // console.log('Address:', user.address);
-
+ 
+ 
     return res.render("user/checkout", {
       cart,
-      address: user.address,
+      address: user.address
+     
     });
   } catch (error) {
     console.error("Error in showCheckout:", error);
@@ -235,10 +236,57 @@ async function createRazorpayOrder(req, res) {
 //   }
 // }
 
+const checkCouponController = async (req, res) => {
+  try {
+    const { couponCode } = req.body;
+
+    // Find the admin with the provided coupon code
+    const admin = await Admin.findOne({ "coupons.couponCode": couponCode });
+
+    // If admin is found
+    if (admin) {
+      const currentDate = new Date();
+      const coupon = admin.coupons.find(coupon => coupon.couponCode === couponCode);
+      console.log("this is coupon ", coupon, coupon.endDate);
+
+      // Convert coupon.endDate to "DD/MM/YYYY" format
+      const endDate = moment(coupon.endDate, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY");
+      console.log("this is end date ", endDate);
+
+      // Convert currentDate to string type
+      const currentDateAsString = currentDate.toISOString();
+
+      // Convert endDate to string type
+      const endDateAsString = moment(endDate, "DD/MM/YYYY").toISOString();
+
+      console.log("Current Date (string): ", currentDateAsString);
+      console.log("End Date (string): ", endDateAsString);
+
+      // If the coupon has expired
+      if (moment(endDate, "DD/MM/YYYY").isBefore(currentDate)) {
+        return res.status(400).json({ error: 'Coupon has expired.' });
+      } else {
+        // Coupon code is valid
+        return res.status(200).json({ valid: true, discountAmount: coupon.discountAmount });
+      }
+    } else {
+      // Coupon code is invalid
+      res.json({ valid: false });
+    }
+  } catch (error) {
+    console.error("Error checking coupon validity:", error);
+    res.status(500).json({ error: 'An error occurred while checking the coupon validity.' });
+  }
+};
+
+
+
+
 module.exports = {
   showCheckout,
   addAddress,
   placeOrder,
   createRazorpayOrder,
+  checkCouponController
   // saveRazorpayResponse
 };
