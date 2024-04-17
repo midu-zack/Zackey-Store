@@ -15,9 +15,14 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.png">
 
     <!-- Add SweetAlert CSS and JS files -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
+    <style>
+    .error-message {
+        color: red;
+    }
+    </style>
     <!-- CSS
 	============================================ -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
@@ -357,7 +362,8 @@
         <div class="checkout-main-area pt-90 pb-90">
             <div class="container">
                 <div class="customer-zone mb-20">
-                    {{!-- <p class="cart-page-title">Returning customer? <a href="/login-register">Click here to login</a></p> --}}
+                    {{!-- <p class="cart-page-title">Returning customer? <a href="/login-register">Click here to
+                            login</a></p> --}}
                     {{!-- <div class="checkout-login-info">
                         <p>If you have shopped with us before, please enter your details in the boxes below. If you are
                             a new customer, please proceed to the Billing & Shipping section.</p>
@@ -398,86 +404,105 @@
                     </div> --}}
                 </div>
 
-              <div class="customer-zone mb-20">
-    <p class="cart-page-title">Have a coupon? <a class="checkout-click3" href="#">Click here to enter your code</a></p>
-    <div class="checkout-login-info3">
-        <form action="#" id="coupon-form">
-            <input type="text" id="coupon-code-input" placeholder="Coupon code">
-            <input type="submit" value="Apply Coupon">
-             <input type="submit" id="remove-coupon-btn" value="Remove Coupon">
-              <p id="error-message" style="color: red;"></p>
-        </form>
-    </div>
-</div>
+                <div class="customer-zone mb-20">
+                    <p class="cart-page-title">Have a coupon? <a class="checkout-click3" href="#">Click here to enter
+                            your code</a></p>
+                    <div class="checkout-login-info3">
+                        <form action="#" id="coupon-form">
+                            <input type="text" id="coupon-code-input" placeholder="Coupon code">
+                            <input type="submit" value="Apply Coupon">
+                            <input type="submit" id="remove-coupon-btn" value="Remove Coupon">
+                            <p id="error-message" style="color: red;"></p>
+                        </form>
+                    </div>
+                </div>
 
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        document.getElementById('coupon-form').addEventListener('submit', async function (event) {
+                            event.preventDefault(); // Prevent the form from submitting normally
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('coupon-form').addEventListener('submit', async function(event) {
-        event.preventDefault(); // Prevent the form from submitting normally
+                            // Get the coupon code input value
+                            const couponCode = document.getElementById('coupon-code-input').value;
 
-        // Get the coupon code input value
-        const couponCode = document.getElementById('coupon-code-input').value;
+                            // Call function to send coupon code to the server for validation
+                            await validateCouponCode(couponCode);
+                        });
 
-        // Call function to send coupon code to the server for validation
-        await validateCouponCode(couponCode);
-    });
+                        // Event listener for Remove Coupon button
+                        document.getElementById('remove-coupon-btn').addEventListener('click', function () {
+                            // Clear the input field
+                            document.getElementById('coupon-code-input').value = '';
+                            // Clear error message
+                            document.getElementById('error-message').textContent = '';
+                            // Clear discount amount
+                            document.getElementById('discount-amount').textContent = '';
 
-    // Event listener for Remove Coupon button
-    document.getElementById('remove-coupon-btn').addEventListener('click', function() {
-        // Clear the input field
-        document.getElementById('coupon-code-input').value = '';
-        // Clear error message
-        document.getElementById('error-message').textContent = '';
-        // Clear discount amount
-        document.getElementById('discount-amount').textContent = '';
-    });
-});
+                            // Reset the total amount to the original grand total
+                            document.getElementById('total-amount').textContent = `$ {{cart.grandtotal}}`;
+                        });
+                    });
 
-async function validateCouponCode(couponCode) {
-    try {
-        // Fetch API request to send coupon code to the server
-        const response = await fetch('/checkCoupon', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ couponCode: couponCode }) // Convert to JSON string
-        });
+                    async function validateCouponCode(couponCode) {
+                        try {
+                            // Fetch API request to send coupon code to the server
+                            const response = await fetch('/checkCoupon', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ couponCode: couponCode }) // Convert to JSON string
+                            });
 
-        // Get response data as JSON
-        const data = await response.json();
+                            // Get response data as JSON
+                            const data = await response.json();
 
-        // Check if the coupon code is valid
-        if (data.valid) {
-            // Show success message using SweetAlert
-            Swal.fire({
-                icon: 'success',
-                title: 'Coupon Applied',
-                text: 'Coupon code applied successfully!',
-                timer: 1000, // Auto close timer in milliseconds (1 second)
-                showConfirmButton: false // Hide the "OK" button
-            });
-            // Display discount amount
-            document.getElementById('discount-amount').textContent = `$ ${data.discountAmount}`;
-        } else {
-            // Show error message in <p> tag
-            if (response.status === 400) {
-                // If response status is 400, it means the coupon has expired
-                document.getElementById('error-message').textContent = 'Coupon has expired.';
-            } else {
-                document.getElementById('error-message').textContent = 'Invalid coupon code. Please try again.';
-            }
-            // Clear discount amount if coupon is not valid
-            document.getElementById('discount-amount').textContent = '';
-        }
-    } catch (error) {
-        console.error('Error validating coupon code:', error);
-        alert('An error occurred while validating the coupon code. Please try again later.');
-    }
-}
+                            // Check if the coupon code is valid
+                            if (data.valid) {
+                                // Show success message using SweetAlert
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Coupon Applied',
+                                    text: 'Coupon code applied successfully!',
+                                    timer: 1000, // Auto close timer in milliseconds (1 second)
+                                    showConfirmButton: false // Hide the "OK" button
+                                });
 
-</script>
+                                // Display discount amount
+                                const discountAmount = data.discountAmount;
+                                document.getElementById('discount-amount').textContent = `$ ${discountAmount}`;
+
+                                // Calculate and display the discounted total
+                                const grandTotal = parseFloat("{{cart.grandtotal}}");
+                                const discountedTotal = grandTotal - discountAmount;
+                                document.getElementById('total-amount').textContent = `$ ${discountedTotal}`;
+
+                                // After applying the coupon code, fetch the discount amount to pass to /placeOrder
+                                await fetch('/placeOrder', {
+                                    method: 'post',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ couponCode: couponCode }) // Pass coupon code to /placeOrder
+                                });
+
+                            } else {
+                                // Show error message in <p> tag
+                                if (response.status === 400) {
+                                    // If response status is 400, it means the coupon has expired
+                                    document.getElementById('error-message').textContent = 'Coupon has expired.';
+                                } else {
+                                    document.getElementById('error-message').textContent = 'Invalid coupon code. Please try again.';
+                                }
+                                // Clear discount amount if coupon is not valid
+                                document.getElementById('discount-amount').textContent = '';
+                            }
+                        } catch (error) {
+                            console.error('Error validating coupon code:', error);
+                            alert('An error occurred while validating the coupon code. Please try again later.');
+                        }
+                    }
+                </script>
 
 
 
@@ -499,8 +524,8 @@ async function validateCouponCode(couponCode) {
                                             {{#each address}}
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="address"
-                                                    id="address{{this._id}}" value="{{this._id}}" {{#if this._id}} checked
-                                                    {{/if}}>
+                                                    id="address{{this._id}}" value="{{this._id}}" {{#if this._id}}
+                                                    checked {{/if}}>
                                                 <label class="form-check-label" for="address{{@index}}">
                                                     {{this.firstName}} {{this.lastName}} - {{this.address}},
                                                     {{this.city}}, {{this.state}}, {{this.postcode}}
@@ -541,83 +566,162 @@ async function validateCouponCode(couponCode) {
                                     <!-- Your new address form or content goes here -->
                                 </div>
 
-                                <form action="/addAddress" method="post">
+                                <form id="addressForm" action="/addAddress" method="post">
                                     <div class="different-address open-toggle mt-30">
                                         <div class="row">
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="billing-info mb-20">
                                                     <label>First Name</label>
-                                                    <input type="text" name="firstName">
+                                                    <input type="text" id="firstName" name="firstName">
+                                                    <div id="firstNameError" class="error-message"></div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="billing-info mb-20">
                                                     <label>Last Name</label>
-                                                    <input type="text" name="lastName">
+                                                    <input type="text" id="lastName" name="lastName">
+                                                    <div id="lastNameError" class="error-message"></div>
                                                 </div>
                                             </div>
-                                            {{!-- <div class="col-lg-12">
-                                                <div class="billing-info mb-20">
-                                                    <label>Company Name</label>
-                                                    <input type="text">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="billing-select mb-20">
-                                                    <label for="country">State</label>
-                                                    <select name="state" id="country">
-                                                        <option>Select a country</option>
-                                                        <option>Delhi</option>
-                                                        <option>Punjab</option>
-                                                        <option>Maharashtra</option>
-                                                        <option>Goa</option>
-                                                        <option>Kerala</option>
-                                                    </select>
-                                                </div>
-                                            </div> --}}
-
                                             <div class="col-lg-12">
                                                 <div class="billing-info mb-20">
                                                     <label>Street Address</label>
-                                                    <input class="billing-address" name="address" type="text">
-                                                    {{!-- <input placeholder="Apartment, suite, unit etc." type="text">
-                                                    --}}
+                                                    <input class="billing-address" id="address" name="address"
+                                                        type="text">
+                                                    <div id="addressError" class="error-message"></div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="billing-info mb-20">
                                                     <label>Town / City</label>
-                                                    <input type="text" name="city">
+                                                    <input type="text" id="city" name="city">
+                                                    <div id="cityError" class="error-message"></div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="billing-info mb-20">
-                                                    <label>State </label>
-                                                    <input type="text" name="state">
+                                                    <label>State</label>
+                                                    <input type="text" id="state" name="state">
+                                                    <div id="stateError" class="error-message"></div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="billing-info mb-20">
-                                                    <label>Postcode </label>
-                                                    <input type="text" name="postcode">
+                                                    <label>Postcode</label>
+                                                    <input type="text" id="postcode" name="postcode">
+                                                    <div id="postcodeError" class="error-message"></div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="billing-info mb-20">
                                                     <label>Phone</label>
-                                                    <input type="text" name="phone">
+                                                    <input type="text" id="phone" name="phone">
+                                                    <div id="phoneError" class="error-message"></div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="billing-info mb-20">
                                                     <label>Email Address</label>
-                                                    <input type="text" name="email">
+                                                    <input type="text" id="email" name="email">
+                                                    <div id="emailError" class="error-message"></div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <button type="submit">SUBMIT</button>
+                                        <button class="btn btn-danger border-top-0" type="submit">SUBMIT</button>
                                     </div>
                                 </form>
+
+                                <script>
+                                    document.getElementById("addressForm").addEventListener("submit", function (event) {
+                                        var isValid = true;
+
+                                        // First Name validation
+                                        var firstName = document.getElementById("firstName").value.trim();
+                                        if (firstName === "") {
+                                            document.getElementById("firstNameError").innerHTML = "Please enter your first name.";
+                                            isValid = false;
+                                        } else {
+                                            document.getElementById("firstNameError").innerHTML = "";
+                                        }
+
+                                        // Last Name validation
+                                        var lastName = document.getElementById("lastName").value.trim();
+                                        if (lastName === "") {
+                                            document.getElementById("lastNameError").innerHTML = "Please enter your last name.";
+                                            isValid = false;
+                                        } else {
+                                            document.getElementById("lastNameError").innerHTML = "";
+                                        }
+
+                                        // Address validation
+                                        var address = document.getElementById("address").value.trim();
+                                        if (address === "") {
+                                            document.getElementById("addressError").innerHTML = "Please enter your address.";
+                                            isValid = false;
+                                        } else {
+                                            document.getElementById("addressError").innerHTML = "";
+                                        }
+
+                                        // City validation
+                                        var city = document.getElementById("city").value.trim();
+                                        if (city === "") {
+                                            document.getElementById("cityError").innerHTML = "Please enter your city.";
+                                            isValid = false;
+                                        } else {
+                                            document.getElementById("cityError").innerHTML = "";
+                                        }
+
+                                        // State validation
+                                        var state = document.getElementById("state").value.trim();
+                                        if (state === "") {
+                                            document.getElementById("stateError").innerHTML = "Please enter your state.";
+                                            isValid = false;
+                                        } else {
+                                            document.getElementById("stateError").innerHTML = "";
+                                        }
+
+                                        // Postcode validation
+                                        var postcode = document.getElementById("postcode").value.trim();
+                                        if (postcode === "") {
+                                            document.getElementById("postcodeError").innerHTML = "Please enter your postcode.";
+                                            isValid = false;
+                                        } else {
+                                            document.getElementById("postcodeError").innerHTML = "";
+                                        }
+
+                                        // Phone validation
+                                        var phone = document.getElementById("phone").value.trim();
+                                        if (phone === "") {
+                                            document.getElementById("phoneError").innerHTML = "Please enter your phone number.";
+                                            isValid = false;
+                                        } else {
+                                            document.getElementById("phoneError").innerHTML = "";
+                                        }
+
+                                        // Email validation
+                                        var email = document.getElementById("email").value.trim();
+                                        if (email === "") {
+                                            document.getElementById("emailError").innerHTML = "Please enter your email address.";
+                                            isValid = false;
+                                        } else if (!isValidEmail(email)) {
+                                            document.getElementById("emailError").innerHTML = "Please enter a valid email address.";
+                                            isValid = false;
+                                        } else {
+                                            document.getElementById("emailError").innerHTML = "";
+                                        }
+
+                                        if (!isValid) {
+                                            event.preventDefault();
+                                        }
+                                    });
+
+                                    function isValidEmail(email) {
+                                        // Regular expression for email validation
+                                        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                        return emailRegex.test(email);
+                                    }
+                                </script>
+
 
                                 {{!-- <div class="additional-info-wrap">
                                     <label>Order notes</label>
@@ -661,7 +765,7 @@ async function validateCouponCode(couponCode) {
                                                 </li>
                                             </ul>
                                         </div>
-                                         {{!-- <div class="your-order-info order-shipping">
+                                        {{!-- <div class="your-order-info order-shipping">
                                             <ul>
                                                 <li>DiscountAmount <p></p>
                                                 </li>
@@ -670,13 +774,13 @@ async function validateCouponCode(couponCode) {
 
                                         <div class="your-order-info order-shipping">
                                             <ul>
-                                                <li >Discount Amount: <span id="discount-amount" ></span> </li>
+                                                <li>Discount Amount: <span id="discount-amount"></span></li>
                                             </ul>
                                         </div>
 
                                         <div class="your-order-info order-total">
                                             <ul>
-                                                <li>Total <span>$ {{cart.grandtotal}} </span></li>
+                                                <li>Total <span id="total-amount">$ {{cart.grandtotal}}</span></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -711,7 +815,7 @@ async function validateCouponCode(couponCode) {
                                                 </div>
                                             </div>
                                             <div class="Place-order mt-40">
-                                                <button id="placeOrderBtn" type="button">Place Order</button>
+                                                <button id="placeOrderBtn" class="btn btn-danger" type="button">Place Order</button>
                                             </div>
                                         </div>
                                     </form>
@@ -925,27 +1029,27 @@ async function validateCouponCode(couponCode) {
                 }
             }
 
-            if(selectedPaymentMethod==="cod"){
-                
-                 fetch('/placeOrder', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ paymentMethod: "cod", selectedAddress })
-                            })
-                                .then(response => {
-                                    if (response.ok) {
-                                        window.location.href = '/checkout?success=orderSuccessfully';
-                                    } else {
-                                        console.error('Error in database update:', response.statusText);
-                                        // Handle error
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error while saving Razorpay response:', error);
-                                    // Handle error
-                                });
+            if (selectedPaymentMethod === "cod") {
+
+                fetch('/placeOrder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ paymentMethod: "cod", selectedAddress })
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            window.location.href = '/checkout?success=orderSuccessfully';
+                        } else {
+                            console.error('Error in database update:', response.statusText);
+                            // Handle error
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error while saving Razorpay response:', error);
+                        // Handle error
+                    });
             }
         });
     </script>

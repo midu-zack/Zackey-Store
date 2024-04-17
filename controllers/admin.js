@@ -3,6 +3,7 @@ const User = require("../model/user");
 const Product = require("../model/product");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const ExcelJS = require('exceljs');
 const Orders = require("../model/orders");
 // const { Coupon } = require("../model/admin");
 const moment = require('moment');
@@ -637,7 +638,7 @@ const dashboardData = async (req, res) => {
       (acc, cur) => acc + cur.totalRevenue,
       0
     );
-    console.log("Total Revenue:", totalRevenue);
+    // console.log("Total Revenue:", totalRevenue);
 
     return res.json({
       // lineChartLabels,
@@ -797,10 +798,8 @@ const showCouponEditPage = async (req, res) => {
 const updateCoupon = async (req, res) => {
   try {
     
-
     const couponId = req.params.id;
    
-
     const admin = await Admin.findOne();
   
     if (!admin) {
@@ -835,6 +834,70 @@ const updateCoupon = async (req, res) => {
 
 
  
+
+const generateReportDownload  =async (req, res) => {
+  const startDateMoment = moment(req.query.startDate);
+const endDateMoment = moment(req.query.endDate);
+
+// Format startDate and endDate as strings in the desired format
+const startDate = startDateMoment.format('YYYY-MM-DD');
+const endDate = endDateMoment.format('YYYY-MM-DD');
+
+console.log("Start Date:", startDate);
+console.log("End Date:", endDate);
+
+try {
+  // Fetch orders between the startDate and endDate
+  const orders = await Orders.find({
+    $expr: {
+      $and: [
+        { $gte: [{ $dateToString: { format: "%Y-%m-%d", date: "$date" } }, startDate] },
+        { $lte: [{ $dateToString: { format: "%Y-%m-%d", date: "$date" } }, endDate] }
+      ]
+    }
+  });
+
+      // console.log("this si order", Orders.date);
+      const ord = await Orders.find()
+      console.log(ord);
+
+      console.log("fetch order ",orders);
+
+      // Create Excel workbook
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Sales Report');
+      worksheet.columns = [
+        { header: 'Order ID', key: 'orderId', width: 15 },
+        { header: 'Total', key: 'total', width: 15 },
+        { header: 'Date', key: 'date', width: 15 }
+        // Add more columns as needed
+      ];
+
+      // Populate worksheet with order data
+      orders.forEach(order => {
+        worksheet.addRow({
+          orderId: order.orderId,
+          total: order.total,
+          date: order.date
+          // Add more data fields as needed
+        });
+      });
+
+      // Set response headers for Excel file download
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename="sales_report_${startDate}_${endDate}.xlsx"`);
+
+      // Write Excel file to response stream
+      await workbook.xlsx.write(res);
+      res.end();
+    } catch (error) {
+      console.error('Error generating report:', error);
+      res.status(500).json({ error: 'Failed to generate report' });
+    }
+  };
+
+
+ 
 module.exports = {
   adminLoginPage,
   adminSubmitlogin,
@@ -849,6 +912,7 @@ module.exports = {
   addCouponController,
   deleteCouponController,
   showCouponEditPage,
-  updateCoupon
+  updateCoupon,
+  generateReportDownload
   //   getSalesData
 };

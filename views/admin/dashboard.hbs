@@ -14,6 +14,20 @@
     <link rel="stylesheet" href="assets/plugin/datatables/responsive.dataTables.min.css">
     <link rel="stylesheet" href="assets/plugin/datatables/dataTables.bootstrap5.min.css">
 
+    <style>
+        .datepicker-container {
+            display: none;
+            /* Hide the container initially */
+        }
+
+        .datepicker-container input[type="date"] {
+            width: calc(100% - 10px);
+            /* Set the width of the date inputs */
+            margin-right: 20px;
+            /* Add some space between the inputs */
+        }
+    </style>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- project css file  -->
     <link rel="stylesheet" href="assets/css/ebazar.style.min.css">
@@ -368,6 +382,86 @@
                             </div>
                         </div>
 
+                        {{!-- <div>
+                            <button id="salesReportBtn" class="btn btn-success text-light">Sales Report</button>
+                        </div> --}}
+                        <div class="container">
+                            <!-- Sales Report button -->
+                            <div class="d-md-flex justify-content-md-end">
+                                <button id="salesReportBtn" class="btn btn-dark me-md-2" type="button">Sales
+                                    Report</button>
+
+                            </div>
+                            <!-- Datepicker container -->
+                            <div class="datepicker-container">
+                                <form id="reportForm" action="">
+                                    <div class="form-group m-2 p-2">
+                                        <label for="startDate">Start Date:</label>
+                                        <input type="date" id="startDate" name="startDate" class="form-control">
+                                    </div>
+                                    <div class="form-group m-2 p-2">
+                                        <label for="endDate">End Date:</label>
+                                        <input type="date" id="endDate" name="endDate" class="form-control">
+                                    </div>
+                                    <div class="d-md-flex mt-3 justify-content-md-end">
+                                        <button id="generateReportBtn" class="btn btn-primary text-light">Generate
+                                            Report</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        {{!-- <input type="hidden" name="" id="salesData" value="{{JSON.stringify(lineChartLabels)}}">
+                        --}}
+
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script>
+                            $(document).ready(function () {
+                                // Toggle visibility of datepicker container when Sales Report button is clicked
+                                $('#salesReportBtn').click(function () {
+                                    $('.datepicker-container').toggle(); // Show/hide the datepicker container
+                                });
+
+                                // Generate report when Generate Report button is clicked
+                                $('#generateReportBtn').click(function () {
+                                    const startDate = $('#startDate').val();
+                                    const endDate = $('#endDate').val();
+
+                                    if (startDate === "" || endDate === "") {
+                                        alert("Select both start and end dates.");
+                                        return;
+                                    }
+
+                                    // Construct the URL with the start and end dates as query parameters
+
+
+                                    // Use Fetch API to download the report
+                                    fetch(`/generateReportDownload?startDate=${startDate}&endDate=${endDate}`)
+                                        .then(response => {
+                                            if (!response.ok) {
+                                                throw new Error('Failed to download report');
+                                            }
+                                            return response.blob();
+                                        })
+                                        .then(blob => {
+                                            // Create a temporary URL for the blob
+                                            const blobUrl = URL.createObjectURL(blob);
+
+                                            // Create a link element to trigger the download
+                                            const link = document.createElement('a');
+                                            link.href = blobUrl;
+                                            link.download = `sales_report_${startDate}_${endDate}.xlsx`;
+                                            link.click();
+
+                                            // Cleanup
+                                            URL.revokeObjectURL(blobUrl);
+                                        })
+                                        .catch(error => {
+                                            console.error('Error downloading report:', error);
+                                        });
+                                });
+                            });
+                        </script>
+
                     </div>
                 </nav>
             </div>
@@ -376,6 +470,8 @@
             <div class="body d-flex py-3">
                 <div class="container-xxl">
                     <div id="ordersContainer">
+
+
 
 
                     </div>
@@ -472,10 +568,11 @@
                                                     <div class="left-info">
                                                         <span class="text-muted">Total Revenue</span>
                                                         <div id="total-revenue">
-                                                            
+
                                                         </div>
                                                     </div>
-                                                    <div class="right-icon">                                                        <i class="icofont-calculator-alt-1 fs-3 color-lightblue"></i>
+                                                    <div class="right-icon"> <i
+                                                            class="icofont-calculator-alt-1 fs-3 color-lightblue"></i>
 
                                                         <i class="icofont-calculator-alt-1 fs-3 color-lightblue"></i>
                                                     </div>
@@ -992,31 +1089,36 @@
                                         <div class="progress mb-4" style="height: 8px;">
                                             <div class="progress-bar progress-bar-striped" role="progressbar"
                                                 style="width: 30%" aria-valuenow="30" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
+                                                aria-valuemax="100">
+                                            </div>
                                         </div>
                                         <label class="fw-bold">Mauritius</label>
                                         <div class="progress mb-4" style="height: 8px;">
                                             <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
                                                 style="width: 45%" aria-valuenow="45" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
+                                                aria-valuemax="100">
+                                            </div>
                                         </div>
                                         <label class="fw-bold">Colombia</label>
                                         <div class="progress mb-4" style="height: 8px;">
                                             <div class="progress-bar progress-bar-striped bg-info" role="progressbar"
                                                 style="width: 60%" aria-valuenow="60" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
+                                                aria-valuemax="100">
+                                            </div>
                                         </div>
                                         <label class="fw-bold">Russia</label>
                                         <div class="progress mb-4" style="height: 8px;">
                                             <div class="progress-bar progress-bar-striped bg-warning" role="progressbar"
                                                 style="width: 75%" aria-valuenow="75" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
+                                                aria-valuemax="100">
+                                            </div>
                                         </div>
                                         <label class="fw-bold">France</label>
                                         <div class="progress mb-3" style="height: 8px;">
                                             <div class="progress-bar progress-bar-striped bg-danger" role="progressbar"
                                                 style="width: 98%" aria-valuenow="98" aria-valuemin="0"
-                                                aria-valuemax="100"></div>
+                                                aria-valuemax="100">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1099,7 +1201,7 @@
 
 
 
-                
+
 
 
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1427,13 +1529,13 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1Jr7axGGkwvHRnNfoOzoVRFV3yOPHJEU&amp;callback=myMap"></script>
     <script>
         $('#myDataTable')
-                            .addClass('nowrap')
-                            .dataTable({
-                                responsive: true,
-                                columnDefs: [
-                                    { targets: [-1, -3], className: 'dt-body-right' }
-                                ]
-                            });
+            .addClass('nowrap')
+            .dataTable({
+                responsive: true,
+                columnDefs: [
+                    { targets: [-1, -3], className: 'dt-body-right' }
+                ]
+            });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1448,10 +1550,10 @@
                     return response.json();
                 })
                 .then(data => {
-                    const { lineChartLabels, lineChartData, ordersCount, paymentGraphData, totalOrders, totalProducts ,totalRevenue} = data
-                    
+                    const { lineChartLabels, lineChartData, ordersCount, paymentGraphData, totalOrders, totalProducts, totalRevenue } = data
+
                     roundChartLoading(ordersCount)
-                    lineChartLoading(lineChartLabels,lineChartData)
+                    lineChartLoading(lineChartLabels, lineChartData)
                     createOrdersElement(ordersCount)
                     paymentMethodChart(paymentGraphData)
                     totalOrdersRender(totalOrders)
@@ -1479,7 +1581,7 @@
             container.appendChild(totalOrdersSpan)
         }
 
-         function totalRevenueRender(count) {
+        function totalRevenueRender(count) {
             const container = document.getElementById("total-revenue");
             const totalRevenuesSpan = document.createElement("span")
             totalRevenuesSpan.classList.add("fs-6", "fw-bold", "me-2")

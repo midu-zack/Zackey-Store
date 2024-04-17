@@ -8,6 +8,7 @@ const Orders = require("../model/orders");
 const Product = require("../model/product");
 const moment = require("moment");
 const { generateOrderId } = require("../utils/orderIdGenerator");
+// const { log } = require("handlebars/runtime");
 
 const addAddress = async (req, res) => {
   try {
@@ -78,67 +79,187 @@ const showCheckout = async (req, res) => {
   }
 };
 
+// const placeOrder = async (req, res) => {
+//   const { paymentMethod, selectedAddress } = req.body;
+//   const {couponCode }= req.query
+//   try {
+//     const userId = req.user.id;
+//     const user = await User.findById(userId)
+//       .populate("cart.products.product", "price name")
+//       .select("cart address");
+//     if (!user) {
+//       return res.status(404).send("User not found");
+//     }
+
+//     const address = user.address.find(
+//       (item) => String(item._id) === selectedAddress
+//     );
+
+//     delete address._id;
+//     const products = user.cart.products.map((item) => ({
+//       product: item.product._id,
+//       quantity: item.quantity,
+//       amount: item.total,
+//     }));
+//     const currentDate = moment();
+
+//     // Format the date and time
+//     const formattedDate = currentDate.format("DD-MM-YYYY hh:mm");
+
+//     let orderId;
+//     let isUnique = false;
+
+//     do {
+//       orderId = generateOrderId(); // Generate a new order ID
+//       isUnique = !(await Orders.exists({ orderId })); // Check if the generated ID is unique
+//     } while (!isUnique);
+
+    
+//     const orders = new Orders({
+//       orderId,
+//       products: products,
+//       address,
+//       orderedBy: userId,
+//       date: formattedDate,
+//       total: user.cart.subtotal + user.cart.shippingcost,
+//       payment: {
+//         method: paymentMethod,
+//       },
+//     });
+
+//     user.cart.products = [];
+//     user.cart.subtotal = 0;
+//     await user.save();
+//     await orders.save();
+
+//     return res.redirect("/checkout?success=orderSuccessfully");
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).render("error", {
+//       message:
+//         "An error occurred while placing the order. Please try again later.",
+//     });
+//   }
+// };
+
+
+
+
 const placeOrder = async (req, res) => {
-  const { paymentMethod, selectedAddress } = req.body;
   try {
+    const { paymentMethod, selectedAddress, couponCode } = req.body;
     const userId = req.user.id;
+
+    console.log("coupon code",couponCode);
+ 
+    // Find the user by ID
     const user = await User.findById(userId)
       .populate("cart.products.product", "price name")
       .select("cart address");
+
+    // Check if user exists
     if (!user) {
+    
       return res.status(404).send("User not found");
     }
 
-    const address = user.address.find(
-      (item) => String(item._id) === selectedAddress
-    );
+ 
 
-    delete address._id;
-    const products = user.cart.products.map((item) => ({
+    // Find the selected address in user's addresses
+    const address = user.address.find(item => String(item._id) === selectedAddress);
+    if (!address) {
+     
+      return res.status(400).send("Selected address not found");
+    }
+
+   
+
+    // Find the admin with populated coupons
+    const admin = await Admin.findOne().select("coupons");
+    console.log("admin coupons",admin);
+
+    if (!admin) {
+    
+      return res.status(404).json({ message: 'Admin not found' });
+    }
+ 
+   
+
+    // Initialize discount amount
+    let discountAmount = 0;
+
+   
+
+    // Apply coupon code if provided
+    if (couponCode) {
+   
+
+      // Validate coupon code and calculate discount amount
+      const coupon = admin.coupons.find(coupon => coupon.couponCode === couponCode);
+      if (coupon) {
+        const currentDate = new Date();
+        if (moment(coupon.endDate).isAfter(currentDate) && coupon.couponLimit > 0) {
+          // Coupon is valid, not expired, and within usage limit
+          discountAmount = coupon.discountAmount;
+
+          // Decrease the coupon usage limit by 1
+          coupon.couponLimit -= 1;
+          await admin.save();
+
+       
+        }
+      }
+    }
+
+   
+    // Calculate total amount
+    const totalBeforeDiscount = user.cart.subtotal + user.cart.shippingcost;
+    const totalAfterDiscount = totalBeforeDiscount - discountAmount;
+ 
+
+    // Create new order
+    const products = user.cart.products.map(item => ({
       product: item.product._id,
       quantity: item.quantity,
       amount: item.total,
     }));
     const currentDate = moment();
-
-    // Format the date and time
     const formattedDate = currentDate.format("DD-MM-YYYY hh:mm");
-
-    let orderId;
-    let isUnique = false;
-
-    do {
-      orderId = generateOrderId(); // Generate a new order ID
-      isUnique = !(await Orders.exists({ orderId })); // Check if the generated ID is unique
-    } while (!isUnique);
-
-    
-    const orders = new Orders({
+    const orderId = generateOrderId();
+    const newOrder = new Orders({
       orderId,
-      products: products,
+      products,
       address,
       orderedBy: userId,
       date: formattedDate,
-      total: user.cart.subtotal + user.cart.shippingcost,
+      total: totalAfterDiscount,
       payment: {
         method: paymentMethod,
       },
     });
 
+
+    // Clear user's cart and save order
     user.cart.products = [];
     user.cart.subtotal = 0;
     await user.save();
-    await orders.save();
+    await newOrder.save();
+
+  
 
     return res.redirect("/checkout?success=orderSuccessfully");
   } catch (error) {
     console.error(error);
     return res.status(500).render("error", {
-      message:
-        "An error occurred while placing the order. Please try again later.",
+      message: "An error occurred while placing the order. Please try again later.",
     });
   }
 };
+
+
+
+
+
 
 // Razorpay instance
 const razorpay = new Razorpay({
@@ -236,10 +357,64 @@ async function createRazorpayOrder(req, res) {
 //   }
 // }
 
+
+
+
+
+
+
+
+
+
+
+// /////////////////////
+
+// const checkCouponController = async (req, res) => {
+//   try {
+//     const { couponCode } = req.body;
+
+//     // Find the admin with the provided coupon code
+//     const admin = await Admin.findOne({ "coupons.couponCode": couponCode });
+
+//     // If admin is found
+//     if (admin) {
+//       const currentDate = new Date();
+//       const coupon = admin.coupons.find(coupon => coupon.couponCode === couponCode);
+//       // console.log("this is coupon ", coupon, coupon.endDate);
+
+//       // Convert coupon.endDate to "DD/MM/YYYY" format
+//       const endDate = moment(coupon.endDate, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY");
+//       // console.log("this is end date ", endDate);
+
+//       // Convert currentDate to string type
+//       const currentDateAsString = currentDate.toISOString();
+
+//       // Convert endDate to string type
+//       const endDateAsString = moment(endDate, "DD/MM/YYYY").toISOString();
+
+     
+//       // If the coupon has expired
+//       if (moment(endDate, "DD/MM/YYYY").isBefore(currentDate)) {
+//         return res.status(400).json({ error: 'Coupon has expired.' });
+//       } else {
+//         // Coupon code is valid
+//         return res.status(200).json({ valid: true, discountAmount: coupon.discountAmount });
+//       }
+//     } else {
+//       // Coupon code is invalid
+//       res.json({ valid: false });
+//     }
+//   } catch (error) {
+//     console.error("Error checking coupon validity:", error);
+//     res.status(500).json({ error: 'An error occurred while checking the coupon validity.' });
+//   }
+// };
+
+
 const checkCouponController = async (req, res) => {
   try {
     const { couponCode } = req.body;
-
+    
     // Find the admin with the provided coupon code
     const admin = await Admin.findOne({ "coupons.couponCode": couponCode });
 
@@ -247,31 +422,25 @@ const checkCouponController = async (req, res) => {
     if (admin) {
       const currentDate = new Date();
       const coupon = admin.coupons.find(coupon => coupon.couponCode === couponCode);
-      console.log("this is coupon ", coupon, coupon.endDate);
+
+      if (!coupon) {
+        // Coupon code is not found in the admin document
+        return res.status(400).json({ error: 'Coupon code is invalid.' });
+      }
 
       // Convert coupon.endDate to "DD/MM/YYYY" format
       const endDate = moment(coupon.endDate, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY");
-      console.log("this is end date ", endDate);
-
-      // Convert currentDate to string type
-      const currentDateAsString = currentDate.toISOString();
-
-      // Convert endDate to string type
-      const endDateAsString = moment(endDate, "DD/MM/YYYY").toISOString();
-
-      console.log("Current Date (string): ", currentDateAsString);
-      console.log("End Date (string): ", endDateAsString);
 
       // If the coupon has expired
       if (moment(endDate, "DD/MM/YYYY").isBefore(currentDate)) {
         return res.status(400).json({ error: 'Coupon has expired.' });
       } else {
-        // Coupon code is valid
-        return res.status(200).json({ valid: true, discountAmount: coupon.discountAmount });
+        // Coupon code is valid, pass the matched coupon details
+        return res.status(200).json({ valid: true, coupon });
       }
     } else {
       // Coupon code is invalid
-      res.json({ valid: false });
+      res.status(400).json({ error: 'Coupon code is invalid.' });
     }
   } catch (error) {
     console.error("Error checking coupon validity:", error);

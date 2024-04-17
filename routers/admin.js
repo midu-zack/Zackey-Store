@@ -2,7 +2,7 @@ const express =require('express');
 // const { body } = require('express-validator');
 
  
-const {  adminLoginPage, adminSubmitlogin, adminLogout, dashboard, orderList, orderDetails, orderStatus, dashboardData, couponsList, addCoupon, addCouponController, deleteCouponController, showCouponEditPage, updateCoupon } = require('../controllers/admin');
+const {  adminLoginPage, adminSubmitlogin, adminLogout, dashboard, orderList, orderDetails, orderStatus, dashboardData, couponsList, addCoupon, addCouponController, deleteCouponController, showCouponEditPage, updateCoupon, generateReportDownload } = require('../controllers/admin');
  
  
 const router = express.Router()
@@ -31,6 +31,7 @@ router.get("/deleteCoupon/:id",deleteCouponController)
 router.get("/editCoupon/:id",showCouponEditPage)
 router.post("/editCoupon/:id",updateCoupon)
 
+router.get('/generateReportDownload',generateReportDownload);
 // router.get('/categorie',categorieListShow)
 
 // router.get('/sales', getSalesData);
