@@ -10,6 +10,9 @@
     <title>Zackey: Dashboard </title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <!-- plugin css file  -->
     <link rel="stylesheet" href="assets/plugin/datatables/responsive.dataTables.min.css">
     <link rel="stylesheet" href="assets/plugin/datatables/dataTables.bootstrap5.min.css">
@@ -385,82 +388,103 @@
                         {{!-- <div>
                             <button id="salesReportBtn" class="btn btn-success text-light">Sales Report</button>
                         </div> --}}
-                        <div class="container">
-                            <!-- Sales Report button -->
-                            <div class="d-md-flex justify-content-md-end">
-                                <button id="salesReportBtn" class="btn btn-dark me-md-2" type="button">Sales
-                                    Report</button>
+                       {{!-- <div class="container">
+    <!-- Sales Report button -->
+    <div class="d-md-flex justify-content-md-end">
+        <button id="salesReportBtn" class="btn btn-dark me-md-2" type="button">Sales Report</button>
+    </div>
+    <!-- Datepicker container -->
+    <div class="datepicker-container" style="display: none;">
+        <form id="reportForm" action="">
+            <div class="form-group m-2 p-2">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate" name="startDate" class="form-control">
+            </div>
+            <div class="form-group m-2 p-2">
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate" name="endDate" class="form-control">
+            </div>
+            <div class="d-md-flex mt-3 justify-content-md-end">
+                <button id="generateReportBtn" class="btn btn-primary text-light">Generate Report</button>
+            </div>
+        </form>
+    </div>
+</div> --}}
 
-                            </div>
-                            <!-- Datepicker container -->
-                            <div class="datepicker-container">
-                                <form id="reportForm" action="">
-                                    <div class="form-group m-2 p-2">
-                                        <label for="startDate">Start Date:</label>
-                                        <input type="date" id="startDate" name="startDate" class="form-control">
-                                    </div>
-                                    <div class="form-group m-2 p-2">
-                                        <label for="endDate">End Date:</label>
-                                        <input type="date" id="endDate" name="endDate" class="form-control">
-                                    </div>
-                                    <div class="d-md-flex mt-3 justify-content-md-end">
-                                        <button id="generateReportBtn" class="btn btn-primary text-light">Generate
-                                            Report</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        {{!-- <input type="hidden" name="" id="salesData" value="{{JSON.stringify(lineChartLabels)}}">
-                        --}}
+<div class="container">
+     <!-- Sales Report button -->
+    <div class="d-md-flex justify-content-md-end">
+        <button id="salesReportBtn" class="btn btn-dark me-md-2"  type="button">Sales Report</button>
+    </div>
+    <!-- Datepicker container -->
+    <div class="datepicker-container" style="display: none;">
+        <div class="form-group m-2 p-2">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" class="form-control">
+        </div>
+        <div class="form-group m-2 p-2">
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate" class="form-control">
+        </div>
+        <div class="d-md-flex mt-3 justify-content-md-end">
+            <button id="generateReportBtn" class="btn btn-primary text-light">Generate Report</button>
+        </div>
+    </div>
+    
+   
+</div>
 
-                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                        <script>
-                            $(document).ready(function () {
-                                // Toggle visibility of datepicker container when Sales Report button is clicked
-                                $('#salesReportBtn').click(function () {
-                                    $('.datepicker-container').toggle(); // Show/hide the datepicker container
-                                });
+<script>
+$(document).ready(function () {
+    // Toggle visibility of datepicker container when Sales Report button is clicked
+    $('#salesReportBtn').click(function () {
+        $('.datepicker-container').toggle(); // Show/hide the datepicker container
+    });
 
-                                // Generate report when Generate Report button is clicked
-                                $('#generateReportBtn').click(function () {
-                                    const startDate = $('#startDate').val();
-                                    const endDate = $('#endDate').val();
+    // Generate report when Generate Report button is clicked
+    $('#generateReportBtn').click(function () {
+        const startDate = $('#startDate').val();
+        const endDate = $('#endDate').val();
 
-                                    if (startDate === "" || endDate === "") {
-                                        alert("Select both start and end dates.");
-                                        return;
-                                    }
+        if (startDate === "" || endDate === "") {
+            alert("Select both start and end dates.");
+            return;
+        }
 
-                                    // Construct the URL with the start and end dates as query parameters
+        // Construct the URL with the start and end dates as query parameters
+        const url = `/generateReportDownload/${startDate}/${endDate}`;
 
+        // Use Axios to download the report
+        axios.get(url, {
+            responseType: 'blob'
+        })
+        .then((response) => {
+             {{!-- document.getElementById('reportDateError').textContent = "" --}}
+                document.getElementById("startDate").value =""
+                document.getElementById("endDate").value=""
+            // Create a blob object from the response data
+            const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 
-                                    // Use Fetch API to download the report
-                                    fetch(`/generateReportDownload?startDate=${startDate}&endDate=${endDate}`)
-                                        .then(response => {
-                                            if (!response.ok) {
-                                                throw new Error('Failed to download report');
-                                            }
-                                            return response.blob();
-                                        })
-                                        .then(blob => {
-                                            // Create a temporary URL for the blob
-                                            const blobUrl = URL.createObjectURL(blob);
+            // Create a temporary URL for the blob
+            const url = window.URL.createObjectURL(blob);
 
-                                            // Create a link element to trigger the download
-                                            const link = document.createElement('a');
-                                            link.href = blobUrl;
-                                            link.download = `sales_report_${startDate}_${endDate}.xlsx`;
-                                            link.click();
+            // Create a link element and simulate a click to trigger the download
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'sales_report.xlsx';
+            document.body.appendChild(link);
+            link.click();
 
-                                            // Cleanup
-                                            URL.revokeObjectURL(blobUrl);
-                                        })
-                                        .catch(error => {
-                                            console.error('Error downloading report:', error);
-                                        });
-                                });
-                            });
-                        </script>
+            // Clean up by revoking the object URL
+            window.URL.revokeObjectURL(url);
+        })
+        .catch((error) => {
+            console.error("Error generating Excel report:", error);
+           
+        });
+    });
+});
+</script>
 
                     </div>
                 </nav>

@@ -3,10 +3,10 @@ const User = require("../model/user");
 const Product = require("../model/product");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-const ExcelJS = require('exceljs');
 const Orders = require("../model/orders");
+const ExcelJS = require("exceljs");
 // const { Coupon } = require("../model/admin");
-const moment = require('moment');
+const moment = require("moment");
 dotenv.config();
 
 // ADMIN LOGIN PAGE SHOW
@@ -387,10 +387,8 @@ const orderList = async (req, res) => {
 
 const orderDetails = async (req, res) => {
   try {
-   
-
     const orderId = req.query.orderId;
-  
+
     // Find the user with the specific order and retrieve only the matching order
 
     const order = await Orders.findById(orderId).populate(
@@ -398,12 +396,10 @@ const orderDetails = async (req, res) => {
       "name"
     );
 
-  
     if (!order) {
       return res.status(404).json({ error: "order not fount in user's," });
     }
 
-    
     res.json(order);
 
     // const userAndOneOrder = await User.aggregate([
@@ -665,61 +661,53 @@ const couponsList = async (req, res) => {
 
     // If admin is not found, return an error
     if (!admin) {
-      return res.status(404).json({ message: 'Admin not found' });
+      return res.status(404).json({ message: "Admin not found" });
     }
 
     // Render the 'coupons-list' view with the admin's coupons data
     res.render("admin/coupons-list", { coupons: admin.coupons });
   } catch (error) {
-    console.error('Error rendering coupons list:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error rendering coupons list:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
-
 
 const addCoupon = async (req, res) => {
   try {
     res.render("admin/coupon-add");
   } catch (error) {
-    console.error('Error rendering coupon add form:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error rendering coupon add form:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
-
-
-
-
 
 // addCouponController
 const addCouponController = async (req, res) => {
   try {
- 
-
     // Extract data from the request body
     const { couponCode, couponLimit, startDate, endDate, discountAmount } =
       req.body;
- 
+
     const admin = await Admin.findOne();
- 
+
     if (!admin) {
       return res.status(404).json({ message: "Admin not found" });
     }
 
     // Format dates using Moment.js
-    const formattedStartDate = moment(startDate).format('DD/MM/YYYY');
-    const formattedEndDate = moment(endDate).format('DD/MM/YYYY');
+    const formattedStartDate = moment(startDate).format("DD/MM/YYYY");
+    const formattedEndDate = moment(endDate).format("DD/MM/YYYY");
 
     const newCoupon = {
       couponCode,
       couponLimit,
-      createdAt: formattedStartDate,  
+      createdAt: formattedStartDate,
       endDate: formattedEndDate,
-      discountAmount,  
+      discountAmount,
     };
- 
+
     admin.coupons.push(newCoupon);
 
- 
     // Save the updated admin document
     const coupons = await admin.save();
 
@@ -731,37 +719,35 @@ const addCouponController = async (req, res) => {
   }
 };
 
-
 // delete Coupon
 const deleteCouponController = async (req, res) => {
   try {
- 
-    const couponId = req.params.id;  
-  
+    const couponId = req.params.id;
+
     const admin = await Admin.findOne();
- 
+
     if (!admin) {
-      return res.status(404).json({ message: 'Admin not found' });
+      return res.status(404).json({ message: "Admin not found" });
     }
- 
-    const couponIndex = admin.coupons.findIndex(coupon => coupon._id.toString() === couponId);
- 
+
+    const couponIndex = admin.coupons.findIndex(
+      (coupon) => coupon._id.toString() === couponId
+    );
+
     if (couponIndex === -1) {
-      return res.status(404).json({ message: 'Coupon not found' });
+      return res.status(404).json({ message: "Coupon not found" });
     }
- 
+
     admin.coupons.splice(couponIndex, 1);
- 
+
     await admin.save();
- 
+
     res.status(200).redirect("/couponsList");
   } catch (error) {
-    console.error('Error deleting coupon:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error deleting coupon:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
-
-
 
 // show display edit page
 const showCouponEditPage = async (req, res) => {
@@ -774,130 +760,233 @@ const showCouponEditPage = async (req, res) => {
 
     // If no admin is found, return an error
     if (!admin) {
-      return res.status(404).json({ message: 'Admin not found' });
+      return res.status(404).json({ message: "Admin not found" });
     }
 
     // Find the coupon within the admin's coupons array by its ID
-    const coupon = admin.coupons.find(coupon => coupon._id.toString() === couponId);
+    const coupon = admin.coupons.find(
+      (coupon) => coupon._id.toString() === couponId
+    );
 
     // If coupon is not found, return an error
     if (!coupon) {
-      return res.status(404).json({ message: 'Coupon not found' });
+      return res.status(404).json({ message: "Coupon not found" });
     }
 
     // Render the 'coupon-edit' view and pass the coupon data to it
     res.render("admin/coupon-edit", { coupon });
   } catch (error) {
-    console.error('Error rendering coupon edit page:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error rendering coupon edit page:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
-
 
 // updateCoupon
 const updateCoupon = async (req, res) => {
   try {
-    
     const couponId = req.params.id;
-   
+
     const admin = await Admin.findOne();
-  
+
     if (!admin) {
-      return res.status(404).json({ message: 'Admin not found' });
+      return res.status(404).json({ message: "Admin not found" });
     }
- 
+
     // Find the index of the coupon in the admin's coupons array
-    const couponIndex = admin.coupons.findIndex(coupon => coupon._id.toString() === couponId);
+    const couponIndex = admin.coupons.findIndex(
+      (coupon) => coupon._id.toString() === couponId
+    );
 
     // If coupon is not found, return an error
     if (couponIndex === -1) {
-      return res.status(404).json({ message: 'Coupon not found' });
+      return res.status(404).json({ message: "Coupon not found" });
     }
- 
-    const { startDate, endDate, couponCode, couponLimit, discountAmount } = req.body;
- 
+
+    const { startDate, endDate, couponCode, couponLimit, discountAmount } =
+      req.body;
 
     admin.coupons[couponIndex].startDate = startDate;
     admin.coupons[couponIndex].endDate = endDate;
     admin.coupons[couponIndex].couponCode = couponCode;
     admin.coupons[couponIndex].couponLimit = couponLimit;
     admin.coupons[couponIndex].discountAmount = discountAmount;
- 
+
     await admin.save();
- 
-    res.redirect('/couponsList');  
+
+    res.redirect("/couponsList");
   } catch (error) {
-    console.error('Error editing coupon:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error("Error editing coupon:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
+// const generateReportDownload = async (req, res) => {
+//   try {
+//     const { startDate, endDate } = req.query;
 
- 
+//     // Validate start and end dates
+//     if (!startDate || !endDate) {
+//       return res.status(400).json({ error: 'Both start and end dates are required.' });
+//     }
 
-const generateReportDownload  =async (req, res) => {
-  const startDateMoment = moment(req.query.startDate);
-const endDateMoment = moment(req.query.endDate);
+//     // Parse startDate and endDate strings into Moment.js objects
+//     const startDateMoment = moment(startDate, 'YYYY-MM-DD');
+//     const endDateMoment = moment(endDate, 'YYYY-MM-DD');
 
-// Format startDate and endDate as strings in the desired format
-const startDate = startDateMoment.format('YYYY-MM-DD');
-const endDate = endDateMoment.format('YYYY-MM-DD');
+//     // Format startDate and endDate as strings in the desired format
+//     const startDateFormatted = startDateMoment.format('DD-MM-YYYY HH:mm');
+//     const endDateFormatted = endDateMoment.format('DD-MM-YYYY HH:mm');
 
-console.log("Start Date:", startDate);
-console.log("End Date:", endDate);
+//     // Fetch orders between the startDate and endDate
+//     const orders = await Orders.find({
+//       date: {
+//         $gte: startDateFormatted,
+//         $lte: endDateFormatted
+//       }
+//     });
 
-try {
-  // Fetch orders between the startDate and endDate
-  const orders = await Orders.find({
-    $expr: {
-      $and: [
-        { $gte: [{ $dateToString: { format: "%Y-%m-%d", date: "$date" } }, startDate] },
-        { $lte: [{ $dateToString: { format: "%Y-%m-%d", date: "$date" } }, endDate] }
-      ]
+//     // Create Excel workbook
+//     const workbook = new ExcelJS.Workbook();
+//     const worksheet = workbook.addWorksheet('Sales Report');
+//     worksheet.columns = [
+//       { header: 'Order ID', key: 'orderId', width: 15 },
+//       { header: 'Total', key: 'total', width: 15 },
+//       { header: 'Date', key: 'date', width: 15 }
+//       // Add more columns as needed
+//     ];
+
+//     // Populate worksheet with order data
+//     orders.forEach(order => {
+//       worksheet.addRow({
+//         orderId: order.orderId,
+//         total: order.total,
+//         date: order.date
+//         // Add more data fields as needed
+//       });
+//     });
+
+//     // Set response headers to indicate file download
+//     res.setHeader(
+//       "Content-Type",
+//       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+//     );
+//     res.setHeader(
+//       "Content-Disposition",
+//       "attachment; filename=sales_report.xlsx"
+//     );
+
+//     // Convert workbook to a buffer
+//     const buffer = await workbook.xlsx.writeBuffer();
+
+//     // Send the buffer as the response
+//     res.send(Buffer.from(buffer));
+//   } catch (error) {
+//     console.error('Error generating report:', error);
+//     res.status(500).json({ error: 'Failed to generate report' });
+//   }
+// };
+
+const generateReportDownload = async (req, res) => {
+  try {
+    const { startDate, endDate } = req.params;
+
+    // Check if both start and end dates are provided
+    if (!startDate || !endDate) {
+      return res
+        .status(400)
+        .json({ error: "Both start and end dates are required." });
     }
-  });
 
-      // console.log("this si order", Orders.date);
-      const ord = await Orders.find()
-      console.log(ord);
+    // Parse startDate and endDate strings into Moment.js objects
+    const startDateMoment = moment(startDate, "YYYY-MM-DD");
+    const endDateMoment = moment(endDate, "YYYY-MM-DD");
 
-      console.log("fetch order ",orders);
+    // Format startDate and endDate as strings in the desired format
+    const startDateFormatted = startDateMoment.format("DD-MM-YYYY HH:mm");
+    const endDateFormatted = endDateMoment.format("DD-MM-YYYY HH:mm");
 
-      // Create Excel workbook
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet('Sales Report');
-      worksheet.columns = [
-        { header: 'Order ID', key: 'orderId', width: 15 },
-        { header: 'Total', key: 'total', width: 15 },
-        { header: 'Date', key: 'date', width: 15 }
-        // Add more columns as needed
-      ];
+    // Fetch orders between the startDate and endDate
+    const orders = await Orders.find({
+      date: {
+        $gte: startDateFormatted,
+        $lte: endDateFormatted,
+      },
+    });
 
-      // Populate worksheet with order data
-      orders.forEach(order => {
+    // Create Excel workbook
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Sales Report");
+    // worksheet.columns = [
+    //   { header: 'Order ID', key: 'orderId', width: 20 },
+    //   { header: 'Total', key: 'total', width: 20 },
+    //   { header: 'Date', key: 'date', width: 20 }
+    //   // Add more columns as needed
+    // ];
+
+    // // Populate worksheet with order data
+    // orders.forEach(order => {
+    //   worksheet.addRow({
+    //     orderId: order.orderId,
+    //     total: order.total,
+    //     date: order.date
+    //     // Add more data fields as needed
+    //   });
+    // });
+
+    // Add headers to the worksheet
+    worksheet.columns = [
+      { header: "Order ID", key: "orderId", width: 20 },
+
+      { header: "Quantity", key: "quantity", width: 15 },
+      { header: "Status", key: "status", width: 20 },
+
+      { header: "Total", key: "total", width: 20 },
+      { header: "Date", key: "date", width: 20 },
+      { header: "Payment Method", key: "paymentMethod", width: 20 },
+
+      { header: "Email", key: "email", width: 35 },
+      { header: "Phone", key: "phone", width: 25 },
+    ];
+
+    // Add data to the worksheet
+    orders.forEach((order) => {
+      order.products.forEach((product) => {
         worksheet.addRow({
           orderId: order.orderId,
+
+          quantity: product.quantity,
+          status: product.status,
+
           total: order.total,
-          date: order.date
-          // Add more data fields as needed
+          date: order.date,
+          paymentMethod: order.payment.method,
+
+          email: order.address.email,
+          phone: order.address.phone,
         });
       });
+    });
 
-      // Set response headers for Excel file download
-      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      res.setHeader('Content-Disposition', `attachment; filename="sales_report_${startDate}_${endDate}.xlsx"`);
+    // Set response headers to indicate file download
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=sales_report.xlsx"
+    );
 
-      // Write Excel file to response stream
-      await workbook.xlsx.write(res);
-      res.end();
-    } catch (error) {
-      console.error('Error generating report:', error);
-      res.status(500).json({ error: 'Failed to generate report' });
-    }
-  };
+    // Convert workbook to a buffer and send it as the response
+    const buffer = await workbook.xlsx.writeBuffer();
+    res.write(buffer, "binary");
+    res.end();
+  } catch (error) {
+    console.error("Error generating Excel report:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 
-
- 
 module.exports = {
   adminLoginPage,
   adminSubmitlogin,
@@ -913,6 +1002,6 @@ module.exports = {
   deleteCouponController,
   showCouponEditPage,
   updateCoupon,
-  generateReportDownload
+  generateReportDownload,
   //   getSalesData
 };

@@ -2,7 +2,7 @@ const User = require("../model/user");
 const uuid = require("uuid");
 const dotenv = require("dotenv");
 dotenv.config();
-const Admin = require("../model/admin")
+const Admin = require("../model/admin");
 const Razorpay = require("razorpay");
 const Orders = require("../model/orders");
 const Product = require("../model/product");
@@ -66,12 +66,10 @@ const showCheckout = async (req, res) => {
     }
     const { cart } = user;
     cart.grandtotal = cart.subtotal + cart.shippingcost;
- 
- 
+
     return res.render("user/checkout", {
       cart,
-      address: user.address
-     
+      address: user.address,
     });
   } catch (error) {
     console.error("Error in showCheckout:", error);
@@ -114,7 +112,6 @@ const showCheckout = async (req, res) => {
 //       isUnique = !(await Orders.exists({ orderId })); // Check if the generated ID is unique
 //     } while (!isUnique);
 
-    
 //     const orders = new Orders({
 //       orderId,
 //       products: products,
@@ -142,16 +139,13 @@ const showCheckout = async (req, res) => {
 //   }
 // };
 
-
-
-
 const placeOrder = async (req, res) => {
   try {
     const { paymentMethod, selectedAddress, couponCode } = req.body;
     const userId = req.user.id;
 
-    console.log("coupon code",couponCode);
- 
+    console.log("TExtcode", couponCode);
+
     // Find the user by ID
     const user = await User.findById(userId)
       .populate("cart.products.product", "price name")
@@ -159,66 +153,56 @@ const placeOrder = async (req, res) => {
 
     // Check if user exists
     if (!user) {
-    
       return res.status(404).send("User not found");
     }
 
- 
-
     // Find the selected address in user's addresses
-    const address = user.address.find(item => String(item._id) === selectedAddress);
+    const address = user.address.find(
+      (item) => String(item._id) === selectedAddress
+    );
     if (!address) {
-     
       return res.status(400).send("Selected address not found");
     }
 
-   
-
     // Find the admin with populated coupons
     const admin = await Admin.findOne().select("coupons");
-    console.log("admin coupons",admin);
+    // console.log("admin coupons", admin);
 
     if (!admin) {
-    
-      return res.status(404).json({ message: 'Admin not found' });
+      return res.status(404).json({ message: "Admin not found" });
     }
- 
-   
 
     // Initialize discount amount
     let discountAmount = 0;
 
-   
-
     // Apply coupon code if provided
     if (couponCode) {
-   
-
       // Validate coupon code and calculate discount amount
-      const coupon = admin.coupons.find(coupon => coupon.couponCode === couponCode);
+      const coupon = admin.coupons.find(
+        (coupon) => coupon.couponCode === couponCode
+      );
       if (coupon) {
         const currentDate = new Date();
-        if (moment(coupon.endDate).isAfter(currentDate) && coupon.couponLimit > 0) {
+        if (
+          moment(coupon.endDate).isAfter(currentDate) &&
+          coupon.couponLimit > 0
+        ) {
           // Coupon is valid, not expired, and within usage limit
           discountAmount = coupon.discountAmount;
 
           // Decrease the coupon usage limit by 1
           coupon.couponLimit -= 1;
           await admin.save();
-
-       
         }
       }
     }
 
-   
     // Calculate total amount
     const totalBeforeDiscount = user.cart.subtotal + user.cart.shippingcost;
     const totalAfterDiscount = totalBeforeDiscount - discountAmount;
- 
 
     // Create new order
-    const products = user.cart.products.map(item => ({
+    const products = user.cart.products.map((item) => ({
       product: item.product._id,
       quantity: item.quantity,
       amount: item.total,
@@ -238,28 +222,21 @@ const placeOrder = async (req, res) => {
       },
     });
 
-
     // Clear user's cart and save order
     user.cart.products = [];
     user.cart.subtotal = 0;
     await user.save();
     await newOrder.save();
 
-  
-
     return res.redirect("/checkout?success=orderSuccessfully");
   } catch (error) {
     console.error(error);
     return res.status(500).render("error", {
-      message: "An error occurred while placing the order. Please try again later.",
+      message:
+        "An error occurred while placing the order. Please try again later.",
     });
   }
 };
-
-
-
-
-
 
 // Razorpay instance
 const razorpay = new Razorpay({
@@ -357,105 +334,61 @@ async function createRazorpayOrder(req, res) {
 //   }
 // }
 
-
-
-
-
-
-
-
-
-
-
 // /////////////////////
-
-// const checkCouponController = async (req, res) => {
-//   try {
-//     const { couponCode } = req.body;
-
-//     // Find the admin with the provided coupon code
-//     const admin = await Admin.findOne({ "coupons.couponCode": couponCode });
-
-//     // If admin is found
-//     if (admin) {
-//       const currentDate = new Date();
-//       const coupon = admin.coupons.find(coupon => coupon.couponCode === couponCode);
-//       // console.log("this is coupon ", coupon, coupon.endDate);
-
-//       // Convert coupon.endDate to "DD/MM/YYYY" format
-//       const endDate = moment(coupon.endDate, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY");
-//       // console.log("this is end date ", endDate);
-
-//       // Convert currentDate to string type
-//       const currentDateAsString = currentDate.toISOString();
-
-//       // Convert endDate to string type
-//       const endDateAsString = moment(endDate, "DD/MM/YYYY").toISOString();
-
-     
-//       // If the coupon has expired
-//       if (moment(endDate, "DD/MM/YYYY").isBefore(currentDate)) {
-//         return res.status(400).json({ error: 'Coupon has expired.' });
-//       } else {
-//         // Coupon code is valid
-//         return res.status(200).json({ valid: true, discountAmount: coupon.discountAmount });
-//       }
-//     } else {
-//       // Coupon code is invalid
-//       res.json({ valid: false });
-//     }
-//   } catch (error) {
-//     console.error("Error checking coupon validity:", error);
-//     res.status(500).json({ error: 'An error occurred while checking the coupon validity.' });
-//   }
-// };
-
 
 const checkCouponController = async (req, res) => {
   try {
     const { couponCode } = req.body;
-    
+
     // Find the admin with the provided coupon code
     const admin = await Admin.findOne({ "coupons.couponCode": couponCode });
 
     // If admin is found
     if (admin) {
       const currentDate = new Date();
-      const coupon = admin.coupons.find(coupon => coupon.couponCode === couponCode);
-
-      if (!coupon) {
-        // Coupon code is not found in the admin document
-        return res.status(400).json({ error: 'Coupon code is invalid.' });
-      }
+      const coupon = admin.coupons.find(
+        (coupon) => coupon.couponCode === couponCode
+      );
+      // console.log("this is coupon ", coupon, coupon.endDate);
 
       // Convert coupon.endDate to "DD/MM/YYYY" format
-      const endDate = moment(coupon.endDate, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY");
+      const endDate = moment(coupon.endDate, "YYYY-MM-DDTHH:mm:ss.SSSZ").format(
+        "DD/MM/YYYY"
+      );
+      // console.log("this is end date ", endDate);
+
+      // Convert currentDate to string type
+      const currentDateAsString = currentDate.toISOString();
+
+      // Convert endDate to string type
+      const endDateAsString = moment(endDate, "DD/MM/YYYY").toISOString();
 
       // If the coupon has expired
       if (moment(endDate, "DD/MM/YYYY").isBefore(currentDate)) {
-        return res.status(400).json({ error: 'Coupon has expired.' });
+        return res.status(400).json({ error: "Coupon has expired." });
       } else {
-        // Coupon code is valid, pass the matched coupon details
-        return res.status(200).json({ valid: true, coupon });
+        // Coupon code is valid
+        return res
+          .status(200)
+          .json({ valid: true, discountAmount: coupon.discountAmount });
       }
     } else {
       // Coupon code is invalid
-      res.status(400).json({ error: 'Coupon code is invalid.' });
+      res.json({ valid: false });
     }
   } catch (error) {
     console.error("Error checking coupon validity:", error);
-    res.status(500).json({ error: 'An error occurred while checking the coupon validity.' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while checking the coupon validity." });
   }
 };
-
-
-
 
 module.exports = {
   showCheckout,
   addAddress,
   placeOrder,
   createRazorpayOrder,
-  checkCouponController
+  checkCouponController,
   // saveRazorpayResponse
 };

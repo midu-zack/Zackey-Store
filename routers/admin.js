@@ -31,8 +31,8 @@ router.get("/deleteCoupon/:id",deleteCouponController)
 router.get("/editCoupon/:id",showCouponEditPage)
 router.post("/editCoupon/:id",updateCoupon)
 
-router.get('/generateReportDownload',generateReportDownload);
-// router.get('/categorie',categorieListShow)
+// router.get('/generateReportDownload',generateReportDownload);
+router.get('/generateReportDownload/:startDate/:endDate',generateReportDownload);// router.get('/categorie',categorieListShow)
 
 // router.get('/sales', getSalesData);
  
