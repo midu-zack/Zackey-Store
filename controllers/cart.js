@@ -76,13 +76,110 @@ const addCart = async (req, res) => {
     }
 
     await user.save();
-    return res.redirect("/shop?success=addedToCart");
+    return res.status(200).json({message:"Product added to cart"})
   } catch (error) {
     // Handle errors
     console.error("Error adding product to cart:", error);
     res.status(500).send("Internal Server Error");
   }
 };
+
+
+// // singleCart
+// const singleCart = async (req, res) => {
+//   const productId = req.params.id;
+//   const userId = req.user.id; // Corrected to use req.user.id
+
+//   try {
+//     const user = await User.findById(userId).select("cart").exec();
+
+//     if (!user) {
+//       return res.render("user/login-register");
+//     }
+
+//     const product = await Product.findById(productId).select("price").lean();
+//     if (!product) {
+//       return;
+//     }
+//     const { cart } = user;
+
+//     const productIndex = cart.products.findIndex(
+//       (item) => String(item.product) === productId
+//     );
+
+//     if (productIndex >= 0) {
+//       cart.products[productIndex].quantity++;
+//       cart.products[productIndex].total =
+//         cart.products[productIndex].quantity * product.price;
+//       cart.subtotal = product.price + cart.subtotal;
+//     } else {
+//       const newCartProduct = {
+//         product: product._id,
+//         quantity: 1,
+//         total: product.price,
+//       };
+//       cart.subtotal = product.price + cart.subtotal;
+//       cart.products.push(newCartProduct);
+//     }
+
+//     await user.save();
+//     return res.redirect("/single/:id?success=addedToCart");
+//   } catch (error) {
+//     // Handle errors
+//     console.error("Error adding product to cart:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
+
+
+
+
+
+const buyNow = async (req, res) => {
+  const productId = req.params.id;
+  const userId = req.user.id; // Corrected to use req.user.id
+
+  try {
+    const user = await User.findById(userId).select("cart").exec();
+
+    if (!user) {
+      return res.render("user/login-register");
+    }
+
+    const product = await Product.findById(productId).select("price").lean();
+    if (!product) {
+      return;
+    }
+    const { cart } = user;
+
+    const productIndex = cart.products.findIndex(
+      (item) => String(item.product) === productId
+    );
+
+    if (productIndex >= 0) {
+      cart.products[productIndex].quantity++;
+      cart.products[productIndex].total =
+        cart.products[productIndex].quantity * product.price;
+      cart.subtotal = product.price + cart.subtotal;
+    } else {
+      const newCartProduct = {
+        product: product._id,
+        quantity: 1,
+        total: product.price,
+      };
+      cart.subtotal = product.price + cart.subtotal;
+      cart.products.push(newCartProduct);
+    }
+
+    await user.save();
+    return res.redirect("/cart");
+  } catch (error) {
+    // Handle errors
+    console.error("Error adding product to cart:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 
 const updateQuantity = async (req, res) => {
   try {
@@ -194,4 +291,6 @@ module.exports = {
   updateQuantity,
   removeProductCart,
   clearCart,
+  buyNow,
+  // singleCart
 };

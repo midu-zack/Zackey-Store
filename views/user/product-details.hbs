@@ -29,9 +29,11 @@
     <link rel="stylesheet" href="/assets/css/plugins/jquery-ui.css">
     <link rel="stylesheet" href="/assets/css/style.css">
 
+
 </head>
 
 <body>
+     <script src="https://cdn.jsdelivr.net/npm/noty@4"></script>
     <div class="main-wrapper">
         <header class="header-area transparent-bar sticky-bar pt-10">
             <div class="main-header-wrap">
@@ -525,9 +527,47 @@
                                     <a title="Add To Wishlist" href="/wishlist/{{product._id}}"><i class="la la-heart-o"></i> Add to wish list</a>
                                 </div>
                             </div>
-                            <div class="pro-details-buy-now btn-hover btn-hover-radious">
-                                <a href="/addCart/{{product._id}}">Add To Cart</a>
+                           <div class="d-flex gap-4">
+                             <div class="pro-details-buy-now btn-hover btn-hover-radious" onclick="addToCart('{{product._id}}')">
+                                    <a href="/addCart/{{product._id}}" onclick="event.preventDefault()">Add To Cart</a>
+                            
                             </div>
+
+                             <script>
+                                                                function addToCart(id) {
+                                                                    fetch(`/addCart/${id}`, {
+                                                                        method: 'get', // Assuming you're adding to the cart, so POST method is appropriate
+                                                                        headers: {
+                                                                            'Content-Type': 'application/json',
+
+                                                                        },
+
+                                                                    })
+                                                                        .then(response => {
+                                                                            if (response.ok) {
+
+                                                                                new Noty({
+                                                                                    type: 'success',
+                                                                                    text: 'Item successfully added to cart!',
+                                                                                    timeout: 2000
+                                                                                }).show();
+                                                                            } else {
+                                                                                // Handle other response statuses if needed
+                                                                                console.error('Failed to add item to cart');
+                                                                            }
+                                                                        })
+                                                                        .catch(error => {
+                                                                            console.error('Error adding item to cart:', error);
+                                                                        });
+                                                                }
+
+
+                                                            </script>
+
+                            <div class="pro-details-buy-now btn-hover btn-hover-radious">
+                                <a href="/buyNow/{{product._id}}">Buy Now</a>
+                            </div>
+                           </div>
                         </div> 
                     </div>
                 </div>
@@ -1049,6 +1089,9 @@
         </div>
         <!-- Modal end -->
     </div>
+    {{!-- noty --}}
+   
+
     <!-- JS
 ============================================ -->
 
@@ -1079,6 +1122,68 @@
     <script src="/assets/js/plugins/smoothscroll.js"></script>
     <!-- Main JS -->
     <script src="/assets/js/main.js"></script>
+
+    <script>
+        
+<script>
+    
+const urlParams = new URLSearchParams(window.location.search);
+const success = urlParams.get('success');
+const failed = urlParams.get('failed');
+const productId = urlParams.get('productId'); // Assuming productId is obtained from somewhere
+
+// Function to handle both success and failure notifications
+function showNotification(type, message) {
+    new Noty({
+        type: type,
+        text: message,
+        timeout: 3000 // Increased timeout for better readability
+    }).show();
+}
+
+if (success === 'addedToCart') {
+    showNotification('success', 'Item successfully added to cart!');
+}
+
+if (failed === 'ItemIsAlreadyInCart') {
+    Swal.fire({
+        icon: 'error',
+        title: 'Item is already in cart!',
+        {{!-- text: 'Do you want to remove it?', --}}
+        showCancelButton: false, // Do not show the cancel button
+        confirmButtonText: 'OK' // Set the confirm button text to 'OK'
+    }).then(() => {
+        // You may add further actions here if needed
+    });
+}
+
+if (success === 'addedToWishlist') {
+    showNotification('success', 'Item successfully added to Wishlist!');
+}
+
+if (failed === 'ItemIsAlreadyInWishList') {
+    Swal.fire({
+        icon: 'error',
+        title: 'Item is already in wishlist!',
+        text: 'Do you want to remove it?',
+        showCancelButton: true, // Show the cancel button
+        confirmButtonText: 'Yes, remove it' // Show the confirm button with appropriate text
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Check if productId exists before redirection
+            if (productId) {
+                window.location.href = `/DeleteWishList/${productId}`;
+            } else {
+                console.error('productId is missing or invalid.');
+                // Handle error scenario
+            }
+        }
+    });
+}
+
+
+</script>
+    </script>
 </body>
 
 
