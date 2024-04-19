@@ -1,6 +1,6 @@
 const express =require('express');
 
-const { categorieListShow, categorieAddShow, submitAddCategory, categoryEdit, categoryUpdate , categoryDelete} = require('../controllers/categorie');
+const { categorieListShow, categorieAddShow, submitAddCategory, categoryEdit, categoryUpdate , categoryDelete, filterByCategory} = require('../controllers/categorie');
 
 const router = express.Router()
 
@@ -12,6 +12,8 @@ router.post("/addCategorie",submitAddCategory)
 router.get("/categorieEdit/:id",categoryEdit)
 // router.post("/categorieEdit/:id",categoryEdit)
 
+ 
+router.get('/categoryFiltration',filterByCategory);
 
 router.post("/categorieEdit/:id",categoryUpdate)
 

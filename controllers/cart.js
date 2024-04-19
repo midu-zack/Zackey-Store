@@ -76,14 +76,13 @@ const addCart = async (req, res) => {
     }
 
     await user.save();
-    return res.status(200).json({message:"Product added to cart"})
+    return res.status(200).json({ message: "Product added to cart" });
   } catch (error) {
     // Handle errors
     console.error("Error adding product to cart:", error);
     res.status(500).send("Internal Server Error");
   }
 };
-
 
 // // singleCart
 // const singleCart = async (req, res) => {
@@ -131,10 +130,6 @@ const addCart = async (req, res) => {
 //   }
 // };
 
-
-
-
-
 const buyNow = async (req, res) => {
   const productId = req.params.id;
   const userId = req.user.id; // Corrected to use req.user.id
@@ -179,7 +174,6 @@ const buyNow = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
 
 const updateQuantity = async (req, res) => {
   try {
@@ -250,7 +244,6 @@ const removeProductCart = async (req, res) => {
     }
 
     return res.status(404).send("Product not found in cart");
-
   } catch (error) {
     console.error("Error deleting product from cart:", error);
     res
@@ -266,11 +259,13 @@ const clearCart = async (req, res) => {
     // Find the user by ID and clear the bookings array
     const updatedUser = await User.findByIdAndUpdate(
       userId,
-      { cart: {
-        products:[],
-        shippingcost:40,
-        subtotal:0 
-      } },
+      {
+        cart: {
+          products: [],
+          shippingcost: 40,
+          subtotal: 0,
+        },
+      },
       { new: true }
     );
 
