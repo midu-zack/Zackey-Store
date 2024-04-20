@@ -185,6 +185,42 @@ const deleteAddress = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+const priceFiltration = async (req, res) => {
+  try {
+    // Extracting price range from request body
+    const priceRange = req.body.price;
+
+    // Splitting the price range string by " - " to get start and end prices
+    const [startPriceString, endPriceString] = priceRange.split(" - ");
+
+    // Removing "$" sign and converting to numbers
+    const startPrice = parseFloat(startPriceString.replace("$", ""));
+    const endPrice = parseFloat(endPriceString.replace("$", ""));
+
+    console.log('Start Price:', startPrice);
+    console.log('End Price:', endPrice);
+
+    // Find products within the specified price range
+    const products = await Product.find({
+      price: {
+        $gte: startPrice,
+        $lte: endPrice,
+      },
+    });
+
+    console.log('Products found:', products);
+
+    // Send response with found products
+    res.status(200).json(products);
+
+  } catch (error) {
+    console.error('Error:', error);
+    // Handle errors appropriately
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 
 module.exports = {
   homePage,
@@ -195,4 +231,5 @@ module.exports = {
   getOrderDetails,
   cancelOrder,
   deleteAddress,
+  priceFiltration
 };

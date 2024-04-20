@@ -128,9 +128,7 @@ const updateProduct = async (req, res) => {
       description,
     } = req.body;
 
-  
-    
-
+ 
     let updateFields = {
       name: productName,
       mrp: mrp,

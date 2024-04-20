@@ -593,21 +593,66 @@
 
 
 
-
                                 <div class="shop-price-filter mt-35 shop-sidebar-border pt-40 sidebar-widget">
                                     <h4 class="sidebar-title">Price Filter</h4>
                                     <div class="price-filter mt-20">
-                                        <span>Range: $100.00 - 1.300.00 </span>
                                         <div id="slider-range"></div>
                                         <div class="price-slider-amount">
                                             <div class="label-input">
                                                 <input type="text" id="amount" name="price"
                                                     placeholder="Add Your Price" />
                                             </div>
-                                            <button type="button">Filter</button>
+                                            <button id="filterBtn" type="button">Filter</button>
                                         </div>
                                     </div>
                                 </div>
+
+                                {{!-- <div id="productList" class="product-list"></div> --}}
+
+                                <script>
+                                     
+                                    document.addEventListener("DOMContentLoaded", function () {
+                                        // Get the filter button and input field
+                                        const filterBtn = document.getElementById("filterBtn");
+                                        const amountInput = document.getElementById("amount");
+
+                                        // Add event listener to the filter button
+                                        filterBtn.addEventListener("click", function () {
+                                            // Get the value from the input field
+                                            const price = amountInput.value;
+
+                                            // Send the price to the backend using fetch
+                                            fetch("/priceFilter", {
+                                                method: "POST", // Assuming you want to send data via POST
+                                                headers: {
+                                                    "Content-Type": "application/json",
+                                                },
+                                                body: JSON.stringify({ price: price }),
+                                            })
+                                                .then((response) => {
+                                                    // Handle the response from the backend
+                                                    if (response.ok) {
+                                                        // Process the response if successful
+                                                        return response.json();
+                                                    } else {
+                                                        // Handle errors
+                                                        throw new Error("Network response was not ok.");
+                                                    }
+                                                })
+                                                .then((data) => {
+                                                    // Handle the data from the backend
+                                                    console.log(data); // Log the response data
+                                                    // Call the displayProducts function to update the UI
+                                                    displayProducts(data);
+                                                })
+                                                .catch((error) => {
+                                                    // Handle errors
+                                                    console.error("There was a problem with your fetch operation:", error);
+                                                });
+                                        });
+                                    });
+                                </script>
+
 
 
 

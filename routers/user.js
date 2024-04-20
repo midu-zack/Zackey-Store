@@ -1,5 +1,5 @@
 const express = require("express");
-const { homePage, showShop, logout, account, blockUnblock, getOrderDetails, cancelOrder, deleteAddress } = require("../controllers/user");
+const { homePage, showShop, logout, account, blockUnblock, getOrderDetails, cancelOrder, deleteAddress, priceFiltration } = require("../controllers/user");
 const router = express.Router();
 const verifyToken = require("../middleware/jwtmiddleware");
  
@@ -21,4 +21,7 @@ router.get("/getOrderDetails",getOrderDetails)
 router.post("/cancelOrder",cancelOrder)
 
 router.delete("/deleteAddress/:id",verifyToken,deleteAddress)
+
+router.post("/priceFilter",priceFiltration)
+
 module.exports = router;
