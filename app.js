@@ -25,7 +25,7 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 app.use(cookieParser());
-const port = 2005;
+const port = 2002;
 
 // Register a custom helper function for JSON.stringify
 const handlebars = exphbs.create({
@@ -33,6 +33,7 @@ const handlebars = exphbs.create({
     stringify: function (context) {
       return JSON.stringify(context);
     },
+
   },
 });
 

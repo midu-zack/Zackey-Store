@@ -1,9 +1,13 @@
 const User = require("../model/user");
 const Product = require("../model/product");
-const Admin =require("../model/admin")
+const Admin = require("../model/admin");
 const Category = require("../model/categorie");
+const generateOTP = require("../utils/otpGenerator");
 const jwt = require("jsonwebtoken");
 const Orders = require("../model/orders");
+const nodemailer = require("nodemailer");
+const bcrypt = require("bcrypt");
+// const { log } = require("handlebars");
 
 require("dotenv").config();
 
@@ -18,7 +22,7 @@ let homePage = async (req, res) => {
     const decoded = jwt.verify(token, process.env.JWT_KEY);
     req.user = decoded;
 
-    // console.log("req.user", req.user);
+     
 
     const user = await User.findOne({ _id: req.user.id });
     const products = await Product.find();
@@ -26,10 +30,10 @@ let homePage = async (req, res) => {
     const admin = await Admin.findOne();
 
     if (!admin) {
-      return res.status(404).json({ message: 'Admin not found' });
+      return res.status(404).json({ message: "Admin not found" });
     }
 
-    return res.render("user/index", { products, user, coupons: admin.coupons  });
+    return res.render("user/index", { products, user, coupons: admin.coupons });
   } catch (error) {
     console.error(error);
     res
@@ -73,7 +77,7 @@ const account = async (req, res) => {
       .sort({ createdAt: -1 }) //latest first it will come
       .lean();
 
-    // console.log("this is ", orders);
+    
 
     res.render("user/my-account", { user, orders });
   } catch (error) {
@@ -110,7 +114,7 @@ const blockUnblock = async (req, res) => {
 const getOrderDetails = async (req, res) => {
   try {
     const orderId = req.query.orderId;
-    // console.log(orderId);
+    
     const order = await Orders.findById(orderId).populate(
       "products.product",
       "name "
@@ -143,7 +147,7 @@ const cancelOrder = async (req, res) => {
 
     // Find the product within the order by productId
     const product = products.find((item) => String(item.product) === productId);
-    console.log("this is product ", product);
+   
 
     // Check if the product exists within the order
     if (!product) {
@@ -197,8 +201,8 @@ const priceFiltration = async (req, res) => {
     const startPrice = parseFloat(startPriceString.replace("$", ""));
     const endPrice = parseFloat(endPriceString.replace("$", ""));
 
-    console.log('Start Price:', startPrice);
-    console.log('End Price:', endPrice);
+    // console.log("Start Price:", startPrice);
+    // console.log("End Price:", endPrice);
 
     // Find products within the specified price range
     const products = await Product.find({
@@ -208,18 +212,133 @@ const priceFiltration = async (req, res) => {
       },
     });
 
-    console.log('Products found:', products);
+    // console.log("Products found:", products);
 
     // Send response with found products
     res.status(200).json(products);
-
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
     // Handle errors appropriately
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+const forgotPasswordRendring = async (req, res) => {
+  try {
+    res.render("user/forgotPassword");
+  } catch (error) {
+    console.error("Error rendering forgot password page:", error);
+    res.status(500).send("Internal Server Error");
   }
 };
 
+// const passwordChangeRendring = async (req, res) => {
+//   try {
+//     res.render("user/password-change");
+//   } catch (error) {
+//     console.error("Error rendering password change page:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
+
+// Function to create a transporter for sending emails
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.APP_EMAIL,
+    pass: process.env.APP_PASSWORD,
+  },
+});
+
+// Function to send OTP via email
+const sendOTP = async (email, otp) => {
+  try {
+    await transporter.sendMail({
+      from: "miduzack3007@gmail.com",
+      to: email,
+      subject: "OTP for email verification",
+      text: `Your OTP is: ${otp}`,
+    });
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+    throw error; // Rethrow the error to handle it in the caller function
+  }
+};
+
+const checkEmail = async (req, res) => {
+  try {
+    const { email } = req.query;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const otp = generateOTP();
+
+    // console.log("Generated OTP:", otp);
+
+    req.session.otp = otp;
+
+    await sendOTP(email, otp);
+
+    res.render("user/otp", { email, otp }); // Assuming this is your OTP verification page
+  } catch (error) {
+    console.error("Internal server Error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+ 
+ 
+const verifyOTP = async (req, res) => {
+  try {
+    const { otp, email } = req.body;
+    const sessionOTP = req.session.otp; // Retrieve the OTP stored in session
+
+    // console.log(req.body);
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.send("User not found");
+    }
+
+    const userEmail = user.email; // Extract the email from the user object
+   
+
+    // Check if the OTP entered by the user matches the OTP stored in session
+    const isCorrectOTP = otp === sessionOTP;
+ 
+
+    // Render the password change page with email and OTP verification status
+    res.render("user/password-change", { email: userEmail, isCorrectOTP });
+  } catch (error) {
+    console.error("Error checking OTP:", error);
+    return res.status(500).send("Internal server error");
+  }
+};
+
+
+const passwordChange = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    // If newPassword is not provided, return 400 Bad Request
+    if (!newPassword) {
+      return res.status(400).json({ message: "New password is required" });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password in the database
+    await User.updateOne({ email: email }, { $set: { password: hashedPassword } });
+
+    // Password changed successfully
+    return res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    console.error("Error changing password:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 
 module.exports = {
@@ -231,5 +350,12 @@ module.exports = {
   getOrderDetails,
   cancelOrder,
   deleteAddress,
-  priceFiltration
+  priceFiltration,
+  forgotPasswordRendring,
+  // verifyOTPRendring,
+
+  checkEmail,
+  verifyOTP,
+  // passwordChangeRendring,
+  passwordChange,
 };
