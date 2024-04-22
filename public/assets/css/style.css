@@ -11863,7 +11863,7 @@ button, input, optgroup, select, textarea {
 
 /*-------- 16. Breadcrumb style ---------*/
 .breadcrumb-area {
-  height: 420px;
+  height: 220px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

@@ -8,6 +8,8 @@ const Orders = require("../model/orders");
 const Product = require("../model/product");
 const moment = require("moment");
 const { generateOrderId } = require("../utils/orderIdGenerator");
+const { log } = require("handlebars/runtime");
+const { body } = require("express-validator");
 // const { log } = require("handlebars/runtime");
 
 const addAddress = async (req, res) => {
@@ -143,9 +145,7 @@ const placeOrder = async (req, res) => {
   try {
     const { paymentMethod, selectedAddress, couponCode } = req.body;
     const userId = req.user.id;
-
-    console.log("TExtcode", couponCode);
-
+  
     // Find the user by ID
     const user = await User.findById(userId)
       .populate("cart.products.product", "price name")
@@ -207,6 +207,7 @@ const placeOrder = async (req, res) => {
       quantity: item.quantity,
       amount: item.total,
     }));
+
     const currentDate = moment();
     const formattedDate = currentDate.format("DD-MM-YYYY hh:mm");
     const orderId = generateOrderId();
@@ -238,10 +239,12 @@ const placeOrder = async (req, res) => {
   }
 };
 
+
+
 // Razorpay instance
 const razorpay = new Razorpay({
   key_id: process.env.KEY_ID,
-  key_secret: process.env.KEY_SECRET,
+  key_secret: process.env.KEY_SECRET
 });
 
 // Function to create Razorpay order
@@ -251,28 +254,85 @@ async function createRazorpayOrder(req, res) {
     if (!userId) {
       return res.redirect("/login-register");
     }
-
+     
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).send("User not found");
     }
 
     const grandtotal = user.grandtotal;
-    const { totalAmount } = req.body;
-    const total = totalAmount + grandtotal;
-    const options = {
-      amount: total * 100, // Amount in paise
-      currency: "INR",
-      receipt: uuid.v4(),
-    };
+      const { totalAmount } = req.body;
+       const total =  totalAmount + grandtotal
+      const options = {
+          amount:  total*100, // Amount in paise
+          currency: 'INR',
+          receipt: uuid.v4(),
+      };
 
-    const order = await razorpay.orders.create(options);
-    res.status(200).json({ order, key_id: process.env.KEY_ID });
+      const order = await razorpay.orders.create(options);
+      res.status(200).json({ order, key_id: process.env.KEY_ID });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("An error occurred while creating Razorpay order.");
+      console.error('Error:', error);
+      res.status(500).send('An error occurred while creating Razorpay order.');
   }
 }
+ 
+
+
+
+
+
+
+
+
+// // Razorpay instance
+// const razorpay = new Razorpay({
+//   key_id: process.env.KEY_ID,
+//   key_secret: process.env.KEY_SECRET,
+// });
+
+// // Function to create Razorpay order
+// async function createRazorpayOrder(req, res) {
+//   try {
+//     const userId = req.user.id;
+//     if (!userId) {
+//       return res.redirect("/login-register");
+//     } 
+//     console.log('This is respect',userId);
+
+//     const user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).send("User not found");
+//     }
+
+//     console.log('usehsois',user);
+//     const grandtotal = user.grandtotal;
+//     console.log('grandtotal',grandtotal);
+//     const { totalAmount } = req.body;
+//     console.log("total",req.body);
+//     const total = totalAmount + grandtotal;
+//     console.log('thisss totalsiss',total);
+//     const options = {
+//       amount: total * 100, // Amount in paise
+//       currency: "INR",
+//       receipt: uuid.v4(),
+//     };
+
+//     const order = await razorpay.orders.create(options);
+//     res.status(200).json({ order, key_id: process.env.KEY_ID });
+//   } catch (error) {
+//     console.error("Error:", error);
+//     res.status(500).send("An error occurred while creating Razorpay order.");
+//   }
+// }
+
+
+
+
+
+
+
+
 
 // const razorpay = new Razorpay({
 //   key_id: process.env.KEY_ID,
