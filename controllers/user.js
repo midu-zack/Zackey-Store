@@ -7,6 +7,7 @@ const jwt = require("jsonwebtoken");
 const Orders = require("../model/orders");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
+const { log } = require("handlebars/runtime");
 // const { log } = require("handlebars");
 
 require("dotenv").config();
@@ -391,8 +392,7 @@ const verifyOTP = async (req, res) => {
 const passwordChange = async (req, res) => {
   try {
     const { email, newPassword } = req.body;
-
-    console.log('toldbe ',email,newPassword);
+ 
 
     // If newPassword is not provided, return 400 Bad Request
     if (!newPassword) {
@@ -445,7 +445,37 @@ const passwordChange = async (req, res) => {
 // };
 
  
+const updateUser = async (req, res) => {
+  try {
+     const userId = req.user.id; // Assuming userId is provided in the request parameters
+    const { name, phoneNumber, email } = req.body; // Assuming name, phoneNumber, and email are provided in the request body
 
+    // Find the user by userId
+    const user = await User.findById(userId);
+ 
+    // If user is not found, return 404 Not Found error
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update the user's information
+    if (name) user.name = name;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+    if (email) user.email = email;
+
+    // Save the updated user
+    await user.save();
+
+    // Return success response
+    return res.status(200).json({ message: "User information updated successfully" });
+  } catch (error) {
+    console.error(error);
+    // Return error response
+    return res.status(500).json({ message: "An error occurred while updating user information" });
+  }
+};
+
+ 
 
 
 module.exports = {
@@ -465,4 +495,5 @@ module.exports = {
   verifyOTP,
   // passwordChangeRendring,
   passwordChange,
+  updateUser
 };

@@ -102,24 +102,7 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-// userSchema.pre("save", async function (next) {
-//   // const bookingsPromises = this.cart.map(async (booking) => {
-//   //   if (!booking.total || booking.isModified("quantity")) {
-//   //     const product = await mongoose.model("Product").findById(booking.product);
-//   //     if (product) {
-//   //       booking.total = product.price * booking.quantity;
-//   //     }
-//   //   }
-//   });
-
-//   await Promise.all(bookingsPromises);
-//   this.subtotal = this.bookings.reduce(
-//     (acc, booking) => acc + booking.total,
-//     0
-//   );
-//   this.grandtotal = this.subtotal + this.shippingcost;
-//   next();
-// });
+ 
 
 const User = mongoose.model("User", userSchema);
 

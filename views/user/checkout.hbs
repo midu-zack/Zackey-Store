@@ -976,83 +976,81 @@
     {{!-- Razorpay --}}
 
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-        document.getElementById("placeOrderBtn").addEventListener("click", async function () {
-            const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            const selectedAddress = document.querySelector('input[name="address"]:checked').value;
+<script>
+    document.getElementById("placeOrderBtn").addEventListener("click", async function () {
+        const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+        const selectedAddress = document.querySelector('input[name="address"]:checked').value;
+        const totalAmount = parseFloat(document.getElementById("total-amount").textContent.replace("$ ", ""));
 
-            if (selectedPaymentMethod === "online") {
-
-                try {
-                    const response = await fetch('/createRazorpayOrder', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ totalAmount: 0 }) // Replace 1000 with actual total amount
-                    });
-                    const data = await response.json();
-                    console.log("Razorpay order data:", data);
-                    const options = {
-                        key: data.key_id,
-                        amount: data.order.amount,
-                        currency: 'INR',
-                        order_id: data.order.id,
-                        handler: function (response) {
-                            console.log('Razorpay response:', response);
-
-                            fetch('/placeOrder', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ paymentMethod: "online", selectedAddress })
-                            })
-                                .then(response => {
-                                    if (response.ok) {
-                                        window.location.href = '/checkout?success=orderSuccessfully';
-                                    } else {
-                                        console.error('Error in database update:', response.statusText);
-                                        // Handle error
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error while saving Razorpay response:', error);
-                                    // Handle error
-                                });
-                        },
-                    };
-                    const rzp = new Razorpay(options);
-                    rzp.open();
-                } catch (error) {
-                    console.error('Error:', error);
-                }
-            }
-
-            if (selectedPaymentMethod === "cod") {
-
-                fetch('/placeOrder', {
+        if (selectedPaymentMethod === "online") {
+            try {
+                const response = await fetch('/createRazorpayOrder', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ paymentMethod: "cod", selectedAddress })
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            window.location.href = '/checkout?success=orderSuccessfully';
-                        } else {
-                            console.error('Error in database update:', response.statusText);
+                    body: JSON.stringify({ totalAmount: totalAmount })
+                });
+                const data = await response.json();
+                console.log("Razorpay order data:", data);
+                const options = {
+                    key: data.key_id,
+                    amount: data.order.amount,
+                    currency: 'INR',
+                    order_id: data.order.id,
+                    handler: function (response) {
+                        console.log('Razorpay response:', response);
+                        fetch('/placeOrder', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ paymentMethod: "online", selectedAddress })
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.href = '/checkout?success=orderSuccessfully';
+                            } else {
+                                console.error('Error in database update:', response.statusText);
+                                // Handle error
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error while saving Razorpay response:', error);
                             // Handle error
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error while saving Razorpay response:', error);
-                        // Handle error
-                    });
+                        });
+                    },
+                };
+                const rzp = new Razorpay(options);
+                rzp.open();
+            } catch (error) {
+                console.error('Error:', error);
             }
-        });
-    </script>
+        }
+
+        if (selectedPaymentMethod === "cod") {
+            fetch('/placeOrder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ paymentMethod: "cod", selectedAddress })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/checkout?success=orderSuccessfully';
+                } else {
+                    console.error('Error in database update:', response.statusText);
+                    // Handle error
+                }
+            })
+            .catch(error => {
+                console.error('Error while saving Razorpay response:', error);
+                // Handle error
+            });
+        }
+    });
+</script>
 
 
 

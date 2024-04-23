@@ -474,15 +474,16 @@
                                         <div class="login-form-container">
                                             <h1 class="fs-1">OTP</h1>
                                             <form id="otpForm" action="/otpCheck" method="post">
-    <input type="hidden" value="{{email}}" name="email">
-     
-        <p style="color: red;">{{message}}</p>
-   
-    <input type="text" id="otpInput" name="otp" placeholder="Enter OTP">
-    <div class="mx-auto align-items-center">
-        <button type="submit" id="submitOTPButton" class="btn btn-danger mt-3">Submit OTP</button>
-    </div>
-</form>
+                                                <input type="hidden" value="{{email}}" name="email">
+
+                                                <p style="color: red;">{{message}}</p>
+
+                                                <input type="text" id="otpInput" name="otp" placeholder="Enter OTP">
+                                                <div class="mx-auto align-items-center">
+                                                    <button type="submit" id="submitOTPButton"
+                                                        class="btn btn-danger mt-3">Submit OTP</button>
+                                                </div>
+                                            </form>
 
                                         </div>
                                     </div>
