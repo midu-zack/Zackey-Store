@@ -1,5 +1,5 @@
 const express = require("express");
-const { homePage, showShop, logout, account, blockUnblock, getOrderDetails, cancelOrder, deleteAddress, priceFiltration, forgotPasswordRendring, checkEmail, verifyOTP, verifyOTPRendring, passwordChangeRendring, passwordChange } = require("../controllers/user");
+const { homePage, showShop, logout, account, blockUnblock, getOrderDetails, cancelOrder, deleteAddress, priceFiltration, forgotPasswordRendring, checkEmail, verifyOTP, passwordChange, optRendring, passwordChangeRendring } = require("../controllers/user");
 const router = express.Router();
 const verifyToken = require("../middleware/jwtmiddleware");
 // const { otpReg } = require("../controllers/auth");
@@ -26,9 +26,11 @@ router.delete("/deleteAddress/:id",verifyToken,deleteAddress)
 router.post("/priceFilter",priceFiltration)
 
 router.get("/forgotPassword",forgotPasswordRendring)
-router.get('/checkEmail', checkEmail);
 
-// router.get("/otpCheck",verifyOTPRendring)
+router.post('/checkEmail', checkEmail);
+
+// .get("/otpCheck",verifyOTPRendring)
+router.get("/otpPage",optRendring)
 router.post("/otpCheck",verifyOTP)
 
 // router.get("/passwordChange",passwordChangeRendring)

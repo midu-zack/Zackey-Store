@@ -264,68 +264,142 @@ const sendOTP = async (email, otp) => {
   }
 };
 
+// const checkEmail = async (req, res) => {
+//   try {
+//     const { email } = req.query;
+//     const user = await User.findOne({ email });
+
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     const otp = generateOTP();
+
+//     // console.log("Generated OTP:", otp);
+
+//     req.session.otp = otp;
+//     req.session.email = email
+    
+//     console.log(req.session.email);
+//     console.log('req.sesio',req.session.otp);
+
+//     await sendOTP(email, otp);
+
+//     res.render("user/otp", { email, otp }); // Assuming this is your OTP verification page
+//   } catch (error) {
+//     console.error("Internal server Error:", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+const optRendring = async (req, res) => {
+  try {
+    res.render("user/otp", { email: req.session.email, otp: req.session.otp });
+  } catch (error) {
+    console.error("Error rendering OTP page:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 const checkEmail = async (req, res) => {
   try {
-    const { email } = req.query;
+    const { email } = req.body; // Assuming the email is sent in the request body
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: " User not found! please check your email !!" });
     }
 
     const otp = generateOTP();
 
-    // console.log("Generated OTP:", otp);
-
+    console.log('GenerateOTP',otp);
+    // Save email and OTP in session
+    req.session.email = email;
     req.session.otp = otp;
 
     await sendOTP(email, otp);
 
-    res.render("user/otp", { email, otp }); // Assuming this is your OTP verification page
+    // Return email and OTP as JSON response
+    res.status(200).json({ email, otp });
   } catch (error) {
     console.error("Internal server Error:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
+
  
+// const verifyOTP = async (req, res) => {
+//   try {
+//     // const { otp, email } = req.body;
+//     console.log(req.body);
+//     console.log(req.session.email);
+//     console.log(req.session.otp);
+//     const sessionOTP = req.session.otp; // Retrieve the OTP stored in session
+
+//     // console.log(req.body);
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.send("User not found");
+//     }
+
+//     const userEmail = user.email; // Extract the email from the user object
+   
+
+//     // Check if the OTP entered by the user matches the OTP stored in session
+//     const isCorrectOTP = otp === sessionOTP;
  
+
+//     // Render the password change page with email and OTP verification status
+//     res.render("user/password-change", { email: userEmail, isCorrectOTP });
+//   } catch (error) {
+//     console.error("Error checking OTP:", error);
+//     return res.status(500).send("Internal server error");
+//   }
+// };
+
+// const passwordChangeRendring = async (req, res) => {
+//   const message = req.session.invalidOTP ? 'Invalid OTP' : ' ' // Check if OTP is invalid
+//   req.session.invalidOTP = false; // Reset invalidOTP flag
+//   res.render('user/otp', { message :'Invalid otp'});
+// }
+
+
+
 const verifyOTP = async (req, res) => {
   try {
     const { otp, email } = req.body;
     const sessionOTP = req.session.otp; // Retrieve the OTP stored in session
-
-    // console.log(req.body);
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.send("User not found");
+    const sessionEmail = req.session.email; // Retrieve the email stored in session
+ 
+    // Check if the OTP and email match the ones stored in session
+    if (otp !== sessionOTP ) {
+     
+      return res.render('user/otp',{message:'invalidOTP!!'}); // Redirect to the OTP form with error message
     }
 
-    const userEmail = user.email; // Extract the email from the user object
-   
-
-    // Check if the OTP entered by the user matches the OTP stored in session
-    const isCorrectOTP = otp === sessionOTP;
+    // If OTP is correct, render the password change page with email and OTP verification status
+    res.render('user/password-change', { email: sessionEmail, otp: sessionOTP });
+  } catch (error) {
+    console.error('Error verifying OTP:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
  
 
-    // Render the password change page with email and OTP verification status
-    res.render("user/password-change", { email: userEmail, isCorrectOTP });
-  } catch (error) {
-    console.error("Error checking OTP:", error);
-    return res.status(500).send("Internal server error");
-  }
-};
 
 
 const passwordChange = async (req, res) => {
   try {
     const { email, newPassword } = req.body;
 
+    console.log('toldbe ',email,newPassword);
+
     // If newPassword is not provided, return 400 Bad Request
     if (!newPassword) {
-      return res.status(400).json({ message: "New password is required" });
+      return res.status(400).render({ message: "New password is required" });
     }
 
+    
     // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
@@ -340,6 +414,39 @@ const passwordChange = async (req, res) => {
   }
 };
 
+// const passwordChange = async (req, res) => {
+//   try {
+//       const { email, newPassword } = req.body;
+
+//       // Check if newPassword is provided
+//       if (!newPassword) {
+//           return res.status(400).json({ message: "New password is required" });
+//       }
+
+//       // Check if the user exists in the database
+//       const user = await User.findOne({ email });
+//       if (!user) {
+//           return res.status(404).json({ message: "User not found" });
+//       }
+
+
+//       // Hash the new password
+//       const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+//       // Update the user's password in the database
+//       await User.updateOne({ email: email }, { $set: { password: hashedPassword } });
+
+//       // Password changed successfully
+//       return res.status(200).json({ message: "Password changed successfully" });
+//   } catch (error) {
+//       console.error("Error changing password:", error);
+//       return res.status(500).json({ message: "Internal server error" });
+//   }
+// };
+
+ 
+
+
 
 module.exports = {
   homePage,
@@ -353,7 +460,7 @@ module.exports = {
   priceFiltration,
   forgotPasswordRendring,
   // verifyOTPRendring,
-
+  optRendring,
   checkEmail,
   verifyOTP,
   // passwordChangeRendring,
