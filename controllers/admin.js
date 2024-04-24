@@ -611,7 +611,7 @@ const dashboardData = async (req, res) => {
       {
         $group: {
           _id: "$payment.method",
-          totalRevenue: { $sum: "$total" },
+          count: { $sum: 1 }, // Count the number of documents (orders)
         },
       },
       // Restructure the data to separate COD and Online payments
@@ -619,10 +619,11 @@ const dashboardData = async (req, res) => {
         $project: {
           _id: 0,
           paymentMethod: "$_id",
-          totalRevenue: 1,
+          count: 1, // Include the count field
         },
       },
     ]);
+    
 
     const totalOrders = await Orders.countDocuments();
 

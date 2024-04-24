@@ -1725,43 +1725,43 @@ $(document).ready(function () {
             container.appendChild(rowDiv);
         }
 
+function paymentMethodChart(paymentGraphData) {
+    const ctx = document.getElementById('paymentMethodChart').getContext('2d');
 
-        function paymentMethodChart(paymentGraphData) {
-            const ctx = document.getElementById('paymentMethodChart').getContext('2d');
-
-            // Define chart configuration
-            const chartConfig = {
-                type: 'doughnut',
-                data: {
-                    labels: paymentGraphData.map((item) => item.paymentMethod),
-                    datasets: [{
-                        label: 'Payment Methods',
-                        data: paymentGraphData.map((item) => item.totalRevenue),
-                        backgroundColor: [
-                            'rgb(148, 0, 211)', // Violet
-                            'rgb(47, 79, 79)'   // Dark colors
-                        ],
-                        borderColor: 'rgba(255, 255, 255, 0.5)',
-                        borderWidth: 2
-                    }]
+    // Define chart configuration
+    const chartConfig = {
+        type: 'doughnut',
+        data: {
+            labels: paymentGraphData.map((item) => item.paymentMethod),
+            datasets: [{
+                label: 'Payment Methods',
+                data: paymentGraphData.map((item) => item.count), // Use count instead of totalRevenue
+                backgroundColor: [
+                    'rgb(148, 0, 211)', // Violet
+                    'rgb(47, 79, 79)'   // Dark colors
+                ],
+                borderColor: 'rgba(255, 255, 255, 0.5)',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
                 },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        title: {
-                            display: true,
-                            text: 'Payment Method Distribution'
-                        }
-                    }
+                title: {
+                    display: true,
+                    text: 'Payment Method Distribution'
                 }
-            };
-
-            // Create new chart instance
-            new Chart(ctx, chartConfig);
+            }
         }
+    };
+
+    // Create new chart instance
+    new Chart(ctx, chartConfig);
+}
+
 
     </script>
 
