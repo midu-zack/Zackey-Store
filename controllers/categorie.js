@@ -155,6 +155,30 @@ const searchProducts = async (req, res) => {
   }
 };
 
+const getSortedProducts = async (req, res) => {
+  try {
+      const { sortBy } = req.query;
+      let products;
+
+      if (sortBy === 'name') {
+          // Sort products by name
+          products = await Product.find().sort({ name: 1 });
+      } else if (sortBy === 'price') {
+          // Sort products by price
+          products = await Product.find().sort({ price: 1 });
+      } else {
+          // Fetch products without sorting
+          products = await Product.find();
+      }
+
+      // Return products in the response
+      res.json({ products });
+  } catch (error) {
+      // Handle errors
+      console.error('Error fetching products:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
 
 
@@ -166,5 +190,6 @@ module.exports = {
   categoryUpdate,
   categoryDelete,
   filterByCategory,
-  searchProducts
+  searchProducts,
+  getSortedProducts
 };
