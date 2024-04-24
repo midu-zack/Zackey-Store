@@ -139,18 +139,13 @@ const showCheckout = async (req, res) => {
 //   }
 // };
 
-// Razorpay instance
-const razorpay = new Razorpay({
-  key_id: process.env.KEY_ID,
-  key_secret: process.env.KEY_SECRET,
-});
+ 
+
 
 const placeOrder = async (req, res) => {
   try {
-    const { paymentMethod, selectedAddress, couponCode } = req.body;
+    const { paymentMethod, selectedAddress, totalAmount } = req.body;
     const userId = req.user.id;
-
-    console.log("TExtcode", couponCode);
 
     // Find the user by ID
     const user = await User.findById(userId)
@@ -170,59 +165,16 @@ const placeOrder = async (req, res) => {
       return res.status(400).send("Selected address not found");
     }
 
-    // Find the admin with populated coupons
-    const admin = await Admin.findOne().select("coupons");
-    // console.log("admin coupons", admin);
-
-    if (!admin) {
-      return res.status(404).json({ message: "Admin not found" });
-    }
-
-    // Initialize discount amount
-    let discountAmount = 0;
-
-    // Apply coupon code if provided
-    if (couponCode) {
-      // Validate coupon code and calculate discount amount
-      const coupon = admin.coupons.find(
-        (coupon) => coupon.couponCode === couponCode
-      );
-      if (coupon) {
-        const currentDate = new Date();
-        if (
-          moment(coupon.endDate).isAfter(currentDate) &&
-          coupon.couponLimit > 0
-        ) {
-          // Coupon is valid, not expired, and within usage limit
-          discountAmount = coupon.discountAmount;
-
-          // Decrease the coupon usage limit by 1
-          coupon.couponLimit -= 1;
-          await admin.save();
-        }
-      }
-    }
-
-    // Calculate total amount
-    const totalBeforeDiscount = user.cart.subtotal + user.cart.shippingcost;
-    const totalAfterDiscount = totalBeforeDiscount - discountAmount;
-
     // Create new order
-    const products = user.cart.products.map((item) => ({
-      product: item.product._id,
-      quantity: item.quantity,
-      amount: item.total,
-    }));
     const currentDate = moment();
     const formattedDate = currentDate.format("DD-MM-YYYY hh:mm");
     const orderId = generateOrderId();
     const newOrder = new Orders({
       orderId,
-      products,
       address,
       orderedBy: userId,
       date: formattedDate,
-      total: totalAfterDiscount,
+      total: totalAmount, // Save the total amount in the order document
       payment: {
         method: paymentMethod,
       },
@@ -244,11 +196,17 @@ const placeOrder = async (req, res) => {
   }
 };
 
+// Razorpay instance
+const razorpay = new Razorpay({
+  key_id: process.env.KEY_ID,
+  key_secret: process.env.KEY_SECRET,
+});
 
 // Function to create Razorpay order
 async function createRazorpayOrder(req, res) {
   try {
     const userId = req.user.id;
+
     if (!userId) {
       return res.redirect("/login-register");
     }
@@ -258,9 +216,9 @@ async function createRazorpayOrder(req, res) {
       return res.status(404).send("User not found");
     }
 
-    const grandtotal = user.grandtotal;
     const { totalAmount } = req.body;
-    const total = totalAmount + grandtotal;
+
+    const total = totalAmount;
     const options = {
       amount: total * 100, // Amount in paise
       currency: "INR",
@@ -274,6 +232,8 @@ async function createRazorpayOrder(req, res) {
     res.status(500).send("An error occurred while creating Razorpay order.");
   }
 }
+
+ 
 
 // const razorpay = new Razorpay({
 //   key_id: process.env.KEY_ID,
@@ -334,8 +294,7 @@ async function createRazorpayOrder(req, res) {
 //     res.status(500).send('An error occurred while saving Razorpay response.');
 //   }
 // }
-
-// /////////////////////
+ 
 
 const checkCouponController = async (req, res) => {
   try {
