@@ -495,23 +495,37 @@
                         <div class="sidebar-wrapper">
                             <div class="sidebar-widget">
                                 <h4 class="sidebar-title">Search </h4>
+
+
                                 <div class="sidebar-search mb-40 mt-20">
-                                    <form class="sidebar-search-form" action="#">
-                                        <input type="text" placeholder="Search here...">
-                                        <button>
+                                    <form class="sidebar-search-form" id="searchForm">
+                                        <input type="text" id="searchInput" placeholder="Search here...">
+                                        <button type="submit">
                                             <i class="la la-search"></i>
                                         </button>
                                     </form>
                                 </div>
+
+
+
+
+
+
                                 <div class="sidebar-widget shop-sidebar-border pt-40">
                                     <h4 class="sidebar-title">Shop By Categories</h4>
                                     <div class="shop-catigory mt-20">
+
                                         <select name="category" class="form-select" id="categorySelect" size="5"
                                             aria-label="size 3 select example">
+                                            <!-- Default option -->
+
                                             {{#each categories}}
+
                                             <option value="{{this.categorie}}">{{this.categorie}}</option>
                                             {{/each}}
                                         </select>
+
+
                                     </div>
                                 </div>
 
@@ -519,6 +533,25 @@
 
 
                                 <script>
+                                    // Add event listener for search form submission
+                                    document.getElementById('searchForm').addEventListener('submit', async function (event) {
+                                        event.preventDefault(); // Prevent form submission
+                                        const searchInput = document.getElementById('searchInput').value;
+                                        try {
+                                            const response = await fetch(`/search?keyword=${searchInput}`);
+                                            if (!response.ok) {
+                                                throw new Error('Network response was not ok.');
+                                            }
+                                            const data = await response.json();
+                                            console.log('Search Results:', data);
+                                            displayProducts(data.products); // Call function to display search results
+                                        } catch (error) {
+                                            console.error('Error searching:', error);
+                                            // Handle error
+                                        }
+                                    });
+
+
                                     document.getElementById('categorySelect').addEventListener('change', fetchData);
 
                                     async function fetchData() {
@@ -603,14 +636,15 @@
                                                     placeholder="Add Your Price" />
                                             </div>
                                             <button id="filterBtn" type="button">Filter</button>
+                                            <a href="/shop">
+                                                <button id="filterBtn" class="gap-23" type="button">Reset</button>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
-
-                                {{!-- <div id="productList" class="product-list"></div> --}}
-
+ 
                                 <script>
-                                     
+
                                     document.addEventListener("DOMContentLoaded", function () {
                                         // Get the filter button and input field
                                         const filterBtn = document.getElementById("filterBtn");

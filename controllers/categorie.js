@@ -111,9 +111,7 @@ let categoryDelete = async (req, res) => {
 const filterByCategory = async (req, res) => {
   try {
     const { categoryName } = req.query;
-
-  
-
+ 
     // Find products matching the provided category name
     const products = await Product.find({ category: categoryName });
 
@@ -130,6 +128,36 @@ const filterByCategory = async (req, res) => {
   }
 };
 
+const searchProducts = async (req, res) => {
+  try {
+    const { keyword } = req.query;
+
+    // Find products matching the provided keyword
+    const products = await Product.find({
+      $or: [
+        { name: { $regex: keyword, $options: 'i' } }, // Match product name
+        { description: { $regex: keyword, $options: 'i' } }, // Match product description
+        { category: { $regex: keyword, $options: 'i' } }, // Match product category
+        // Add more fields to search here if needed
+      ],
+    });
+
+    // If products are found, return them in the response
+    if (products.length > 0) {
+      return res.json({ products });
+    } else {
+      return res.json({ message: "No products found matching the search keyword" });
+    }
+  } catch (error) {
+    // Handle errors
+    console.error('Error searching products:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+
+
 module.exports = {
   categorieListShow,
   categorieAddShow,
@@ -137,5 +165,6 @@ module.exports = {
   categoryEdit,
   categoryUpdate,
   categoryDelete,
-  filterByCategory
+  filterByCategory,
+  searchProducts
 };

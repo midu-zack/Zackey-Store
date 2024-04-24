@@ -476,6 +476,17 @@ const updateUser = async (req, res) => {
 };
 
  
+// const searching =  async (req, res) => {
+//   const { keyword } = req.query;
+//   try {
+//       // Search for categories containing the keyword
+//       const results = await Categorie.find({ categorie: { $regex: keyword, $options: 'i' } });
+//       res.json(results);
+//   } catch (error) {
+//       console.error('Error searching:', error);
+//       res.status(500).json({ error: 'An error occurred while searching.' });
+//   }
+// }
 
 
 module.exports = {
@@ -495,5 +506,6 @@ module.exports = {
   verifyOTP,
   // passwordChangeRendring,
   passwordChange,
-  updateUser
+  updateUser,
+  // searching
 };
