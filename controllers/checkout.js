@@ -145,6 +145,7 @@ const showCheckout = async (req, res) => {
 const placeOrder = async (req, res) => {
   try {
     const { paymentMethod, selectedAddress, totalAmount } = req.body;
+
     const userId = req.user.id;
 
     // Find the user by ID
@@ -152,11 +153,19 @@ const placeOrder = async (req, res) => {
       .populate("cart.products.product", "price name")
       .select("cart address");
 
-    // Check if user exists
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
-
+      
+      // Check if user exists
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+      
+      const products = user.cart.products.map(item => ({
+        product: item.product._id,
+        quantity: item.quantity,
+        amount: item.total ,// Assuming 'total' is the amount
+        status:"pending"
+      })); 
+      
     // Find the selected address in user's addresses
     const address = user.address.find(
       (item) => String(item._id) === selectedAddress
@@ -164,6 +173,7 @@ const placeOrder = async (req, res) => {
     if (!address) {
       return res.status(400).send("Selected address not found");
     }
+    
 
     // Create new order
     const currentDate = moment();
@@ -178,6 +188,7 @@ const placeOrder = async (req, res) => {
       payment: {
         method: paymentMethod,
       },
+      products
     });
 
     // Clear user's cart and save order
@@ -188,8 +199,8 @@ const placeOrder = async (req, res) => {
 
     return res.redirect("/checkout?success=orderSuccessfully");
   } catch (error) {
-    console.error(error);
-    return res.status(500).render("error", {
+    // console.error(error);
+    return res.status(500).send("error", {
       message:
         "An error occurred while placing the order. Please try again later.",
     });

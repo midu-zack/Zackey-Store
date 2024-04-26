@@ -665,18 +665,18 @@
                                         <div class="your-order-middle">
                                             <ul>
                                                 {{!-- <li>{{this.productName}} <span>${{this.total}}</span></li> --}}
-                                                <li>{{this.product.name}} <span>${{this.total}} </span></li>
+                                                <li>{{this.product.name}} <span>₹{{this.total}} </span></li>
                                             </ul>
                                         </div>
                                         {{/each}}
                                         <div class="your-order-info order-subtotal">
                                             <ul>
-                                                <li>Subtotal <span>${{cart.subtotal}} </span></li>
+                                                <li>Subtotal <span>₹{{cart.subtotal}} </span></li>
                                             </ul>
                                         </div>
                                         <div class="your-order-info order-shipping">
                                             <ul>
-                                                <li>Shipping <p>$40</p>
+                                                <li>Shipping <p>₹40</p>
                                                 </li>
                                             </ul>
                                         </div>
@@ -689,13 +689,13 @@
 
                                         <div class="your-order-info order-shipping">
                                             <ul>
-                                                <li>Discount Amount: <span id="discount-amount"></span></li>
+                                                <li>Discount Amount: <span id="discount-amount">₹</span></li>
                                             </ul>
                                         </div>
 
                                         <div class="your-order-info order-total">
                                             <ul>
-                                                <li>Total <span id="total-amount">$ {{cart.grandtotal}}</span></li>
+                                                <li>Total <span id="total-amount">₹{{cart.grandtotal}}</span></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -899,7 +899,7 @@
             const selectedAddress = document.querySelector('input[name="address"]:checked').value;
 
           const totalAmountSpan = document.getElementById('total-amount');
-          const totalAmount = parseFloat(totalAmountSpan.textContent.replace('$ ', ''));
+          const totalAmount = parseFloat(totalAmountSpan.textContent.replace('₹ ', ''));
 
  
             if (selectedPaymentMethod === "online") {
