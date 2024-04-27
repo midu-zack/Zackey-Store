@@ -146,6 +146,12 @@ const placeOrder = async (req, res) => {
   try {
     const { paymentMethod, selectedAddress, totalAmount } = req.body;
 
+    console.log(
+      'This is payment method ',paymentMethod,
+      'This is select address ',selectedAddress,
+      'This is Total amount',totalAmount
+    );
+
     const userId = req.user.id;
 
     // Find the user by ID
@@ -199,11 +205,10 @@ const placeOrder = async (req, res) => {
 
     return res.redirect("/checkout?success=orderSuccessfully");
   } catch (error) {
-    // console.error(error);
-    return res.status(500).send("error", {
-      message:
-        "An error occurred while placing the order. Please try again later.",
-    });
+
+    console.error("Error",error);
+    return res.status(500) 
+    
   }
 };
 

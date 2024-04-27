@@ -483,31 +483,69 @@
                         </div>
                     </div>
                 </div>
-                <div class="get-in-touch-wrap">
-                    <h3>Get In Touch</h3>
-                    <div class="contact-from contact-shadow">
-                        <form id="contact-form" action="https://whizthemes.com/mail-php/contact/mail.php" method="post">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <input name="name" type="text" placeholder="Name">
-                                </div>
-                                <div class="col-lg-6">
-                                    <input name="email" type="email" placeholder="Email">
-                                </div>
-                                <div class="col-lg-12">
-                                    <input name="subject" type="text" placeholder="Subject">
-                                </div>
-                                <div class="col-lg-12">
-                                    <textarea name="message" placeholder="Your Message"></textarea>
-                                </div>
-                                <div class="col-lg-12">
-                                    <button class="submit" type="submit">Send Message</button>
-                                </div>
-                            </div>
-                        </form>
-                        <p class="form-messege"></p>
-                    </div>
+              
+<div class="get-in-touch-wrap">
+    <h3>Get In Touch</h3>
+    <div class="contact-from contact-shadow">
+        <form id="contact-form">
+            <div class="row">
+                <div class="col-lg-6">
+                    <input name="name" id="name" type="text" placeholder="Name">
                 </div>
+                <div class="col-lg-6">
+                    <input name="email" id="email" type="email" placeholder="Email">
+                </div>
+                <div class="col-lg-12">
+                    <input name="subject" id="subject" type="text" placeholder="Subject">
+                </div>
+                <div class="col-lg-12">
+                    <textarea name="message" id="message" placeholder="Your Message"></textarea>
+                </div>
+                <div class="col-lg-12">
+                    <button class="submit" type="button" onclick="sendMessage()">Send Message</button>
+                </div>
+            </div>
+        </form>
+        <p class="form-message" id="form-message"></p>
+    </div>
+</div>
+
+<script>
+function sendMessage() {
+    var name = document.getElementById('name').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var subject = document.getElementById('subject').value.trim();
+    var message = document.getElementById('message').value.trim();
+
+    // Simple client-side validation
+    if (name === "" || email === "" || subject === "" || message === "") {
+        document.getElementById('form-message').innerText = "Please fill in all fields.";
+        return;
+    }
+
+    // Send AJAX request to server
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/send-message', true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                document.getElementById('form-message').innerText = JSON.parse(xhr.responseText).message;
+                // Clear form fields after successful submission
+                document.getElementById('name').value = '';
+                document.getElementById('email').value = '';
+                document.getElementById('subject').value = '';
+                document.getElementById('message').value = '';
+            } else {
+                document.getElementById('form-message').innerText = "Failed to send message. Please try again later.";
+            }
+        }
+    };
+    var data = JSON.stringify({ name: name, email: email, subject: subject, message: message });
+    xhr.send(data);
+}
+</script>
+
                 <div class="contact-map pt-90">
                     <div id="map"></div>
                 </div>

@@ -668,15 +668,15 @@
                                                 var thead = document.createElement('thead');
                                                 thead.className = 'thead-light';
                                                 thead.innerHTML = `
-        <tr>
-            <th scope="col">NO</th>
-            <th scope="col">Product</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Price</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
-        </tr>
-    `;
+                                                        <tr>
+                                                            <th scope="col">NO</th>
+                                                            <th scope="col">Product</th>
+                                                            <th scope="col">Quantity</th>
+                                                            <th scope="col">Price</th>
+                                                            <th scope="col">Status</th>
+                                                            <th scope="col">Action</th>
+                                                        </tr>
+                                                    `;
                                                 table.appendChild(thead);
 
                                                 // Create table body
@@ -685,14 +685,14 @@
                                                 orderItems.forEach(function (item, index) {
                                                     var row = document.createElement('tr');
                                                     row.innerHTML = `
-            <th scope="row">${index + 1}</th>
-            <td>${item.product.name}</td>
-            <td>${item.quantity}</td>
-            <td>${item.amount}</td>
-            <td>${item.status}</td>
-         <td>${item.status === 'pending' ? `<button class="btn btn-danger" onclick="cancelOrder('${item.product._id}', '${orderDetails._id}')">Cancel</button>` : ''}</td>
+                                                    <th scope="row">${index + 1}</th>
+                                                    <td>${item.product.name}</td>
+                                                    <td>${item.quantity}</td>
+                                                    <td>${item.amount}</td>
+                                                    <td>${item.status}</td>
+                                                <td>${item.status === 'pending' ? `<button class="btn btn-danger" onclick="cancelOrder('${item.product._id}', '${orderDetails._id}')">Cancel</button>` : ''}</td>
 
-        `;
+                                                `;
                                                     tbody.appendChild(row);
                                                 });
                                                 table.appendChild(tbody);
@@ -960,10 +960,10 @@
                                 </div>
                                 <div class="footer-list-3">
                                     <ul>
-                                        <li><a href="about-us.html">About US</a></li>
-                                        <li><a href="blog.html">Blogs</a></li>
-                                        <li><a href="#">Careers</a></li>
-                                        <li><a href="/contact">Contact</a></li>
+                                        <li><a href="/">About US</a></li>
+                                        {{!-- <li><a href="blog.html">Blogs</a></li> --}}
+                                        {{!-- <li><a href="#">Careers</a></li> --}}
+                                        <li><a href=""></a>.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -975,15 +975,15 @@
                                 </div>
                                 <div class="footer-list-3">
                                     <ul>
-                                        <li><a href="#">Pricing</a></li>
-                                        <li><a href="#">Features</a></li>
-                                        <li><a href="#">Customers</a></li>
-                                        <li><a href="#">Demos</a></li>
+                                        <li><a href="/shop">shop </a></li>
+                                        <li><a href="/cart">shopping cart</a></li>
+                                        <li><a href="/wishlist">shopping wishlist</a></li>
+                                        {{!-- <li><a href="#">Demos</a></li> --}}
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-4 col-6 col-sm-6">
+                        {{!-- <div class="col-lg-2 col-md-4 col-6 col-sm-6">
                             <div class="footer-widget mb-30 ml-35">
                                 <div class="footer-title-3">
                                     <h3>Helps</h3>
@@ -997,25 +997,26 @@
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-lg-2 col-md-4 col-6 col-sm-6">
                             <div class="footer-widget mb-30 ml-135">
                                 <div class="footer-title-3">
-                                    <h3>Social Netowrk</h3>
+                                    <h3>Social Network</h3>
                                 </div>
                                 <div class="footer-list-3">
                                     <ul>
-                                        <li><a href="#">Facebook</a></li>
-                                        <li><a href="#">Twitter</a></li>
-                                        <li><a href="#">Linkedin</a></li>
-                                        <li><a href="#">Google +</a></li>
+                                        <li><a href="https://www.facebook.com/profile.php?id=100071053367682">Facebook</a></li>
+                                        <li><a href="https://www.instagram.com/midu__zack_/">Instagram</a></li>
+                                        <li><a href="https://twitter.com/midu_zack">Twitter</a></li>
+                                         <li><a href="https://www.linkedin.com/feed/">Linkedin</a></li>
+                                        {{!-- <li><a href="#">Google +</a></li> --}}
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="footer-bottom pt-40 border-top-1">
+                {{!-- <div class="footer-bottom pt-40 border-top-1"> --}}
                     {{!-- <div class="row">
                         <div class="col-xl-7 col-lg-10 col-md-11 ms-auto me-auto">
                             <div class="footer-tag-wrap">
@@ -1054,7 +1055,7 @@
                     <div class="copyright-3 text-center pt-20 pb-20 border-top-1">
                         <p>Copyright © <a href="#">Zackey-Store</a>. All Right Reserved</p>
                     </div>
-                </div>
+                {{!-- </div> --}}
             </div>
         </footer>
     </div>

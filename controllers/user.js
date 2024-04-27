@@ -476,6 +476,17 @@ const updateUser = async (req, res) => {
   }
 };
 
+
+const contact = async (req,res)=>{
+  try {
+    res.render('user/contact')
+  } catch (error) {
+    
+  }
+}
+
+
+
  
 // const searching =  async (req, res) => {
 //   const { keyword } = req.query;
@@ -488,6 +499,43 @@ const updateUser = async (req, res) => {
 //       res.status(500).json({ error: 'An error occurred while searching.' });
 //   }
 // }
+
+
+
+
+// const sendMessage = async (req, res) => {
+//     const { name, email, subject, message } = req.body;
+
+    
+//     // Configure Nodemailer
+//     const transporter = nodemailer.createTransport({
+//         service: 'gmail',
+//         auth: {
+//             user: 'process.env.APP_EMAIL', // Your Gmail email address
+//             pass: 'process.env.APP_PASSWORD' // Your Gmail password
+//         }
+//     });
+
+//     // Email content
+//     const mailOptions = {
+//         from: email,
+//         to: 'midlajmidu0002@gmail.com', // Recipient's email address
+//         subject: subject,
+//         text: `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`
+//     };
+
+//     // Send email
+//     transporter.sendMail(mailOptions, (error, info) => {
+//         if (error) {
+//             console.log(error);
+//             res.status(500).json({ error: 'Failed to send message. Please try again later.' });
+//         } else {
+//             console.log('Email sent: ' + info.response);
+//             res.json({ message: 'Message sent successfully!' });
+//         }
+//     });
+// };
+
 
 
 module.exports = {
@@ -508,5 +556,7 @@ module.exports = {
   // passwordChangeRendring,
   passwordChange,
   updateUser,
-  // searching
+  contact,
+  // searching,
+  // sendMessage
 };
