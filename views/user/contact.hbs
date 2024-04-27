@@ -3,6 +3,7 @@
 
 
 <!-- Mirrored from template.hasthemes.com/daxone/daxone/contact.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Feb 2024 10:44:51 GMT -->
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -43,7 +44,8 @@
                             </div>
                         </div>
                         <div class="col-xl-7 col-lg-6">
-                            <div class="main-menu menu-common-style menu-lh-1 menu-margin-4 menu-font-3 ml-20 menu-others-page">
+                            <div
+                                class="main-menu menu-common-style menu-lh-1 menu-margin-4 menu-font-3 ml-20 menu-others-page">
                                 <nav>
                                     <ul>
                                         <li class="angle-shape"><a href="index.html">Home</a>
@@ -74,7 +76,8 @@
                                                 </li>
                                                 <li><a class="menu-title" href="#">Shop Layout</a>
                                                     <ul>
-                                                        <li><a href="shop-fullwide-no-sidebar.html">fullwide no sidebar </a></li>
+                                                        <li><a href="shop-fullwide-no-sidebar.html">fullwide no sidebar
+                                                            </a></li>
                                                         <li><a href="shop-list.html">list style</a></li>
                                                         <li><a href="shop-list-2col.html">list 2 column</a></li>
                                                         <li><a href="shop-list-no-sidebar.html">list no sidebar</a></li>
@@ -91,10 +94,12 @@
                                                 </li>
                                                 <li><a class="menu-title" href="#">Product Details</a>
                                                     <ul>
-                                                        <li><a href="product-details-gallery.html">gallery style </a></li>
+                                                        <li><a href="product-details-gallery.html">gallery style </a>
+                                                        </li>
                                                         <li><a href="product-details-sticky.html">sticky style</a></li>
                                                         <li><a href="product-details-slider.html">slider style</a></li>
-                                                        <li><a href="product-details-affiliate.html">Affiliate style</a></li>
+                                                        <li><a href="product-details-affiliate.html">Affiliate style</a>
+                                                        </li>
                                                     </ul>
                                                 </li>
                                             </ul>
@@ -347,7 +352,8 @@
                                                 <li><a href="shop-2-col.html">shop 2 column</a></li>
                                                 <li><a href="shop-no-sidebar.html">shop no sidebar</a></li>
                                                 <li><a href="shop-fullwide.html">shop fullwide</a></li>
-                                                <li><a href="shop-fullwide-no-sidebar.html">fullwide no sidebar </a></li>
+                                                <li><a href="shop-fullwide-no-sidebar.html">fullwide no sidebar </a>
+                                                </li>
                                             </ul>
                                         </li>
                                         <li class="menu-item-has-children"><a href="#">shop list layout</a>
@@ -483,68 +489,68 @@
                         </div>
                     </div>
                 </div>
-              
-<div class="get-in-touch-wrap">
-    <h3>Get In Touch</h3>
-    <div class="contact-from contact-shadow">
-        <form id="contact-form">
-            <div class="row">
-                <div class="col-lg-6">
-                    <input name="name" id="name" type="text" placeholder="Name">
-                </div>
-                <div class="col-lg-6">
-                    <input name="email" id="email" type="email" placeholder="Email">
-                </div>
-                <div class="col-lg-12">
-                    <input name="subject" id="subject" type="text" placeholder="Subject">
-                </div>
-                <div class="col-lg-12">
-                    <textarea name="message" id="message" placeholder="Your Message"></textarea>
-                </div>
-                <div class="col-lg-12">
-                    <button class="submit" type="button" onclick="sendMessage()">Send Message</button>
-                </div>
-            </div>
-        </form>
-        <p class="form-message" id="form-message"></p>
-    </div>
-</div>
 
-<script>
-function sendMessage() {
-    var name = document.getElementById('name').value.trim();
-    var email = document.getElementById('email').value.trim();
-    var subject = document.getElementById('subject').value.trim();
-    var message = document.getElementById('message').value.trim();
+                <div class="get-in-touch-wrap">
+                    <h3>Get In Touch</h3>
+                    <div class="contact-from contact-shadow">
+                        <form id="contact-form">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <input name="name" id="name" type="text" placeholder="Name">
+                                </div>
+                                <div class="col-lg-6">
+                                    <input name="email" id="email" type="email" placeholder="Email">
+                                </div>
+                                <div class="col-lg-12">
+                                    <input name="subject" id="subject" type="text" placeholder="Subject">
+                                </div>
+                                <div class="col-lg-12">
+                                    <textarea name="message" id="message" placeholder="Your Message"></textarea>
+                                </div>
+                                <div class="col-lg-12">
+                                    <button class="submit" type="button" onclick="sendMessage()">Send Message</button>
+                                </div>
+                            </div>
+                        </form>
+                        <p class="form-message" id="form-message"></p>
+                    </div>
+                </div>
 
-    // Simple client-side validation
-    if (name === "" || email === "" || subject === "" || message === "") {
-        document.getElementById('form-message').innerText = "Please fill in all fields.";
-        return;
-    }
+                <script>
+                    function sendMessage() {
+                        var name = document.getElementById('name').value.trim();
+                        var email = document.getElementById('email').value.trim();
+                        var subject = document.getElementById('subject').value.trim();
+                        var message = document.getElementById('message').value.trim();
 
-    // Send AJAX request to server
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/send-message', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                document.getElementById('form-message').innerText = JSON.parse(xhr.responseText).message;
-                // Clear form fields after successful submission
-                document.getElementById('name').value = '';
-                document.getElementById('email').value = '';
-                document.getElementById('subject').value = '';
-                document.getElementById('message').value = '';
-            } else {
-                document.getElementById('form-message').innerText = "Failed to send message. Please try again later.";
-            }
-        }
-    };
-    var data = JSON.stringify({ name: name, email: email, subject: subject, message: message });
-    xhr.send(data);
-}
-</script>
+                        // Simple client-side validation
+                        if (name === "" || email === "" || subject === "" || message === "") {
+                            document.getElementById('form-message').innerText = "Please fill in all fields.";
+                            return;
+                        }
+
+                        // Send AJAX request to server
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', '/send-message', true);
+                        xhr.setRequestHeader('Content-Type', 'application/json');
+                        xhr.onreadystatechange = function () {
+                            if (xhr.readyState === XMLHttpRequest.DONE) {
+                                if (xhr.status === 200) {
+                                    document.getElementById('form-message').innerText = JSON.parse(xhr.responseText).message;
+                                    // Clear form fields after successful submission
+                                    document.getElementById('name').value = '';
+                                    document.getElementById('email').value = '';
+                                    document.getElementById('subject').value = '';
+                                    document.getElementById('message').value = '';
+                                } else {
+                                    document.getElementById('form-message').innerText = "Failed to send message. Please try again later.";
+                                }
+                            }
+                        };
+                        var data = JSON.stringify({ name: name, email: email, subject: subject, message: message });
+                        xhr.send(data);
+                    }
+                </script>
 
                 <div class="contact-map pt-90">
                     <div id="map"></div>
@@ -557,9 +563,10 @@ function sendMessage() {
                     <div class="row">
                         <div class="col-lg-3 col-md-8 col-12 col-sm-12">
                             <div class="footer-widget mb-30">
-                                <a href="#"><img src="assets/images/logo/logo-1.png" alt="logo"></a>
+                                <a href="#"><img src="/assets/images/logo/logo-1.png" alt="logo"></a>
                                 <div class="footer-about">
-                                    <p>On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms. </p>
+                                    <p>On the other hand, we denounce with righteous indignation and dislike men who are
+                                        so beguiled and demoralized by the charms. </p>
                                 </div>
                             </div>
                         </div>
@@ -570,10 +577,10 @@ function sendMessage() {
                                 </div>
                                 <div class="footer-list-3">
                                     <ul>
-                                        <li><a href="about-us.html">About US</a></li>
-                                        <li><a href="blog.html">Blogs</a></li>
-                                        <li><a href="#">Careers</a></li>
-                                        <li><a href="contact.html">Contact</a></li>
+                                        <li><a href="/">About US</a></li>
+                                        {{!-- <li><a href="blog.html">Blogs</a></li> --}}
+                                        {{!-- <li><a href="#">Careers</a></li> --}}
+                                        <li><a href=""></a>.</li>
                                     </ul>
                                 </div>
                             </div>
@@ -585,15 +592,15 @@ function sendMessage() {
                                 </div>
                                 <div class="footer-list-3">
                                     <ul>
-                                        <li><a href="#">Pricing</a></li>
-                                        <li><a href="#">Features</a></li>
-                                        <li><a href="#">Customers</a></li>
-                                        <li><a href="#">Demos</a></li>
+                                        <li><a href="/shop">shop </a></li>
+                                        <li><a href="/cart">shopping cart</a></li>
+                                        <li><a href="/wishlist">shopping wishlist</a></li>
+                                        {{!-- <li><a href="#">Demos</a></li> --}}
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-4 col-6 col-sm-6">
+                        {{!-- <div class="col-lg-2 col-md-4 col-6 col-sm-6">
                             <div class="footer-widget mb-30 ml-35">
                                 <div class="footer-title-3">
                                     <h3>Helps</h3>
@@ -607,26 +614,29 @@ function sendMessage() {
                                     </ul>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-lg-2 col-md-4 col-6 col-sm-6">
                             <div class="footer-widget mb-30 ml-135">
                                 <div class="footer-title-3">
-                                    <h3>Social Netowrk</h3>
+                                    <h3>Social Network</h3>
                                 </div>
                                 <div class="footer-list-3">
                                     <ul>
-                                        <li><a href="#">Facebook</a></li>
-                                        <li><a href="#">Twitter</a></li>
-                                        <li><a href="#">Linkedin</a></li>
-                                        <li><a href="#">Google +</a></li>
+                                        <li><a
+                                                href="https://www.facebook.com/profile.php?id=100071053367682">Facebook</a>
+                                        </li>
+                                        <li><a href="https://www.instagram.com/midu__zack_/">Instagram</a></li>
+                                        <li><a href="https://twitter.com/midu_zack">Twitter</a></li>
+                                        <li><a href="https://www.linkedin.com/feed/">Linkedin</a></li>
+                                        {{!-- <li><a href="#">Google +</a></li> --}}
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="footer-bottom pt-40 border-top-1">
-                    <div class="row">
+                {{!-- <div class="footer-bottom pt-40 border-top-1"> --}}
+                    {{!-- <div class="row">
                         <div class="col-xl-7 col-lg-10 col-md-11 ms-auto me-auto">
                             <div class="footer-tag-wrap">
                                 <div class="footer-tag-title">
@@ -660,11 +670,12 @@ function sendMessage() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="copyright-3 text-center pt-20 pb-20 border-top-1">
-                        <p>Copyright © <a href="#">Daxone</a>. All Right Reserved</p>
+                        <p>Copyright © <a href="#">Zackey-Store</a>. All Right Reserved</p>
                     </div>
-                </div>
+                    {{!--
+                </div> --}}
             </div>
         </footer>
     </div>
@@ -706,313 +717,313 @@ function sendMessage() {
                 scrollwheel: false,
                 center: new google.maps.LatLng(40.709896, -73.995481),
                 styles: [{
-                        "featureType": "administrative",
-                        "elementType": "labels.text.fill",
-                        "stylers": [{
-                            "color": "#6195a0"
-                        }]
+                    "featureType": "administrative",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "color": "#6195a0"
+                    }]
+                },
+                {
+                    "featureType": "administrative.province",
+                    "elementType": "geometry.stroke",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "landscape",
+                    "elementType": "geometry",
+                    "stylers": [{
+                        "lightness": "0"
                     },
                     {
-                        "featureType": "administrative.province",
-                        "elementType": "geometry.stroke",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
+                        "saturation": "0"
                     },
                     {
-                        "featureType": "landscape",
-                        "elementType": "geometry",
-                        "stylers": [{
-                                "lightness": "0"
-                            },
-                            {
-                                "saturation": "0"
-                            },
-                            {
-                                "color": "#f5f5f2"
-                            },
-                            {
-                                "gamma": "1"
-                            }
-                        ]
+                        "color": "#f5f5f2"
                     },
                     {
-                        "featureType": "landscape.man_made",
-                        "elementType": "all",
-                        "stylers": [{
-                                "lightness": "-3"
-                            },
-                            {
-                                "gamma": "1.00"
-                            }
-                        ]
-                    },
-                    {
-                        "featureType": "landscape.man_made",
-                        "elementType": "geometry.fill",
-                        "stylers": [{
-                            "color": "#f8f8f8"
-                        }]
-                    },
-                    {
-                        "featureType": "landscape.natural.terrain",
-                        "elementType": "all",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "poi",
-                        "elementType": "all",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "poi",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "poi.attraction",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "poi.business",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "poi.government",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "poi.medical",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "poi.park",
-                        "elementType": "geometry.fill",
-                        "stylers": [{
-                                "color": "#e6f2da"
-                            },
-                            {
-                                "visibility": "on"
-                            }
-                        ]
-                    },
-                    {
-                        "featureType": "poi.park",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "poi.place_of_worship",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "poi.school",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "poi.sports_complex",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "road",
-                        "elementType": "all",
-                        "stylers": [{
-                                "saturation": -100
-                            },
-                            {
-                                "lightness": 45
-                            },
-                            {
-                                "visibility": "simplified"
-                            }
-                        ]
-                    },
-                    {
-                        "featureType": "road.highway",
-                        "elementType": "all",
-                        "stylers": [{
-                            "visibility": "simplified"
-                        }]
-                    },
-                    {
-                        "featureType": "road.highway",
-                        "elementType": "geometry.fill",
-                        "stylers": [{
-                                "color": "#f9d6b5"
-                            },
-                            {
-                                "visibility": "simplified"
-                            }
-                        ]
-                    },
-                    {
-                        "featureType": "road.highway",
-                        "elementType": "labels.text",
-                        "stylers": [{
-                            "color": "#4e4e4e"
-                        }]
-                    },
-                    {
-                        "featureType": "road.arterial",
-                        "elementType": "labels.text.fill",
-                        "stylers": [{
-                            "color": "#787878"
-                        }]
-                    },
-                    {
-                        "featureType": "road.arterial",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "road.local",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
-                    },
-                    {
-                        "featureType": "transit",
-                        "elementType": "all",
-                        "stylers": [{
-                            "visibility": "simplified"
-                        }]
-                    },
-                    {
-                        "featureType": "transit.line",
-                        "elementType": "geometry.fill",
-                        "stylers": [{
-                            "color": "#e5e5e5"
-                        }]
-                    },
-                    {
-                        "featureType": "transit.station.airport",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                                "hue": "#0a00ff"
-                            },
-                            {
-                                "saturation": "-77"
-                            },
-                            {
-                                "gamma": "0.57"
-                            },
-                            {
-                                "lightness": "0"
-                            },
-                            {
-                                "visibility": "off"
-                            }
-                        ]
-                    },
-                    {
-                        "featureType": "transit.station.bus",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                                "visibility": "on"
-                            },
-                            {
-                                "hue": "#008eff"
-                            }
-                        ]
-                    },
-                    {
-                        "featureType": "transit.station.rail",
-                        "elementType": "labels.text.fill",
-                        "stylers": [{
-                            "color": "#43321e"
-                        }]
-                    },
-                    {
-                        "featureType": "transit.station.rail",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                                "hue": "#005dff"
-                            },
-                            {
-                                "lightness": "4"
-                            },
-                            {
-                                "gamma": "0.75"
-                            },
-                            {
-                                "saturation": "-68"
-                            },
-                            {
-                                "visibility": "off"
-                            }
-                        ]
-                    },
-                    {
-                        "featureType": "water",
-                        "elementType": "all",
-                        "stylers": [{
-                                "color": "#eaf6f8"
-                            },
-                            {
-                                "visibility": "on"
-                            }
-                        ]
-                    },
-                    {
-                        "featureType": "water",
-                        "elementType": "geometry.fill",
-                        "stylers": [{
-                            "color": "#cbeefa"
-                        }]
-                    },
-                    {
-                        "featureType": "water",
-                        "elementType": "labels.text.fill",
-                        "stylers": [{
-                                "lightness": "-49"
-                            },
-                            {
-                                "saturation": "-53"
-                            },
-                            {
-                                "gamma": "0.79"
-                            }
-                        ]
-                    },
-                    {
-                        "featureType": "water",
-                        "elementType": "labels.icon",
-                        "stylers": [{
-                            "visibility": "off"
-                        }]
+                        "gamma": "1"
                     }
+                    ]
+                },
+                {
+                    "featureType": "landscape.man_made",
+                    "elementType": "all",
+                    "stylers": [{
+                        "lightness": "-3"
+                    },
+                    {
+                        "gamma": "1.00"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "landscape.man_made",
+                    "elementType": "geometry.fill",
+                    "stylers": [{
+                        "color": "#f8f8f8"
+                    }]
+                },
+                {
+                    "featureType": "landscape.natural.terrain",
+                    "elementType": "all",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "all",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "poi",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "poi.attraction",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "poi.business",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "poi.government",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "poi.medical",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "poi.park",
+                    "elementType": "geometry.fill",
+                    "stylers": [{
+                        "color": "#e6f2da"
+                    },
+                    {
+                        "visibility": "on"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "poi.park",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "poi.place_of_worship",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "poi.school",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "poi.sports_complex",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "road",
+                    "elementType": "all",
+                    "stylers": [{
+                        "saturation": -100
+                    },
+                    {
+                        "lightness": 45
+                    },
+                    {
+                        "visibility": "simplified"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "all",
+                    "stylers": [{
+                        "visibility": "simplified"
+                    }]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "geometry.fill",
+                    "stylers": [{
+                        "color": "#f9d6b5"
+                    },
+                    {
+                        "visibility": "simplified"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "road.highway",
+                    "elementType": "labels.text",
+                    "stylers": [{
+                        "color": "#4e4e4e"
+                    }]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "color": "#787878"
+                    }]
+                },
+                {
+                    "featureType": "road.arterial",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "road.local",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                },
+                {
+                    "featureType": "transit",
+                    "elementType": "all",
+                    "stylers": [{
+                        "visibility": "simplified"
+                    }]
+                },
+                {
+                    "featureType": "transit.line",
+                    "elementType": "geometry.fill",
+                    "stylers": [{
+                        "color": "#e5e5e5"
+                    }]
+                },
+                {
+                    "featureType": "transit.station.airport",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "hue": "#0a00ff"
+                    },
+                    {
+                        "saturation": "-77"
+                    },
+                    {
+                        "gamma": "0.57"
+                    },
+                    {
+                        "lightness": "0"
+                    },
+                    {
+                        "visibility": "off"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "transit.station.bus",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "on"
+                    },
+                    {
+                        "hue": "#008eff"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "transit.station.rail",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "color": "#43321e"
+                    }]
+                },
+                {
+                    "featureType": "transit.station.rail",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "hue": "#005dff"
+                    },
+                    {
+                        "lightness": "4"
+                    },
+                    {
+                        "gamma": "0.75"
+                    },
+                    {
+                        "saturation": "-68"
+                    },
+                    {
+                        "visibility": "off"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "all",
+                    "stylers": [{
+                        "color": "#eaf6f8"
+                    },
+                    {
+                        "visibility": "on"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "geometry.fill",
+                    "stylers": [{
+                        "color": "#cbeefa"
+                    }]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "labels.text.fill",
+                    "stylers": [{
+                        "lightness": "-49"
+                    },
+                    {
+                        "saturation": "-53"
+                    },
+                    {
+                        "gamma": "0.79"
+                    }
+                    ]
+                },
+                {
+                    "featureType": "water",
+                    "elementType": "labels.icon",
+                    "stylers": [{
+                        "visibility": "off"
+                    }]
+                }
                 ]
             };
             var mapElement = document.getElementById('map');
@@ -1031,4 +1042,5 @@ function sendMessage() {
 
 
 <!-- Mirrored from template.hasthemes.com/daxone/daxone/contact.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 24 Feb 2024 10:44:51 GMT -->
+
 </html>

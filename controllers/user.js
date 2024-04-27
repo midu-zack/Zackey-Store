@@ -120,7 +120,7 @@ const getOrderDetails = async (req, res) => {
       "products.product",
       "name "
     );
-    console.log(order ,1111111111);
+    
     if (!order) {
       return res
         .status(404)
