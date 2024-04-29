@@ -690,7 +690,7 @@
             range: true,
             min: 0,
             max: 50000,
-            values: [0, 10000],
+            values: [0, 50000],
             slide: function(event, ui) {
                 amountprice.val("$" + ui.values[0] + " - $" + ui.values[1]);
             }

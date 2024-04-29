@@ -419,7 +419,7 @@
                                             </div>
                                             <button id="filterBtn" type="button">Filter</button>
                                             <a href="/shop">
-                                                <button id="filterBtn" class="gap-23" type="button">Reset</button>
+                                                <button id="filterBtn" class="gap-23 btn-danger" type="button">Reset</button>
                                             </a>
                                         </div>
                                     </div>
@@ -457,12 +457,23 @@
                                     </select>
                                 </div> --}}
 
-                                <div class="product-show shorting-style">
+                                {{!-- <div class="product-show shorting-style">
                                     <label>Sort by:</label>
                                     <select id="sortSelect">
                                         <option value="default">Default</option>
                                         <option value="name">Name</option>
                                         <option value="price">Price</option>
+                                    </select>
+                                </div> --}}
+
+                                <div class="product-show shorting-style">
+                                    <label>Sort by:</label>
+                                    <select id="sortSelect" >
+                                        <option value="default">Default</option>
+                                        <option value="priceLow">Price (Low to High)</option>
+                                        <option value="priceHigh">Price (High to Low)</option>
+                                        <option value="nameAZ">Name (A to Z)</option>
+                                        <option value="nameZA">Name (Z to A)</option>
                                     </select>
                                 </div>
 

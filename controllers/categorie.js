@@ -160,17 +160,22 @@ const getSortedProducts = async (req, res) => {
       const { sortBy } = req.query;
       let products;
 
-      if (sortBy === 'name') {
-          // Sort products by name
-          products = await Product.find().sort({ name: 1 });
-      } else if (sortBy === 'price') {
-          // Sort products by price
-          products = await Product.find().sort({ price: 1 });
-      } else {
-          // Fetch products without sorting
-          products = await Product.find();
-      }
-
+      if (sortBy === 'priceLow') {
+        // Sort products by price in ascending order
+        products = await Product.find().sort({ price: 1 });
+    } else if (sortBy === 'priceHigh') {
+        // Sort products by price in descending order
+        products = await Product.find().sort({ price: -1 });
+    } else if (sortBy === 'nameAZ') {
+        // Sort products by name in ascending order
+        products = await Product.find().sort({ name: 1 });
+    } else if (sortBy === 'nameZA') {
+        // Sort products by name in descending order
+        products = await Product.find().sort({ name: -1 });
+    } else {
+        // Fetch products without sorting
+        products = await Product.find();
+    }
       // Return products in the response
       res.json({ products });
   } catch (error) {
@@ -179,6 +184,7 @@ const getSortedProducts = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 

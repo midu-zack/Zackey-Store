@@ -43,6 +43,7 @@ const addCart = async (req, res) => {
   const productId = req.params.id;
   const userId = req.user.id; // Corrected to use req.user.id
 
+  
   try {
     const user = await User.findById(userId).select("cart").exec();
 

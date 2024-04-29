@@ -146,11 +146,11 @@ const placeOrder = async (req, res) => {
   try {
     const { paymentMethod, selectedAddress, totalAmount } = req.body;
 
-    console.log(
-      'This is payment method ',paymentMethod,
-      'This is select address ',selectedAddress,
-      'This is Total amount',totalAmount
-    );
+    // console.log(
+    //   'This is payment method ',paymentMethod,
+    //   'This is select address ',selectedAddress,
+    //   'This is Total amount',totalAmount
+    // );
 
     const userId = req.user.id;
 

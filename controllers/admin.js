@@ -535,10 +535,41 @@ const dashboardData = async (req, res) => {
 
     // const lineChartLabels = lineChart.map((item) => item.date);
     // const lineChartData = lineChart.map((item) => item.sales);
+    const totalOrders = await Orders.countDocuments();
 
+    const totalProducts = await Product.countDocuments();
+
+    // const tenDaysAgo = new Date();
+    // tenDaysAgo.setDate(tenDaysAgo.getDate() - 9); // Subtract 9 days instead of 10
+
+    // // Fetch sales data for the last 10 days
+    // const lineChart = await Orders.aggregate([
+    //   // Match documents within the last 10 days
+    //   {
+    //     $match: {
+    //       createdAt: { $gte: tenDaysAgo },
+    //     },
+    //   },
+    //   // Group by date to calculate total sales for each day
+    //   {
+    //     $group: {
+    //       _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+    //       totalSales: { $sum: "$total" },
+    //     },
+    //   },
+    //   // Sort the data by date in ascending order
+    //   {
+    //     $sort: { _id: 1 },
+    //   },
+    // ]);
+
+    // // Extract labels (dates) and data (revenue)
+    // const lineChartLabels = lineChart.map((item) => item._id);
+    // console.log('Evelod',lineChartLabels);
+    // const lineChartData = lineChart.map((item) => item.totalSales);
     const tenDaysAgo = new Date();
     tenDaysAgo.setDate(tenDaysAgo.getDate() - 9); // Subtract 9 days instead of 10
-
+    
     // Fetch sales data for the last 10 days
     const lineChart = await Orders.aggregate([
       // Match documents within the last 10 days
@@ -559,10 +590,37 @@ const dashboardData = async (req, res) => {
         $sort: { _id: 1 },
       },
     ]);
+    
+    // Create an array of the last 10 days' dates in the format "YYYY-MM-DD"
+    const dateRange = Array.from({ length: 10 }, (_, i) => {
+      const date = new Date(tenDaysAgo);
+      date.setDate(date.getDate() + i);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    });
+    
+    // Initialize arrays to store chart labels and data
+    const lineChartLabels = [];
+    const lineChartData = [];
+    
+    // Loop through the last 10 days' dates
+    dateRange.forEach(date => {
+      // Check if there is data available for the current date
+      const dataForDate = lineChart.find(item => item._id === date);
+      if (dataForDate) {
+        // If data is available, push the date and total sales to the chart arrays
+        lineChartLabels.push(date);
+        lineChartData.push(dataForDate.totalSales);
+      } else {
+        // If no data is available, push the date to the chart labels array and set sales to 0
+        lineChartLabels.push(date);
+        lineChartData.push(0);
+      }
+    });
+    
 
-    // Extract labels (dates) and data (revenue)
-    const lineChartLabels = lineChart.map((item) => item._id);
-    const lineChartData = lineChart.map((item) => item.totalSales);
 
     /// round Chart
     const ordersCountByStatus = await Orders.aggregate([
@@ -625,16 +683,20 @@ const dashboardData = async (req, res) => {
     ]);
     
 
-    const totalOrders = await Orders.countDocuments();
-
-    const totalProducts = await Product.countDocuments();
-
+  
     // console.log("this is paymentGreapgh data", paymentGraphData);
-
-    const totalRevenue = paymentGraphData.reduce(
-      (acc, cur) => acc + cur.totalRevenue,
-      0
-    );
+    const totalRevenueData = await Orders.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$total" }, // Calculate total revenue for all orders
+        },
+      },
+    ]);
+    
+    // Extract total revenue from the result
+    const totalRevenue = totalRevenueData.length > 0 ? totalRevenueData[0].totalRevenue : 0;
+    
     // console.log("Total Revenue:", totalRevenue);
 
     return res.json({

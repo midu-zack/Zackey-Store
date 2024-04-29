@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Zackey: Dashboard </title>
+    <title>Zackey Admin </title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -42,7 +42,7 @@
         <!-- sidebar -->
         <div class="sidebar px-4 py-4 py-md-4 me-0">
             <div class="d-flex flex-column h-100">
-                <a href="index.html" class="mb-0 brand-icon">
+                <a href="/dashboard" class="mb-0 brand-icon">
                     <span class="logo-icon">
                         <i class="bi bi-bag-check-fill fs-4"></i>
                     </span>
@@ -50,7 +50,7 @@
                 </a>
                 <!-- Menu: main ul -->
                 <ul class="menu-list flex-grow-1 mt-3">
-                    <li><a class="m-link active" href="index.html"><i class="icofont-home fs-5"></i>
+                    <li><a class="m-link active" href="/dashboard"><i class="icofont-home fs-5"></i>
                             <span>Dashboard</span></a></li>
                     <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-product" href="#">
@@ -73,7 +73,7 @@
                         <ul class="sub-menu collapse" id="categories">
                             <li><a class="ms-link" href="/categorie">Categories List</a></li>
 
-                            <li><a class="ms-link" href="categories-add.html">Categories Add</a></li>
+                            <li><a class="ms-link" href="/addCategorie">Categories Add</a></li>
                         </ul>
                     </li>
                     <li class="collapsed">
@@ -94,7 +94,7 @@
                         <!-- Menu: Sub menu ul -->
                         <ul class="sub-menu collapse" id="customers-info">
                             <li><a class="ms-link" href="/customersList">Customers List</a></li>
-                            <li><a class="ms-link" href="customer-detail.html">Customers Details</a></li>
+                            {{!-- <li><a class="ms-link" href="customer-detail.html">Customers Details</a></li> --}}
                         </ul>
                     </li>
                     <li class="collapsed">
@@ -1575,6 +1575,8 @@ $(document).ready(function () {
                 })
                 .then(data => {
                     const { lineChartLabels, lineChartData, ordersCount, paymentGraphData, totalOrders, totalProducts, totalRevenue } = data
+
+                    console.log(data)
 
                     roundChartLoading(ordersCount)
                     lineChartLoading(lineChartLabels, lineChartData)
