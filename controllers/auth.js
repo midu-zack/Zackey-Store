@@ -189,7 +189,7 @@ let submitRegister = async (req, res) => {
 
     req.session.otp = otp;
 
-    console.log(otp);
+    // console.log(otp);
     await sendOTP(email, otp);
 
     res.render("user/otp-register", {

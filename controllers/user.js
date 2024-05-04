@@ -314,7 +314,7 @@ const checkEmail = async (req, res) => {
 
     const otp = generateOTP();
 
-    console.log('GenerateOTP',otp);
+    // console.log('GenerateOTP',otp);
     // Save email and OTP in session
     req.session.email = email;
     req.session.otp = otp;

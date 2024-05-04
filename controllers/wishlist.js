@@ -24,7 +24,7 @@ const addToWishlist = async (req, res) => {
     const productId = req.params.id;
     const userId = req.user.id;
 
-    console.log("productId", productId);
+    // console.log("productId", productId);
 
     // Check if the user is authenticated
     if (!userId) {

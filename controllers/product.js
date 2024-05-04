@@ -75,7 +75,7 @@ const productAdding = async (req, res) => {
       // Save the product to the database
       await newProduct.save();
 
-      console.log('Product saved successfully');
+      // console.log('Product saved successfully');
 
       // Redirect to the product list page
       res.redirect("/listProduct");
