@@ -162,9 +162,7 @@ const sendOTP = async (email, otp) => {
       subject: "OTP for email verification",
       text: `Your OTP is: ${otp}`,
     });
-
-    // console.log("OTP sent successfully to:", email);
-    // console.log(otp);
+  
   } catch (error) {
     console.error("Error sending OTP:", error);
     throw error; // Rethrow the error to handle it in the caller function
