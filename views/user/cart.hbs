@@ -30,7 +30,8 @@
     <link rel="stylesheet" href="/assets/css/plugins/jquery-ui.css">
     <link rel="stylesheet" href="/assets/css/style.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha384-xmJyEx1KdZlVtvqWmik5uV0OqayyEcMPhRz7P4vzsEm//Uef6S5KkKePmE5KxG3B" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha384-xmJyEx1KdZlVtvqWmik5uV0OqayyEcMPhRz7P4vzsEm//Uef6S5KkKePmE5KxG3B" crossorigin="anonymous">
 
     <style>
         .icon {
@@ -428,10 +429,58 @@
                                             </td>
                                             <td class="product-remove">
                                                 {{!-- <a href="#"><i class="la la-pencil"></i></a> --}}
-                                                <a href="/deleteProductCart/{{this.product._id}}"><i
+                                                <a href="#" onclick="handleDelete(event, '{{this.product._id}}')"><i
                                                         class="la la-close"></i></a>
 
                                             </td>
+                                            <!-- Script for handling product deletion with confirmation dialog -->
+                                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+                                            <script>
+                                                const handleDelete = async (event, productId) => {
+                                                    event.preventDefault(); // Prevent default behavior of the <a> tag
+
+                                                    // Show confirmation dialog
+                                                    const isConfirmed = await Swal.fire({
+                                                        title: "Are you sure?",
+                                                        text: "Once deleted, you will not be able to recover this item!",
+                                                        icon: "warning",
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: "#d33",
+                                                        cancelButtonColor: "#3085d6",
+                                                        confirmButtonText: "Yes, delete it!",
+                                                    });
+
+                                                    // If user confirms deletion
+                                                    if (isConfirmed.isConfirmed) {
+                                                        try {
+                                                            const response = await fetch(`/deleteProductCart/${productId}`, {
+                                                                method: 'GET', // Using GET method for deletion
+                                                            });
+
+                                                            if (!response.ok) {
+                                                                throw new Error('Failed to delete product from cart');
+                                                            }
+
+                                                            // Assuming successful deletion, you may want to handle the response (e.g., refresh the page)
+                                                            window.location.reload(); // Refresh the page after deletion
+                                                        } catch (error) {
+                                                            console.error('Error deleting product:', error);
+                                                            // Handle error (e.g., show a message to the user)
+                                                        }
+                                                    }
+                                                };
+
+                                                const addToCartAndDelete = async (event, productId) => {
+                                                    event.preventDefault(); // Prevent default behavior of the <a> tag
+
+                                                    // Handle addition to cart here
+                                                    // Assuming you have the logic to add the product to the cart
+
+                                                    // After adding to cart, delete the product from the cart
+                                                    handleDelete(event, productId);
+                                                };
+                                            </script>
+
                                         </tr>
                                         {{/each}}
 
@@ -536,14 +585,14 @@
             </div>
         </div>
         {{else}}
-          <div class="cart-main-area pt-85 pb-90">
+        <div class="cart-main-area pt-85 pb-90">
             <div class="container">
-        <div class="total m-5">
-            <p class="text-center">Cart is empty!</p>
-              <a href="/shop" class="btn btn-danger">Go to shop</a>
-        </div>
+                <div class="total m-5">
+                    <p class="text-center">Cart is empty!</p>
+                    <a href="/shop" class="btn btn-danger">Go to shop</a>
+                </div>
             </div>
-          </div>
+        </div>
         {{/if}}
 
         <footer class="footer-area section-padding-2 bg-bluegray pt-80">

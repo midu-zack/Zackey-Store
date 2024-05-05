@@ -253,6 +253,8 @@ const removeProductCart = async (req, res) => {
   }
 };
 
+ 
+
 const clearCart = async (req, res) => {
   try {
     const userId = req.user.id;
