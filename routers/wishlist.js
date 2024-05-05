@@ -9,6 +9,6 @@ router.get('/wishlist/:id',verifyToken,addToWishlist)
 router.get('/DeleteWishlist/:id', verifyToken,DeleteWishList)
 
 
-router.get('/addCartWishlist/:id',verifyToken ,addCartWishlist)
+router.get('/DeleteWishlist/:id',verifyToken ,addCartWishlist)
 
 module.exports = router;

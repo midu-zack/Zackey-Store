@@ -51,28 +51,51 @@ const addToWishlist = async (req, res) => {
   }
 };
 
+// const DeleteWishList = async (req, res) => {
+//   const productId = req.params.id;
+
+//   try {
+//     const updatedUserWishlist = await User.findOneAndUpdate(
+//       { "wishlist.items": productId },
+//       { $pull: { wishlist: { items: productId } } },
+//       { new: true }
+//     );
+
+//     if (!updatedUserWishlist) {
+//       return res.status(404).send("Product not found in wishlist");
+//     }
+
+//     // Redirect to the wishlist page after deletion
+//     res.redirect("/Wishlist?success");
+//   } catch (error) {
+//     console.error("Error deleting product:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
+
 const DeleteWishList = async (req, res) => {
   const productId = req.params.id;
 
   try {
-    const updatedUserWishlist = await User.findOneAndUpdate(
-      { "wishlist.items": productId },
-      { $pull: { wishlist: { items: productId } } },
-      { new: true }
-    );
+      const updatedUserWishlist = await User.findOneAndUpdate(
+          { "wishlist.items": productId },
+          { $pull: { wishlist: { items: productId } } },
+          { new: true }
+      );
 
-    if (!updatedUserWishlist) {
-      return res.status(404).send("Product not found in wishlist");
-    }
+      if (!updatedUserWishlist) {
+          return res.status(404).send("Product not found in wishlist");
+      }
 
-    // Redirect to the wishlist page after deletion
-    res.redirect("/Wishlist?success");
+      // Sending a success response
+      res.status(200).json({ message: "Product successfully removed from wishlist" });
   } catch (error) {
-    console.error("Error deleting product:", error);
-    res.status(500).send("Internal Server Error");
+      console.error("Error deleting product:", error);
+      res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
+ 
 
 
 const addCartWishlist = async (req, res) => {
