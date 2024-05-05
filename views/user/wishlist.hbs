@@ -453,50 +453,50 @@
                                         </div> --}}
 
                                         <div class="product-actions">
-    <a href="#" onclick="handleDelete(event, '{{this.items._id}}')">
-        <i class="fas fa-trash m-2"></i> <!-- Font Awesome trash icon -->
-    </a>
-    <a href="/addCartWishlist/{{this.items._id}}">
-        <i class="fas fa-shopping-cart m-1"></i>
-    </a>
-</div>
+                                            <a href="#" onclick="handleDelete(event, '{{this.items._id}}')">
+                                                <i class="fas fa-trash m-2"></i> <!-- Font Awesome trash icon -->
+                                            </a>
+                                              <a href="/addCartWishlist/{{this.items._id}}">
+                                                <i class="fas fa-shopping-cart m-1"></i>
+                                            </a>
+                                        </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script>
-    const handleDelete = async (event, productId) => {
-        event.preventDefault(); // Prevent default behavior of the <a> tag
+                                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+                                        <script>
+                                            const handleDelete = async (event, productId) => {
+                                                event.preventDefault(); // Prevent default behavior of the <a> tag
 
-        // Show confirmation dialog
-        const isConfirmed = await Swal.fire({
-            title: "Are you sure?",
-            text: "Once deleted, you will not be able to recover this item!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, delete it!",
-        });
+                                                // Show confirmation dialog
+                                                const isConfirmed = await Swal.fire({
+                                                    title: "Are you sure?",
+                                                    text: "Once deleted, you will not be able to recover this item!",
+                                                    icon: "warning",
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: "#d33",
+                                                    cancelButtonColor: "#3085d6",
+                                                    confirmButtonText: "Yes, delete it!",
+                                                });
 
-        // If user confirms deletion
-        if (isConfirmed.isConfirmed) {
-            try {
-                const response = await fetch(`/DeleteWishlist/${productId}`, {
-                    method: 'GET', // Using GET method for deletion
-                });
+                                                // If user confirms deletion
+                                                if (isConfirmed.isConfirmed) {
+                                                    try {
+                                                        const response = await fetch(`/DeleteWishlist/${productId}`, {
+                                                            method: 'GET', // Using GET method for deletion
+                                                        });
 
-                if (!response.ok) {
-                    throw new Error('Failed to delete product from wishlist');
-                }
+                                                        if (!response.ok) {
+                                                            throw new Error('Failed to delete product from wishlist');
+                                                        }
 
-                // Assuming successful deletion, you may want to handle the response (e.g., refresh the page)
-                window.location.reload(); // Refresh the page after deletion
-            } catch (error) {
-                console.error('Error deleting product:', error);
-                // Handle error (e.g., show a message to the user)
-            }
-        }
-    };
-</script>
+                                                        // Assuming successful deletion, you may want to handle the response (e.g., refresh the page)
+                                                        window.location.reload(); // Refresh the page after deletion
+                                                    } catch (error) {
+                                                        console.error('Error deleting product:', error);
+                                                        // Handle error (e.g., show a message to the user)
+                                                    }
+                                                }
+                                            };
+                                        </script>
 
                                     </div>
                                     {{/each}}
@@ -505,18 +505,18 @@
                                         <p>Your wishlist is empty !</p>
                                         <a href="/shop" class="btn btn-danger">Go to shop</a>
 
-                                         
+
                                     </div>
                                     {{/if}}
                                 </div>
- 
+
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <footer class="footer-area section-padding-2 bg-bluegray pt-80">
             <div class="container-fluid">
                 <div class="footer-top pb-40">

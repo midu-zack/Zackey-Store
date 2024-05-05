@@ -6,9 +6,9 @@ const { wishlist, addToWishlist, DeleteWishList, addCartWishlist } = require("..
 
 router.get('/wishlist',verifyToken,wishlist)
 router.get('/wishlist/:id',verifyToken,addToWishlist)
-router.get('/DeleteWishlist/:id', verifyToken,DeleteWishList)
+router.get('/DeleteWishlist/:id',verifyToken,DeleteWishList)
 
 
-router.get('/DeleteWishlist/:id',verifyToken ,addCartWishlist)
+router.get('/addCartWishlist/:id',verifyToken ,addCartWishlist)
 
 module.exports = router;

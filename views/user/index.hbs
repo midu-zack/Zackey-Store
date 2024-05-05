@@ -277,11 +277,15 @@
                 <div class="col-6">
                     <div class="header-right-wrap">
                         <div class="cart-wrap common-style">
+                            {{#if user}}
                             <button class="cart-active" id="cartButton">
                                 <i class="la la-shopping-cart"></i>
 
                                 {{!-- <span class="count-style"></span> --}}
                             </button>
+                            {{else}}
+                            <a href="/login-register">  <i class="fa-solid fa-user"></i></a>
+                            {{/if}}
                             <script>
                                 document.addEventListener("DOMContentLoaded", function () {
                                     const cartButton = document.getElementById("cartButton");
@@ -464,6 +468,7 @@
                 </div>
                 <!-- mobile menu end -->
             </div>
+              {{#if user}}
             <div class="mobile-curr-lang-wrap">
                 {{!-- <div class="single-mobile-curr-lang">
                     <a class="mobile-language-active" href="#">Language <i class="la la-angle-down"></i></a>
@@ -486,8 +491,11 @@
                         </ul>
                     </div>
                 </div> --}}
+                                   
                 <div class="single-mobile-curr-lang">
+
                     <a class="mobile-account-active" href="#">My Account <i class="la la-angle-down"></i></a>
+                   
                     <div class="lang-curr-dropdown account-dropdown-active">
                         <ul>
                             <li><a href="/logout">Logout</a></li>
@@ -495,8 +503,10 @@
                             <li><a href="/profile">My Account</a></li>
                         </ul>
                     </div>
+                     
                 </div>
             </div>
+                {{/if}}
             <div class="mobile-social-wrap">
                 <a class="facebook" href="https://www.facebook.com/profile.php?id=100071053367682"><i
                         class="ti-facebook"></i></a>
