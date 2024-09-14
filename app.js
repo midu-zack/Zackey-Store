@@ -20,11 +20,14 @@ const connectDatabase = require("./config/database");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 
-
-
+const cors =require('cors')
 
 
 const app = express();
+
+app.use(cors())
+
+
 app.use(cookieParser());
 const port = 2328;
 
