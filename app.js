@@ -26,8 +26,7 @@ const cookieParser = require("cookie-parser");
 const app = express();
 
  
-
-app.use(cookieParser(corsConfig));
+ 
 const port = 2328;
 
 // Register a custom helper function for JSON.stringify
