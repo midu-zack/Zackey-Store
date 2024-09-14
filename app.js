@@ -20,6 +20,12 @@ const connectDatabase = require("./config/database");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 
+
+
+
+const app = express();
+
+// UPDATE
 const cors =require('cors')
 const corsConfig ={
   orgin:"*",
@@ -27,10 +33,7 @@ const corsConfig ={
   methods : ["GET", "POST" , "PUT" , "DELETE"]
 
 }
-
-
-const app = express();
-
+app.options("",cors(corsConfig))
 app.use(cors())
 
 
