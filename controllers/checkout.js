@@ -3,7 +3,8 @@ const uuid = require("uuid");
 const dotenv = require("dotenv");
 dotenv.config();
 const Admin = require("../model/admin");
-const Razorpay = require("razorpay");
+// RAZORPAY
+// const Razorpay = require("razorpay");
 const Orders = require("../model/orders");
 const Product = require("../model/product");
 const moment = require("moment");
@@ -212,42 +213,43 @@ const placeOrder = async (req, res) => {
   }
 };
 
-// Razorpay instance
-const razorpay = new Razorpay({
-  key_id: process.env.KEY_ID,
-  key_secret: process.env.KEY_SECRET,
-});
+// RAZORPAY 
+// // Razorpay instance
+// const razorpay = new Razorpay({
+//   key_id: process.env.KEY_ID,
+//   key_secret: process.env.KEY_SECRET,
+// });
 
-// Function to create Razorpay order
-async function createRazorpayOrder(req, res) {
-  try {
-    const userId = req.user.id;
+// // Function to create Razorpay order
+// async function createRazorpayOrder(req, res) {
+//   try {
+//     const userId = req.user.id;
 
-    if (!userId) {
-      return res.redirect("/login-register");
-    }
+//     if (!userId) {
+//       return res.redirect("/login-register");
+//     }
 
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).send("User not found");
-    }
+//     const user = await User.findById(userId);
+//     if (!user) {
+//       return res.status(404).send("User not found");
+//     }
 
-    const { totalAmount } = req.body;
+//     const { totalAmount } = req.body;
 
-    const total = totalAmount;
-    const options = {
-      amount: total * 100, // Amount in paise
-      currency: "INR",
-      receipt: uuid.v4(),
-    };
+//     const total = totalAmount;
+//     const options = {
+//       amount: total * 100, // Amount in paise
+//       currency: "INR",
+//       receipt: uuid.v4(),
+//     };
 
-    const order = await razorpay.orders.create(options);
-    res.status(200).json({ order, key_id: process.env.KEY_ID });
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("An error occurred while creating Razorpay order.");
-  }
-}
+//     const order = await razorpay.orders.create(options);
+//     res.status(200).json({ order, key_id: process.env.KEY_ID });
+//   } catch (error) {
+//     console.error("Error:", error);
+//     res.status(500).send("An error occurred while creating Razorpay order.");
+//   }
+// }
 
  
 
@@ -364,7 +366,8 @@ module.exports = {
   showCheckout,
   addAddress,
   placeOrder,
-  createRazorpayOrder,
+  // RAZORPAY
+  // createRazorpayOrder,
   checkCouponController,
   // saveRazorpayResponse
 };
