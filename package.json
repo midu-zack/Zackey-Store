@@ -32,7 +32,8 @@
     "passport-google-oauth2": "^0.2.0",
     "razorpay": "^2.9.2",
     "tinycolor2": "^1.6.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "vercel": "^37.4.2"
   },
   "description": ""
 }
