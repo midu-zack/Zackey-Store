@@ -19,15 +19,36 @@ const connectDatabase = require("./config/database");
 // const { session } = require("passport");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-
+const MongoStore = require('connect-mongo');
 
 
 
 const app = express();
 
  
- 
 const port = 2328;
+
+
+// mongodb update
+
+app.use(
+  session({
+    secret: "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI, // Ensure your MongoDB URI is in environment variables
+    }),
+    cookie: {
+      secure: process.env.NODE_ENV === "production", // Set to true in production with HTTPS
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  })
+);
+
+
+
 
 // Register a custom helper function for JSON.stringify
 const handlebars = exphbs.create({
