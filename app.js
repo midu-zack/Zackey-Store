@@ -21,14 +21,17 @@ const session = require("express-session");
 const cookieParser = require('cookie-parser');
 
 
+// cors
+const cors =require("cors")
  
-
 const app = express();
-app.use(cookieParser());
- 
+
+app.use(cors())
+
 const port = 2328;
 
- 
+app.use(cookieParser());
+
 
 
 
