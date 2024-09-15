@@ -122,7 +122,7 @@ const corsConfig = {
 
 const app = express();
 
-// Middleware
+// Middleware setup
 app.use(cors(corsConfig));
 app.use(cookieParser());
 app.use(express.json());
@@ -133,7 +133,12 @@ app.use(express.static(path.join(__dirname, "public")));
 const handlebars = exphbs.create({
   helpers: {
     stringify: function (context) {
-      return JSON.stringify(context);
+      try {
+        return JSON.stringify(context);
+      } catch (e) {
+        console.error("Error stringifying context:", e);
+        return 'Error stringifying context';
+      }
     },
   },
 });
@@ -166,8 +171,20 @@ app.use("/", cartRouter);
 app.use("/", wishlistRouter);
 app.use("/", checkoutRouter);
 
-// Start server
-app.listen(process.env.PORT || 2328, async () => {
-  console.log(`Server running on port ${process.env.PORT || 2328}`);
-  await connectDatabase();
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err);
+  res.status(500).send("Internal Server Error");
 });
+
+// Start server
+const PORT = process.env.PORT || 2328;
+app.listen(PORT, async () => {
+  console.log(`Server running on port ${PORT}`);
+  try {
+    await connectDatabase();
+  } catch (err) {
+    console.error("Database connection error:", err);
+  }
+});
+
