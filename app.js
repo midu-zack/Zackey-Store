@@ -89,6 +89,9 @@
 
 
 // uUPDATE VERSION
+
+const MongoStore = require('connect-mongo');
+
 const exphbs = require("express-handlebars");
 const express = require("express");
 const path = require("path");
@@ -136,11 +139,14 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
-    secret: "your-secret-key",
+    secret: 'your-secret-key',
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+    }),
     cookie: {
-      secure: false, // Set to true in production if using HTTPS
+      secure: false, // Set to true in production with HTTPS
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
     },
