@@ -18,8 +18,10 @@ const bodyParser = require("body-parser");
 const connectDatabase = require("./config/database");
 // const { session } = require("passport");
 const session = require("express-session");
-const cookieParser = require("cookie-parser");
- 
+const cookieParser = require('cookie-parser');
+
+app.use(cookieParser());
+
 
 
 
