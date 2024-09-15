@@ -23,11 +23,16 @@ const cookieParser = require('cookie-parser');
 
 // cors
 const cors =require("cors")
+const corsConfig = {
+  orgin :"*",
+  credential:"true",
+  methods:["GET","POST","PUT","DELETE"]
+}
  
 const app = express();
 
 app.use(cors())
-
+app.use(cors(corsConfig))
 const port = 2328;
 
 app.use(cookieParser());
