@@ -90,7 +90,6 @@
 
 
 
-
 const exphbs = require("express-handlebars");
 const express = require("express");
 const path = require("path");
@@ -110,14 +109,14 @@ const checkoutRouter = require("./routers/checkout");
 const bodyParser = require("body-parser");
 const connectDatabase = require("./config/database");
 const session = require("express-session");
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 // CORS configuration
 const corsConfig = {
   origin: "*",
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"]
+  methods: ["GET", "POST", "PUT", "DELETE"],
 };
 
 const app = express();
@@ -129,7 +128,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Handlebars setup
+// Handlebars setup with a fallback if an error occurs during rendering
 const handlebars = exphbs.create({
   helpers: {
     stringify: function (context) {
@@ -143,8 +142,10 @@ const handlebars = exphbs.create({
   },
 });
 
+// View engine setup for Handlebars
 app.engine("handlebars", handlebars.engine);
 app.set("view engine", "handlebars");
+app.set("views", path.join(__dirname, "views")); // Ensure the views directory is set correctly
 
 // Session setup
 app.use(
@@ -153,7 +154,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // Set to true in production if using HTTPS
+      secure: process.env.NODE_ENV === "production", // Secure only in production with HTTPS
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours in milliseconds
     },
@@ -171,10 +172,15 @@ app.use("/", cartRouter);
 app.use("/", wishlistRouter);
 app.use("/", checkoutRouter);
 
-// Error handling middleware
+// Catch-all route for 404 errors
+app.use((req, res, next) => {
+  res.status(404).render("404", { message: "Page not found" });
+});
+
+// Error handling middleware for uncaught errors
 app.use((err, req, res, next) => {
   console.error("Unhandled error:", err);
-  res.status(500).send("Internal Server Error");
+  res.status(500).render("500", { message: "Internal Server Error" });
 });
 
 // Start server
@@ -183,8 +189,11 @@ app.listen(PORT, async () => {
   console.log(`Server running on port ${PORT}`);
   try {
     await connectDatabase();
+    console.log("Database connected successfully.");
   } catch (err) {
     console.error("Database connection error:", err);
+    process.exit(1); // Exit process with failure
   }
 });
+
 
