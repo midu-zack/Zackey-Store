@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "build": "echo 'No build step required'"
+    "build": "npm install && npm run build"
   },
   "keywords": [],
   "author": "",
@@ -35,8 +35,7 @@
     "passport-google-oauth2": "^0.2.0",
     "razorpay": "^2.9.2",
     "tinycolor2": "^1.6.0",
-    "uuid": "^9.0.1",
-    "vercel": "^37.4.2"
+    "uuid": "^9.0.1"
   },
   "description": ""
 }
